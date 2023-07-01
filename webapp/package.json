@@ -8,6 +8,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "auth0-js": "^9.21.0",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
   },
