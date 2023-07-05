@@ -33,7 +33,8 @@ export default {
       const webAuth = new auth0.WebAuth({
         domain: import.meta.env.VITE_AUTH0_DOMAIN,
         clientID: import.meta.env.VITE_AUTH0_CLIENTID,
-        responseType: 'token',
+        responseType: 'code',
+        responseMode: 'redirectUri',
         redirectUri: import.meta.env.VITE_AUTH0_CALLBACK,
       });
 
@@ -42,6 +43,9 @@ export default {
           email: this.email,
           password: this.password,
           connection: 'Username-Password-Authentication',
+          responseType: 'token code',
+          responseMode: 'redirectUri',
+          redirectUri: import.meta.env.VITE_AUTH0_CALLBACK,
         },
         (err) => {
           if (err) {
