@@ -1,25 +1,30 @@
 <template>
   <div>
     <h2>Signup</h2>
-    <form @submit.prevent="signup">
-      <div>
-        <label>Email:</label>
-        <input type="email" v-model="email" required>
-      </div>
-      <div>
-        <label>Password:</label>
-        <input type="password" v-model="password" required>
-      </div>
-      <button type="submit">Signup</button>
-    </form>
+     <div>
+      <button @click="login">Log in</button>
+       <button @click="signup">Signup</button>
+    </div>
     <p v-if="errorMessage" class="error">{{ errorMessage }}</p>
   </div>
 </template>
 
 <script>
-import auth0 from 'auth0-js';
+import {useAuth0} from '@auth0/auth0-vue';
+
 
 export default {
+  setup() {
+      const auth0 = useAuth0();
+      return {
+        login() {
+          auth0.loginWithRedirect();
+        },
+        signup() {
+          auth0.loginWithRedirect( {authorizationParams: {screen_hint: 'signup'}});
+        }
+      };
+    },
   data() {
     console.log(import.meta.env);
     return {
@@ -29,34 +34,24 @@ export default {
     };
   },
   methods: {
-    signup() {
-      const webAuth = new auth0.WebAuth({
-        domain: import.meta.env.VITE_AUTH0_DOMAIN,
-        clientID: import.meta.env.VITE_AUTH0_CLIENTID,
-        responseType: 'code',
-        responseMode: 'redirectUri',
-        redirectUri: import.meta.env.VITE_AUTH0_CALLBACK,
-      });
-
-      webAuth.signup(
-        {
-          email: this.email,
-          password: this.password,
-          connection: 'Username-Password-Authentication',
-          responseType: 'token code',
-          responseMode: 'redirectUri',
-          redirectUri: import.meta.env.VITE_AUTH0_CALLBACK,
-        },
-        (err) => {
-          if (err) {
-            console.error('Error signing up:', err);
-            this.errorMessage = err
-          } else {
-            console.log('Sigcd nup successful!');
-          }
-        }
-      );
-    },
+    // login() {
+    //   const auth0 = useAuth0();
+    //   auth0.loginWithRedirect();
+    // },
+    // signup() {
+      // createAuth0({
+      //   domain: "dev-e0hn8bw4osg50wqz.us.auth0.com",
+      //   clientId: "gsV2RRopEbPsVoz1R5XcpVPNtXgM1Uhb",
+      //   authorizationParams: {
+      //     redirect_uri: 'http://localhost:5000/callback',
+      //   screen_hint: 'signup'
+      //   }
+      // })
+      // console.log("AAA")
+      // const auth0 = useAuth0();
+      // this.$auth0.authorizationParams.screen_hint = 'signup'
+      // auth0.loginWithRedirect();
+    // },
   },
 };
 </script>
