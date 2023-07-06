@@ -31,5 +31,5 @@ npm run build
 ### Set env
 ```sh
 Create .env file and put variable with prefix VITE_
-Example: VITE_APP_NAME=EasyMoney
+Example: VITE_APP_NAME=EasyMoney and use import.meta.env. to get env variable
 ```

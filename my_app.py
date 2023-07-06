@@ -1,4 +1,5 @@
 from flask import Flask
+from flask_cors import CORS
 from flask_restful import Api
 
 from classes.auth_resource import AuthResource
@@ -7,6 +8,7 @@ from classes.user_resource import UserResource
 
 app = Flask(__name__)
 api = Api(app)
+CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
 
 # Define your middleware function

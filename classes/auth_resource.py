@@ -4,6 +4,7 @@ from flask_restful import Resource
 class AuthResource(Resource):
 
     def post(self):
+        # process to sign up user
         print('Callback')
         params = request.args
         print(params)
