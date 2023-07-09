@@ -1,3 +1,4 @@
+import os
 from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
@@ -10,6 +11,9 @@ app = Flask(__name__)
 api = Api(app)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
+# Load environment variables
+for key, value in os.environ.items():
+    app.config[key] = value
 
 # Define your middleware function
 def app_middleware(next_handler):
@@ -28,7 +32,7 @@ app.wsgi_app = app_middleware(app.wsgi_app)
 
 # Add the resource to the API
 api.add_resource(TodoResource, '/todos/<int:todo_id>')
-api.add_resource(AuthResource, '/callback')
+api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
 
 if __name__ == '__main__':
