@@ -3,7 +3,12 @@
     <div>
       <router-link to="/">Home</router-link>
       <div v-if="this.isAuth">
+        <div>
+        <router-link to="/dashboard">Dashboard</router-link>
+        </div>
+        <div>
         <router-link to="/profile">Profile</router-link>
+        </div>
         <button @click="logout">Logout</button>
       </div>
       <div v-else>
@@ -16,7 +21,7 @@
 
 <script>
 import {useAuth0} from '@auth0/auth0-vue';
-import { mapGetters } from 'vuex';
+import store from "@/ultils/store";
 export default {
   data() {
     return {
@@ -38,8 +43,7 @@ export default {
       };
     },
   mounted() {
-    this.isAuth = this.$store.getters.getIsAuth
-    console.log(this.isAuth)
+    this.isAuth = store.getters.getIsAuth
   },
   methods: {
     // login() {

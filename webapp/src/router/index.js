@@ -4,8 +4,8 @@ import SignupView from '../views/SignupView.vue'
 import CallbackView from '../views/CallbackView.vue'
 import LoginView from '../views/LoginView.vue'
 import AboutView from '../views/AboutView.vue'
-import store from "@/ultils/store"
 import {useAuth0} from "@auth0/auth0-vue";
+import auth from "@/ultils/auth";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -62,11 +62,11 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
   if (to.matched.some((record) => record.meta.requiresAuth)) {
     // Route requires authentication, check if the user is logged in
-    const auth0 = useAuth0()
-    await auth0.checkSession();
-    await auth0.getAccessTokenSilently()
-
-    if (await auth0.isAuthenticated.value) {
+    // const auth0 = useAuth0()
+    // await auth0.checkSession();
+    // await auth0.getAccessTokenSilently()
+    // await auth.authenticate()
+    if (await auth.authenticate()) {
       // User is authenticated, allow access
       next();
     } else {

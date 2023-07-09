@@ -4,7 +4,6 @@ import NavBar from '../components/NavBar.vue'
 <template>
   <div class="profile">
     <NavBar/>
-    <router-link to="/profile">Profile</router-link>
     <h1>This is an Profile page</h1>
   </div>
 </template>
@@ -14,7 +13,6 @@ export default {
   setup() {
   },
   mounted() {
-    console.log(this.$store.getters.getAccessToken)
   },
   methods: {
   }

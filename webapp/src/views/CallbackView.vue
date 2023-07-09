@@ -4,14 +4,16 @@
   </div>
 </template>
 <script>
-import { useRoute } from 'vue-router';
+import {useRoute} from 'vue-router';
 import axios from "axios";
 import {useAuth0} from "@auth0/auth0-vue";
-import { mapState, mapActions } from 'vuex';
+import {mapState, mapActions} from 'vuex';
+
 export default {
   data() {
     return {
-      accessToken: '',
+      auth0AccessToken: '',
+      auth0Token: '',
       isAuth: false
     }
   },
@@ -24,25 +26,30 @@ export default {
     ...mapState(['accessToken']),
   },
   methods: {
-    ...mapActions(['updateAccessToken', 'updateIsAuth']),
+    ...mapActions(['updateToken', 'updateIsAuth', 'updateAccessToken']),
     async postData() {
       const auth0 = useAuth0()
       const route = useRoute()
       const action = route.query.action;
-      if ( action === 'logout' ) {
-          this.updateAccessToken('')
-          this.updateIsAuth(false)
-          // TODO: Send request to server to logout then redirect to URL
-          this.$router.push('/')
+      if (action === 'logout') {
+        this.updateToken('')
+        this.updateAccessToken('')
+        this.updateIsAuth(false)
+        // TODO: Send request to server to logout then redirect to URL
+        this.$router.push('/')
       } else {
         // action: Login
-          auth0.checkSession();
-          this.accessToken = await auth0.getAccessTokenSilently()
-          if ( await auth0.isAuthenticated.value ) {
-            this.updateAccessToken(this.accessToken)
-            this.updateIsAuth(true)
-            // TODO: Send request to server to llogin then redirect to URL
-             this.$router.push('/dashboard')
+        await auth0.checkSession();
+        this.auth0AccessToken = await auth0.getAccessTokenSilently()
+        if (await auth0.isAuthenticated.value) {
+          this.auth0Token = auth0.idTokenClaims.value.__raw
+
+          this.updateToken(this.auth0Token)
+          this.updateAccessToken(this.auth0AccessToken)
+          this.updateIsAuth(true)
+
+          // TODO: Send request to server to llogin then redirect to URL
+          this.$router.push('/dashboard')
         }
       }
 

@@ -37,4 +37,6 @@ Example: VITE_APP_NAME=EasyMoney and use import.meta.env. to get env variable
 ### Auth0
 ```sh
 Set Application Type is Single Page Application
+AccessToken: This is used to access the user\'s profile and the /userinfo endpoint. It is a JWT that contains user profile information.
+Token: This is used to access the Auth0 Management API and perform actions on behalf of the user. It is a JWT that contains scopes and permissions.
 ```

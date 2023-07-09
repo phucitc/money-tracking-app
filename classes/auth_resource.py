@@ -30,7 +30,7 @@ class AuthResource(Resource):
         #                               headers={'content-type': 'application/json'}).json()
         # print(token_results)
         # if 'access_token' in token_results:
-        access_token = 'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZTBobjhidzRvc2c1MHdxei51cy5hdXRoMC5jb20vIn0..eKfgHjkI_QZ5Hnrz.2CDHtwGmX4-rpsJuXo39Y-maxeNSWrbXBPHUX17diw8hnwxm7q37wJxds522u9VcNzB72DaSidxCeCl8VEMmJFTpg0XpNscgDN1Jxj9GGypfHNC5O5fjDFxqGhOX2AbOI7KOBJnL7JaQSgki9gKEuVQrCkjPbOe2L8LkcuJlB7VxBLoBoLclk-qqH6ytlMmzUuECOrvNzHvaF8mfiJv9AaIHktswAmzQLR7LlfC_czffVh4WPg0LilfK70EB1rTqKfY1DtMFbO0Xu0JYTWNuSas1sPxQsiS1D3LuqMo4CPx7lBEkF6pS3i6PU7Eq-FiAhRJjjRAGxD1f6TjJCiqdrm8M.gXmE3N_Rncfg5rnobfkraw'
+        access_token = 'eyJhbGciOiJkaXIiLCJlbmMiOiJBMjU2R0NNIiwiaXNzIjoiaHR0cHM6Ly9kZXYtZTBobjhidzRvc2c1MHdxei51cy5hdXRoMC5jb20vIn0..3pMDOdK3z0TcBRfJ.P4A9GFBQjmG1A0lzR3leGvWiq4A_5A4uKbqcJL4jxFS3rRT8xZXCewbOYN4nbJDTuzpWMymfWSERRCGVHKgWG8GBnhNT_cbml-Qf7TTrFPpv67ah1PpLnUoC-3NOJ6aHrcbEdNSwVJwvu8r1m8Tn6jUPwA5uYPxw9s_qyDKdFDVcPZ7zee94uisT3PXvJ0OXjIp1DwnUN82X7TUl3n0-fwtvCCp87gxTC04PxHHs6d9IMc8uMPllqjlPOam5fMzeH9VP1ZkZTsywQPdCGxF1AZ454WEDDjMDmkI2PvLzvRapzwwp64jUEU2NPf5ReGfIHzPmH9DKlUsCNQ2GOqcs15sw.2Cs8FSsoSj8kNdjbU8axAg'
         results = requests.get('https://{domain}/userinfo?access_token={access_token}'.format(
             domain=current_app.config['AUTH0_API_DOMAIN'],
             access_token=access_token))
