@@ -9,10 +9,13 @@ import NavBar from '../components/NavBar.vue'
 </template>
 
 <script>
+import store from "@/ultils/store";
+
 export default {
   setup() {
   },
   mounted() {
+    console.log(store.getters.getToken)
   },
   methods: {
   }
