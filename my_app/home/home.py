@@ -11,10 +11,12 @@ def index():
 def redirect_link(slug):
     if slug is not None:
         # these are routes in VueJS
-        spa_routes = ['home', 'login', 'signup', 'logout', 'profile', 'dashboard', 'about', 'callback' ]
+        spa_routes = ['home', 'login', 'signup', 'logout', 'profile', 'dashboard', 'about', 'callback']
         if slug in spa_routes:
             return render_template('index.html')
         print(slug)
+        # Flask redirect 301
+
         return slug
     else:
         return 'No link'
