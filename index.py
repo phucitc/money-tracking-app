@@ -1,13 +1,15 @@
 import os
-from flask import Flask
+from flask import Flask, render_template
 from flask_cors import CORS
 from flask_restful import Api
 
 from classes.auth_resource import AuthResource
 from classes.todo_resource import TodoResource
 from classes.user_resource import UserResource
+from my_app.home.home import home_blueprint
 
-app = Flask(__name__)
+# Setup template_folder and static_folder are from VueJS build
+app = Flask(__name__, template_folder='public', static_folder='public/assets')
 api = Api(app)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
@@ -34,6 +36,17 @@ app.wsgi_app = app_middleware(app.wsgi_app)
 api.add_resource(TodoResource, '/todos/<int:todo_id>')
 api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
+
+# route
+# app.register_blueprint(home_blueprint)
+@app.route("/")
+def index():
+    return render_template('index.html')
+
+@app.route("/app")
+def hello():
+    return "Hello"
+
 
 if __name__ == '__main__':
     app.run(debug=True)
