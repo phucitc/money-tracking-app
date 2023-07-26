@@ -9,7 +9,7 @@ from classes.user_resource import UserResource
 from my_app.home.home import home_blueprint
 
 # Setup template_folder and static_folder are from VueJS build
-app = Flask(__name__, template_folder='public', static_folder='public/assets')
+app = Flask(__name__)
 api = Api(app)
 CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
 
@@ -38,10 +38,7 @@ api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
 
 # route
-# app.register_blueprint(home_blueprint)
-@app.route("/")
-def index():
-    return render_template('index.html')
+app.register_blueprint(home_blueprint)
 
 @app.route("/app")
 def hello():
