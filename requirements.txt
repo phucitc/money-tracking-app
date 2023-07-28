@@ -4,3 +4,4 @@ flask-cors
 PyJWT
 requests
 gunicorn
+psycopg2
