@@ -1,9 +1,9 @@
 from model.db import DB
 
 
-class User(DB):
-    TABLE = 'users'
-    IGNORE_COLUMNS = ['user_id', 'created_at', 'updated_at']
+class URL(DB):
+    TABLE = 'urls'
+    IGNORE_COLUMNS = ['created_at', 'updated_at']
 
     def __init__(self):
         params = {
