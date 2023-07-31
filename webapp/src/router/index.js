@@ -6,6 +6,8 @@ import LoginView from '../views/LoginView.vue'
 import AboutView from '../views/AboutView.vue'
 import {useAuth0} from "@auth0/auth0-vue";
 import auth from "@/ultils/auth";
+import NotFoundView from "@/views/NotFoundView.vue";
+import MaintenanceView from "@/views/MaintenanceView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -55,6 +57,16 @@ const router = createRouter({
       meta: {
         requiresAuth: true,
       },
+    },
+    {
+      path: '/maintenance',
+      name: 'maintenance',
+      component: MaintenanceView
+    },
+    // Add a wildcard route for 404 page
+    {
+      path: '/:catchAll(.*)',
+      component: NotFoundView,
     },
   ]
 });

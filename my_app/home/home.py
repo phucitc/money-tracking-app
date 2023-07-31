@@ -1,4 +1,6 @@
-from flask import Blueprint, render_template
+from flask import Blueprint, render_template, redirect
+
+from model.url import URL
 
 # VueJS need to build, then copy dist folder to this folder and rename to vuejs_webapp
 home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
@@ -15,9 +17,14 @@ def redirect_link(slug):
         if slug in spa_routes:
             return render_template('index.html')
         print(slug)
-        # Flask redirect 301
 
-        return slug
+        url = URL()
+        item = url.get_by_public_id(slug)
+        if item:
+            # Process to track click here
+            return redirect(item['destination_link'], code=301)
+        else:
+            return render_template('index.html'), 404
     else:
         return 'No link'
 
