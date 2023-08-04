@@ -3,6 +3,7 @@ from flask import Flask, render_template
 from flask_cors import CORS
 from flask_restful import Api
 
+from api.url_resource import URLResource
 from classes.auth_resource import AuthResource
 from classes.todo_resource import TodoResource
 from classes.user_resource import UserResource
@@ -36,7 +37,7 @@ app.wsgi_app = app_middleware(app.wsgi_app)
 api.add_resource(TodoResource, '/todos/<int:todo_id>')
 api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
-
+api.add_resource(URLResource, '/api/url/short-url')
 # route
 app.register_blueprint(home_blueprint)
 

@@ -1,3 +1,4 @@
+import hashlib
 import os
 
 import jwt
@@ -36,5 +37,17 @@ def decode_jwt(token):
         # Invalid token
         return {'error': 'Invalid token'}, 401
 
+
+def calculate_md5_hash(input_string):
+    # Create an MD5 hash object
+    md5_hash = hashlib.md5()
+
+    # Update the hash object with the input string encoded as bytes
+    md5_hash.update(input_string.encode('utf-8'))
+
+    # Get the hexadecimal representation of the hash
+    md5_hex_digest = md5_hash.hexdigest()
+
+    return md5_hex_digest
 
 
