@@ -1,5 +1,6 @@
 # Deploy VueJS and Python Flask together
 - Vuejs: Frontend
+  - Must be nodejs >= 16
   - npm run build
   - npm run deploy-2-python
 - Flask: Backend
