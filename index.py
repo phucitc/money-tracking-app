@@ -1,5 +1,5 @@
 import os
-from flask import Flask, url_for
+from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_restful import Api
 
@@ -39,7 +39,10 @@ api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
 api.add_resource(URLResource, '/api/url/short-url')
 # route
-app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon.ico'))
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(os.path.join(app.root_path, 'static'),
+                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
 app.register_blueprint(home_blueprint)
 
 @app.route("/app")
