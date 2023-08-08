@@ -8,6 +8,8 @@
   - Start app local
     - flask --app index run or python index.py
   - Start app on Production
+    - chmod u+x start_gunicorn.sh
+    - pm2 startOrReload ecosystem.config.js
     - gunicorn -w 4 'index:app' (gunicorn is only enabled on production mode and run in Ubuntu)
 
 # Setup server and software
