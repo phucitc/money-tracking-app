@@ -12,7 +12,8 @@ from my_app.home.home import home_blueprint
 # Setup template_folder and static_folder are from VueJS build
 app = Flask(__name__, static_folder='static')
 api = Api(app)
-CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://zipit.link", "https://zipit.link"]}})
+# CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://zipit.link", "https://zipit.link"]}})
+CORS(app, origins=["http://localhost:5173", "http://zipit.link", "https://zipit.link"])
 
 # Load environment variables
 for key, value in os.environ.items():
