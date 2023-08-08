@@ -1,5 +1,5 @@
 import os
-from flask import Flask, render_template
+from flask import Flask
 from flask_cors import CORS
 from flask_restful import Api
 
@@ -47,4 +47,4 @@ def hello():
 
 
 if __name__ == '__main__':
-    app.run(debug=True, port=os.environ['PORT'])
+    app.run(debug=True)
