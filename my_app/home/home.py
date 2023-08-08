@@ -14,7 +14,7 @@ def index():
 
 @home_blueprint.route('/<slug>')
 def redirect_link(slug):
-    print("BBB")
+    print("slug", slug)
     if slug is not None:
         # these are routes in VueJS
         spa_routes = ['home', 'login', 'signup', 'logout', 'profile', 'dashboard', 'about', 'callback']
