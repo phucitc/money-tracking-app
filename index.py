@@ -1,5 +1,5 @@
 import os
-from flask import Flask
+from flask import Flask, url_for
 from flask_cors import CORS
 from flask_restful import Api
 
@@ -10,9 +10,9 @@ from classes.user_resource import UserResource
 from my_app.home.home import home_blueprint
 
 # Setup template_folder and static_folder are from VueJS build
-app = Flask(__name__)
+app = Flask(__name__, static_folder='static')
 api = Api(app)
-CORS(app, resources={r"/*": {"origins": "http://localhost:5173"}})
+CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://zipit.link", "https://zipit.link"]}})
 
 # Load environment variables
 for key, value in os.environ.items():
@@ -39,6 +39,7 @@ api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
 api.add_resource(URLResource, '/api/url/short-url')
 # route
+app.add_url_rule('/favicon.ico', redirect_to=url_for('static', filename='favicon.ico'))
 app.register_blueprint(home_blueprint)
 
 @app.route("/app")
