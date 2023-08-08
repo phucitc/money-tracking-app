@@ -13,6 +13,7 @@ class DB:
             self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
             self.table_name = kwargs.get('table_name')
             self.columns = dict()
+            print('Connected to DB')
         except Exception as e:
             print(e)
 
