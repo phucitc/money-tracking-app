@@ -8,7 +8,7 @@
   - Start app local
     - flask --app index run or python index.py
   - Start app on Production
-    - gunicorn -w 4 'index:app'
+    - gunicorn -w 4 'index:app' (gunicorn is only enabled on production mode and run in Ubuntu)
 
 # Setup server and software
 - PostgreSQL (Default port: 5432 and It's not allowed to connect from outside, it's only allowed to connect from localhost
