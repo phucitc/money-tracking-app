@@ -22,8 +22,8 @@
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2" @click="login">Login</button>
-          <button type="button" class="btn btn-warning" @click="signup">Sign-up</button>
+          <button type="button" class="btn btn-outline-light me-2 d-none" @click="login">Login</button>
+          <button type="button" class="btn btn-warning d-none" @click="signup">Sign-up</button>
         </div>
       </div>
     </div>
