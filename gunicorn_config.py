@@ -1,13 +1,14 @@
-from decouple import Config
+import os
+from decouple import config
 
-# Initialize the Config class
-config = Config()
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 # Load environment variables from .env file
 APP_ENV = config('APP_ENV', default='')
 DEBUG = config('DEBUG', default=False, cast=bool)
 AUTH0_API_DOMAIN = config('AUTH0_API_DOMAIN', default='')
 DWH = config('DWH', default='')
+print(DWH)
 APP_DOMAIN = config('APP_DOMAIN', default='')
 PORT = config('PORT', default='')
 
