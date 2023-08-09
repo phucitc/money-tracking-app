@@ -9,6 +9,7 @@ class DB:
     COLS_IGNORE = []
     def __init__(self, **kwargs):
         try:
+            print(os.environ.get('DWH'))
             self.connection = psycopg2.connect(os.environ.get('DWH'))
             self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
             self.table_name = kwargs.get('table_name')
