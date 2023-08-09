@@ -9,11 +9,9 @@ class DB:
     COLS_IGNORE = []
     def __init__(self, **kwargs):
         try:
-            print(os.getenv('DWH'))
             self.connection = psycopg2.connect(os.getenv('DWH'))
             self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
             self.table_name = kwargs.get('table_name')
-            print(self.table_name)
             self.columns = dict()
             print('Connected to DB')
         except Exception as e:

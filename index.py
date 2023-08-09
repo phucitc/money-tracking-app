@@ -21,8 +21,6 @@ CORS(app, origins=["http://localhost:5173", "http://zipit.link", "https://zipit.
 for key, value in os.environ.items():
     app.config[key] = value
 
-print(os.environ.items())
-
 # Define your middleware function
 def app_middleware(next_handler):
     def middleware(*args, **kwargs):
