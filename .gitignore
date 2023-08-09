@@ -79,3 +79,5 @@ __pycache__/
 
 # Virtual environment
 venv/
+build_frontend.sh
+reload_app.sh
