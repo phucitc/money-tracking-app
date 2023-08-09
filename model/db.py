@@ -2,6 +2,7 @@
 import os
 
 import psycopg2
+from flask import current_app
 from psycopg2.extras import RealDictCursor
 
 class DB:
@@ -9,11 +10,12 @@ class DB:
     COLS_IGNORE = []
     def __init__(self, **kwargs):
         try:
-            self.connection = psycopg2.connect(os.environ['DWH'])
+            self.connection = psycopg2.connect(current_app.config['DWH'])
             self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
             self.table_name = kwargs.get('table_name')
             self.columns = dict()
             print('Connected to DB')
+            print(current_app.config['DWH'])
         except Exception as e:
             print(e)
 
