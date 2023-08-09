@@ -40,3 +40,10 @@ Set Application Type is Single Page Application
 AccessToken: This is used to access the user\'s profile and the /userinfo endpoint. It is a JWT that contains user profile information.
 Token: This is used to access the Auth0 Management API and perform actions on behalf of the user. It is a JWT that contains scopes and permissions.
 ```
+
+### Note
+```sh
+store.getters.getToken to get auth0 token
+import.meta.env to access env like as import.meta.env.VITE_BE_URL
+
+```
