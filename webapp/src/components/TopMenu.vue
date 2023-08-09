@@ -22,10 +22,32 @@
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2">Login</button>
-          <button type="button" class="btn btn-warning">Sign-up</button>
+          <button type="button" class="btn btn-outline-light me-2" @click="login">Login</button>
+          <button type="button" class="btn btn-warning" @click="signup">Sign-up</button>
         </div>
       </div>
     </div>
   </header>
 </template>
+
+<script>
+import {useAuth0} from '@auth0/auth0-vue';
+export default {
+  data() {
+    return {
+      isAuth: false
+    }
+  },
+  setup() {
+      const auth0 = useAuth0();
+      return {
+        login() {
+          auth0.loginWithRedirect();
+        },
+        signup() {
+          auth0.loginWithRedirect( {authorizationParams: {screen_hint: 'signup'}});
+        },
+      };
+    },
+};
+</script>
