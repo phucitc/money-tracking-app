@@ -36,5 +36,35 @@
     - python3 -m venv env
     - source env/bin/activate
 
+# Setup Gunicorn as a service
+This is command to test Gunicorn
+- gunicorn -w 2 'index:app';
+
+sudo nano /etc/systemd/system/zipit.service
+
+Content config
+```
+[Unit]
+Description=Gunicorn instance to serve zipit
+After=network.target
+
+[Service]
+User=root
+Group=root
+WorkingDirectory=/root/all-my-app/money-tracking-app
+Environment="PATH=/root/all-my-app/money-tracking-app/env/bin"
+ExecStart=/root/all-my-app/money-tracking-app/env/bin/gunicorn -c /root/all-my-app/money-tracking-app/gunicorn_config.py index:app
+
+[Install]
+WantedBy=multi-user.target
 
 ```
+Then run command:
+```
+sudo systemctl daemon-reload
+sudo systemctl start zipit
+
+sudo systemctl enable zipit
+sudo systemctl status zipit
+```
+- Note: Please remember create config file `gunicorn_config.py`
