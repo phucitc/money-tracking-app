@@ -35,6 +35,7 @@ env.bak/
 
 # Log files
 *.log
+logs/
 
 # SQLite database files
 *.db

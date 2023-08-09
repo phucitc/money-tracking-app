@@ -1,6 +1,7 @@
 module.exports = {
   apps : [{
     name   : "zipit",
-    script : "./deploy.sh"
+    script : "./env/bin/python",
+    args   : "./start_gunicorn.sh",
   }]
 }
