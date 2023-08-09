@@ -2,12 +2,11 @@ import hashlib
 import os
 
 import jwt
-from flask import current_app
 from jwt import PyJWKClient
 
 def decode_jwt(token):
     # Retrieve the JSON Web Key Set (JWKS) from Auth0
-    jwks_url = 'https://{domain}/.well-known/jwks.json'.format(domain=current_app.config['AUTH0_API_DOMAIN'])
+    jwks_url = 'https://{domain}/.well-known/jwks.json'.format(domain=os.environ.get('AUTH0_API_DOMAIN'))
     jwks_client = PyJWKClient(jwks_url)
     signing_key = jwks_client.get_signing_key_from_jwt(token)
 
