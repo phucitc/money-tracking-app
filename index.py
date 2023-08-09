@@ -2,6 +2,8 @@ import os
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_restful import Api
+from dotenv import load_dotenv
+load_dotenv()
 
 from api.url_resource import URLResource
 from classes.auth_resource import AuthResource
