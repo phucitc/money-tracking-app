@@ -66,5 +66,6 @@ sudo systemctl start zipit
 
 sudo systemctl enable zipit
 sudo systemctl status zipit
+sudo systemctl stop zipit
 ```
 - Note: Please remember create config file `gunicorn_config.py`
