@@ -24,9 +24,12 @@ class URLResource(Resource):
             url = URL()
             data = dict()
             data['destination_link'] = payload['long_url'].strip()
-            row = url.insert(data)
+            row = url.get_by_destination_link_hash(data['destination_link'])
             if row:
-                short_link = os.environ.get('APP_DOMAIN') + row['public_id']
+                short_link = os.getenv('APP_DOMAIN') + row['public_id']
+            else:
+                row = url.insert(data)
+                short_link = os.getenv('APP_DOMAIN') + row['public_id']
         else:
             abort(Constant.HTTP_BAD_REQUEST, message="Invalid JSON")
         return {'short_link': short_link}

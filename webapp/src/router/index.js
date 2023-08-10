@@ -8,6 +8,7 @@ import {useAuth0} from "@auth0/auth0-vue";
 import auth from "@/ultils/auth";
 import NotFoundView from "@/views/NotFoundView.vue";
 import MaintenanceView from "@/views/MaintenanceView.vue";
+import CommingSoonView from "@/views/CommingSoonView.vue";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -15,6 +16,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      // component: HomeView
+      component: CommingSoonView
+    },
+    {
+      path: '/beta',
+      name: 'home-beta',
       component: HomeView
     },
     {

@@ -9,7 +9,9 @@
         </a>
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
-          <li><a href="#" class="nav-link px-2 text-secondary">Home</a></li>
+          <li>
+            <router-link to="/" class="nav-link px-2 text-secondary">Home</router-link>
+          </li>
           <li><a href="#" class="nav-link px-2 text-white d-none">Features</a></li>
           <li><a href="#" class="nav-link px-2 text-white d-none">Pricing</a></li>
           <li><a href="#" class="nav-link px-2 text-white d-none">FAQs</a></li>

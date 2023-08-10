@@ -8,7 +8,6 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp',
 
 @home_blueprint.route('/')
 def index():
-    print("AAAAAAAAAAAAAAA")
     return render_template('index.html')
 
 
@@ -17,11 +16,12 @@ def redirect_link(slug):
     print("slug", slug)
     if slug is not None:
         # these are routes in VueJS
-        spa_routes = ['home', 'login', 'signup', 'logout', 'profile', 'dashboard', 'about', 'callback']
+        spa_routes = ['home', 'login', 'signup', 'logout', 'profile', 'dashboard', 'about', 'callback', 'beta']
         if slug in spa_routes:
+            print("Here, return vueJS template")
             return render_template('index.html')
-        print(slug)
 
+        print(f"Query DB to get destination_link {slug}")
         url = URL()
         item = url.get_by_public_id(slug)
         if item:
