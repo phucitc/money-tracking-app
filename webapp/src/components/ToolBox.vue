@@ -1,15 +1,15 @@
 <template>
-  <h3 class="text-center pt-5">Zip a long link</h3>
+  <h1 class="text-center pt-5">Shorten a long link</h1>
   <div class="toolbox">
     <div class="mb-3">
-      <label for="basic-url" class="form-label">Paste a long link</label>
+      <label for="basic-url" class="form-label"><strong>Paste a long link</strong></label>
       <input type="text" class="form-control" name="long_url" v-model="this.long_url" placeholder="Example: https://your-domain.com/your-url-too-long" aria-label="Enter a long link"
              aria-describedby="button-addon2">
     </div>
     <div class="mb-3" v-if="!this.is_show_result">
       <div class="row">
         <div class="col">
-          <label for="basic-url" class="form-label">Domain</label>
+          <label for="basic-url" class="form-label"><strong>Domain</strong></label>
           <input type="text" class="form-control" placeholder="zipit.link" aria-label="Enter a long link" readonly disabled
                  aria-describedby="button-addon2">
         </div>
@@ -19,14 +19,14 @@
                  aria-describedby="button-addon2">
         </div>
         <div class="col">
-          <label for="basic-url" class="form-label">Enter a back-half you want (optional)</label>
+          <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong></label>
           <input type="text" class="form-control" name="short_url_alias" v-model="this.short_url_alias" placeholder="Example: my-link" aria-label="Enter a long link"
                  aria-describedby="button-addon2">
         </div>
       </div>
       <div class="row mt-3">
         <div class="col text-center">
-          <button class="btn btn-primary" @click="this.generate_short_link">Zip your link</button>
+          <button class="btn btn-primary btn-large" @click="this.generate_short_link">Zip your link</button>
         </div>
       </div>
     </div>

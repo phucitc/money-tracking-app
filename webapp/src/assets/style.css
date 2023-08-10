@@ -1,0 +1,12 @@
+.form-control {
+    font-size: 1.2rem;
+    line-height: 2.2;
+}
+label {
+    font-size: 1.2rem;
+}
+.btn-large {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    line-height: 2;
+}
