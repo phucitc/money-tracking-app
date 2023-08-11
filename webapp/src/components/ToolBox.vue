@@ -20,12 +20,12 @@
             <input type="text" class="form-control" placeholder="zipit.link" aria-label="Enter a long link" readonly disabled
                    aria-describedby="button-addon2">
           </div>
-          <div class="col-1 p-0">
+          <div class="col-1 p-0 d-none">
             <label for="basic-url" class="form-label">&nbsp;</label>
             <input type="text" class="form-control text-center" placeholder="/" readonly disabled
                    aria-describedby="button-addon2">
           </div>
-          <div class="col">
+          <div class="col d-none">
             <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong></label>
             <input type="text" class="form-control" name="short_url_alias" v-model="this.short_url_alias" placeholder="Example: my-link" aria-label="Enter a long link"
                    aria-describedby="button-addon2">
