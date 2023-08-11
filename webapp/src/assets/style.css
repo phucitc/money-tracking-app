@@ -10,3 +10,7 @@ label {
     padding: 0.5rem 1rem;
     line-height: 2;
 }
+.btn .spinner-border {
+    position: relative;
+    top:5px;
+}
