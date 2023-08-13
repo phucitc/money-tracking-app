@@ -12,7 +12,7 @@
     - pm2 startOrReload ecosystem.config.js
     - gunicorn -w 4 'index:app' (gunicorn is only enabled on production mode and run in Ubuntu)
   - Important: Please create folders:
-    - storage/non-users and storage/users
+    - storage/qrcode
 
 # Setup server and software
 - PostgreSQL (Default port: 5432 and It's not allowed to connect from outside, it's only allowed to connect from localhost

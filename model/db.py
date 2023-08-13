@@ -4,15 +4,18 @@ import os
 import psycopg2
 from psycopg2.extras import RealDictCursor
 
+
 class DB:
     COLS_EXE_FCT = []
     COLS_IGNORE = []
+
     def __init__(self, **kwargs):
         try:
             self.connection = psycopg2.connect(os.getenv('DWH'))
             self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
             self.table_name = kwargs.get('table_name')
             self.columns = dict()
+            self.data = dict()
             print('Connected to DB')
         except Exception as e:
             print(e)
@@ -46,6 +49,7 @@ class DB:
             default_columns_name = default_columns_name - set(self.COLS_IGNORE)
 
             invalid_columns = input_columns - default_columns_name
+            # columns that are not in the table. Raise exception
             if len(invalid_columns):
                 raise Exception(f'Invalid column(s): {invalid_columns}')
 
@@ -57,13 +61,40 @@ class DB:
                     holder += f"{data[key]},"
                 else:
                     holder += f"%({key})s,"
-            holder = holder[:-1]
+            holder = holder[:-1]  # remove last comma
 
             query = f"INSERT INTO {self.table_name} ({columns_to_insert}) VALUES ({holder}) RETURNING {return_columns_after_insert}"
             self.execute(query, params=data)
             inserted_row = self.cursor.fetchone()
+            self.data = inserted_row
             self.connection.commit()
-            return inserted_row
+            return self
+
+        except Exception as e:
+            print(e)
+            return False
+
+    def update(self, data):
+        try:
+            if len(data) == 0 or not isinstance(data, dict):
+                raise Exception('No data to update or data is not a dictionary')
+
+            return_columns_after_update = self.data.keys()
+            return_columns_after_update = ', '.join(return_columns_after_update)
+            holder = ''
+            for key in data:
+                if key in self.COLS_EXE_FCT:
+                    continue
+                else:
+                    holder += f"{key} = %({key})s,"
+            holder = holder[:-1]  # remove last comma
+
+            query = f"UPDATE {self.table_name} SET {holder} WHERE id = {self.id} RETURNING {return_columns_after_update}"
+            self.execute(query, params=data)
+            updated_row = self.cursor.fetchone()
+            self.data = updated_row
+            self.connection.commit()
+            return updated_row
 
         except Exception as e:
             print(e)
@@ -94,9 +125,19 @@ class DB:
         data = {
             'value': value
         }
-        return self.fetch_one(query, params=data)
+        row = self.fetch_one(query, params=data)
+        if row:
+            self.data = row
+            return self
+        return None
 
     def get_by_public_id(self, public_id):
         return self.get_by_field('public_id', public_id)
 
+    def convert_row_to_dict(self, row):
+        return dict(row)
 
+    def __getattr__(self, item):
+        if item in self.data:
+            return self.data[item]
+        return None

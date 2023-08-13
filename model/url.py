@@ -4,8 +4,7 @@ from py.helper import calculate_md5_hash
 
 class URL(DB):
     TABLE = 'urls'
-    COLS_IGNORE = ['id', 'created_at', 'updated_at']
-
+    COLS_IGNORE = []
     def __init__(self):
         params = {
             'table_name': self.TABLE
@@ -17,6 +16,6 @@ class URL(DB):
         data['destination_link_hash'] = calculate_md5_hash(data['destination_link'])
         return super().insert(data)
 
-    def get_by_destination_link_hash(self, destination_link):
+    def get_by_destination_link(self, destination_link):
         destination_link_hash = calculate_md5_hash(destination_link)
         return self.get_by_field('destination_link_hash', destination_link_hash)
