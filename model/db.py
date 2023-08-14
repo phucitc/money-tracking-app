@@ -12,10 +12,8 @@ class DB:
 
     def __init__(self, **kwargs):
         try:
-            print(os.getenv('DWH'))
             # parse connection string
             DB_URL = urllib.parse.urlparse(os.getenv('DWH'))
-            print(DB_URL)
             self.connection = psycopg2.connect(
                 database=DB_URL.path[1:],
                 user=DB_URL.username,
@@ -30,6 +28,7 @@ class DB:
             print('Connected to DB')
         except Exception as e:
             print(e)
+            print('Can not connect to DB')
 
     def get_columns(self):
         if self.table_name:
