@@ -38,9 +38,11 @@ def redirect_link(slug):
 
 @home_blueprint.route('/qrcode/<url_public_id>')
 def download_qrcode(url_public_id):
-    print("AAAAAAAAAAAAAAAAAAAAa")
+    print("AAAAAAAAAAAAAAAAAAAAa", url_public_id)
     url = URL()
     item = url.get_by_public_id(url_public_id)
+    print('item')
+    print(item)
     print('item.qrcode_path', item.qrcode_path)
     if item and is_empty(item.qrcode_path) is False:
         root_path = os.path.dirname(os.path.abspath(__file__))
