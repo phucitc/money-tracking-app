@@ -16,6 +16,8 @@ BEGIN
             number_random := floor(random() * 10);
             IF number_random % 2 = 0 THEN
                 public_id := CONCAT(public_id, CHR( (65 + floor(random() * 26))::integer ));
+            ELSEIF number_random % 3 = 0 THEN
+                public_id := CONCAT(public_id, CHR( (97 + floor(random() * 26))::integer ));
             ELSE
                 public_id := CONCAT(public_id, CHR( (48 + floor(random() * 10))::integer ));
             END IF;

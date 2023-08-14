@@ -3,7 +3,7 @@
 CREATE TABLE IF NOT EXISTS public.users
 (
     user_id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    public_id character varying(8) COLLATE pg_catalog."default" NOT NULL DEFAULT generate_public_id('users'::text, 8),
+    public_id character varying(8) COLLATE pg_catalog."default",
     email character varying(32) COLLATE pg_catalog."default" NOT NULL,
     timezone character varying(64) COLLATE pg_catalog."default",
     created_at timestamp without time zone DEFAULT now(),
@@ -23,10 +23,11 @@ CREATE INDEX IF NOT EXISTS idx_users_public_id
 CREATE TABLE IF NOT EXISTS public.urls
 (
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
-    public_id character varying(8) COLLATE pg_catalog."default" NOT NULL DEFAULT generate_public_id('urls'::text, 8),
+    public_id character varying(8) COLLATE pg_catalog."default",
     user_id integer,
     destination_link text COLLATE pg_catalog."default" NOT NULL,
     destination_link_hash character varying(33) COLLATE pg_catalog."default" NOT NULL,
+    qrcode_path character varying(128) COLLATE pg_catalog."default",
     created_at timestamp without time zone DEFAULT now(),
     updated_at timestamp without time zone DEFAULT now(),
     CONSTRAINT urls_pkey PRIMARY KEY (id)

@@ -1,6 +1,7 @@
 import hashlib
 import os
 
+import qrcode
 import jwt
 from jwt import PyJWKClient
 
@@ -50,4 +51,44 @@ def calculate_md5_hash(input_string):
 
     return md5_hex_digest
 
+
+def is_empty(value):
+    if value in [None, '']:
+        return True
+    return False
+
+def create_simple_qrcode(content):
+    try:
+        data = content
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(data)
+        qr.make(fit=True)
+
+        img = qr.make_image(fill_color="black", back_color="white")
+        # get root path
+        root_path = os.path.dirname(os.path.abspath(__file__))
+        # go up one level
+        root_path = os.path.dirname(root_path)
+        filename = calculate_md5_hash(content) + ".png"
+        # save image
+        related_path = f"storage/qrcode/{filename}"
+        filename = root_path + "/" + related_path
+        img.save(filename)
+
+        return related_path
+    except Exception as e:
+        print(e)
+        return ''
+
+
+def return_link(value):
+    return os.getenv('APP_DOMAIN') + value
+
+def get_qrcode_link(public_id):
+    return return_link('qrcode/' + public_id)
 
