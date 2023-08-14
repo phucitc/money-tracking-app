@@ -35,12 +35,12 @@ class DB:
         else:
             print('No table name provided')
 
-    def insert(self, data):
+    def insert(self, params):
         try:
-            if len(data) == 0 or not isinstance(data, dict):
+            if len(params) == 0 or not isinstance(params, dict):
                 raise Exception('No data to insert or data is not a dictionary')
 
-            input_columns = set(data.keys())
+            input_columns = set(params.keys())
 
             default_columns = self.get_columns()
             default_columns_name = default_columns.keys()
@@ -54,17 +54,17 @@ class DB:
                 raise Exception(f'Invalid column(s): {invalid_columns}')
 
             return_columns_after_insert = ', '.join(return_columns_after_insert)
-            columns_to_insert = ', '.join(data)
+            columns_to_insert = ', '.join(params)
             holder = ''
-            for key in data:
+            for key in params:
                 if key in self.COLS_EXE_FCT:
-                    holder += f"{data[key]},"
+                    holder += f"{params[key]},"
                 else:
                     holder += f"%({key})s,"
             holder = holder[:-1]  # remove last comma
 
             query = f"INSERT INTO {self.table_name} ({columns_to_insert}) VALUES ({holder}) RETURNING {return_columns_after_insert}"
-            self.execute(query, params=data)
+            self.execute(query, params=params)
             inserted_row = self.cursor.fetchone()
             self.data = inserted_row
             self.connection.commit()
@@ -74,15 +74,15 @@ class DB:
             print(e)
             return False
 
-    def update(self, data):
+    def update(self, params):
         try:
-            if len(data) == 0 or not isinstance(data, dict):
+            if len(params) == 0 or not isinstance(params, dict):
                 raise Exception('No data to update or data is not a dictionary')
 
             return_columns_after_update = self.data.keys()
             return_columns_after_update = ', '.join(return_columns_after_update)
             holder = ''
-            for key in data:
+            for key in params:
                 if key in self.COLS_EXE_FCT:
                     continue
                 else:
@@ -90,7 +90,7 @@ class DB:
             holder = holder[:-1]  # remove last comma
 
             query = f"UPDATE {self.table_name} SET {holder} WHERE id = {self.id} RETURNING {return_columns_after_update}"
-            self.execute(query, params=data)
+            self.execute(query, params=params)
             updated_row = self.cursor.fetchone()
             self.data = updated_row
             self.connection.commit()
@@ -122,10 +122,10 @@ class DB:
 
     def get_by_field(self, field, value):
         query = 'SELECT * FROM {table_name} WHERE {field} = %(value)s'.format(table_name=self.table_name, field=field)
-        data = {
+        params = {
             'value': value
         }
-        row = self.fetch_one(query, params=data)
+        row = self.fetch_one(query, params=params)
         if row:
             self.data = row
             return self
