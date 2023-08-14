@@ -137,7 +137,7 @@ class DB:
     def convert_row_to_dict(self, row):
         return dict(row)
 
-    def __getattr__(self, item):
-        if item in self.data:
-            return self.data[item]
+    def __getattr__(self, column_name):
+        if column_name in self.data:
+            return self.data[column_name]
         return None
