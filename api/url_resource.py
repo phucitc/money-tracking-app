@@ -30,10 +30,11 @@ class URLResource(Resource):
             if row is None:
                 row = url.insert(data)
 
+            public_id = row.public_id
             if is_empty(row.qrcode_path):
                 qrcode_path = create_simple_qrcode(return_link(public_id))
                 url.update({'qrcode_path': qrcode_path})
-            public_id = row.public_id
+
         else:
             abort(Constant.HTTP_BAD_REQUEST, message="Invalid JSON")
         return {
