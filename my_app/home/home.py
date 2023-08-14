@@ -41,6 +41,7 @@ def download_qrcode(url_public_id):
     print("AAAAAAAAAAAAAAAAAAAAa")
     url = URL()
     item = url.get_by_public_id(url_public_id)
+    print('item.qrcode_path', item.qrcode_path)
     if item and is_empty(item.qrcode_path) is False:
         root_path = os.path.dirname(os.path.abspath(__file__))
         # go up multi level
