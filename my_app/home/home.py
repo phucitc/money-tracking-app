@@ -38,6 +38,7 @@ def redirect_link(slug):
 
 @home_blueprint.route('/qrcode/<url_public_id>')
 def download_qrcode(url_public_id):
+    print("AAAAAAAAAAAAAAAAAAAAa")
     url = URL()
     item = url.get_by_public_id(url_public_id)
     print("item", item)
