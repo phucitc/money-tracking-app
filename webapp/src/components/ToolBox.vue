@@ -44,21 +44,32 @@
 
       <div v-if="this.is_show_result">
         <div class="row">
-          <div class="col">
+          <div class="col col-md-8">
             <label for="basic-url" class="form-label"><strong>Your short URL</strong></label>
-              <div class="input-group mb-3">
-                <input type="text" class="form-control" name="short_url" v-model="this.short_url" placeholder="https://zipit.link/your-link"
-                       aria-label="Enter a long link" readonly disabled
-                       aria-describedby="button-addon2">
-                <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_short_url">{{ this.btn_copy_text }}</button>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" name="short_url" v-model="this.short_url" placeholder="https://zipit.link/your-link"
+                     aria-label="Enter a long link" readonly disabled
+                     aria-describedby="button-addon2">
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_short_url">{{ this.btn_copy_text }}</button>
+            </div>
+            <div class="input-group">
+              <div class="text-center w-100">
+                <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
               </div>
+            </div>
+          </div>
+          <div class="col col-md-4">
+            <div class="text-center">
+              <div class="qrcode-box">
+                <img :src="this.qrcode_base64" alt="QR Code" class="img-fluid">
+                <a :href="this.qrcode" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover btn-download-qrcode">Download</a>
+              </div>
+
+            </div>
           </div>
         </div>
-        <div class="row">
-          <div class="col text-center">
-            <button class="btn btn-primary"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
-          </div>
-        </div>
+
+
       </div>
 
     </form>
@@ -83,6 +94,8 @@ export default {
       btn_zip_url_text: 'Zip your URL',
       btn_zip_another_text: 'Zip another URL',
       form_css_was_validated: '',
+      qrcode_base64: '',
+      qrcode: '',
     }
   },
   setup() {
@@ -114,6 +127,8 @@ export default {
           this.short_url = short_link;
           this.is_show_result = true;
           this.long_url_disable = true;
+          this.qrcode_base64 = response.data.qrcode_base64;
+          this.qrcode = response.data.qrcode;
         }
       } catch (error) {
         console.error('Error:', error);
@@ -126,6 +141,8 @@ export default {
       this.short_url = '';
       this.is_show_result = false;
       this.btn_copy_text = 'Copy';
+      this.qrcode_base64 = '';
+      this.qrcode = ''
     },
     copy_short_url() {
       navigator.clipboard.writeText(this.short_url);

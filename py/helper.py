@@ -92,3 +92,15 @@ def return_link(value):
 def get_qrcode_link(public_id):
     return return_link('qrcode/' + public_id)
 
+
+def get_root_path():
+    current_dir = os.path.abspath(os.path.dirname(__file__))
+
+    while not os.path.isfile(os.path.join(current_dir, "README.md")):
+        current_dir = os.path.dirname(current_dir)
+        if current_dir == os.path.dirname(current_dir):
+            break
+
+    return current_dir
+
+
