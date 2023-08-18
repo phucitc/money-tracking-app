@@ -60,7 +60,7 @@
           </div>
           <div class="col col-md-4">
             <div class="text-center">
-              <div class="qrcode-box">
+              <div class="qrcode-box overflow-hidden">
                 <img :src="this.qrcode_base64" alt="QR Code" class="img-fluid">
                 <a :href="this.qrcode" class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover btn-download-qrcode">Download</a>
               </div>

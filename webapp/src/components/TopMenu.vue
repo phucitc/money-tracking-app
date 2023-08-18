@@ -1,5 +1,5 @@
 <template>
-  <header class="p-3 text-bg-dark">
+  <header class="p-3 text-zt-dark">
     <div class="container">
       <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
         <a href="/" class="d-flex align-items-center mb-2 mb-lg-0 text-white text-decoration-none">
@@ -10,12 +10,11 @@
 
         <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
           <li>
-            <router-link to="/" class="nav-link px-2 text-secondary">Home</router-link>
+            <router-link to="/" class="nav-link px-2 text-white text-logo">ZIPIT</router-link>
           </li>
-          <li><a href="#" class="nav-link px-2 text-white d-none">Features</a></li>
-          <li><a href="#" class="nav-link px-2 text-white d-none">Pricing</a></li>
-          <li><a href="#" class="nav-link px-2 text-white d-none">FAQs</a></li>
-          <li><a href="#" class="nav-link px-2 text-white d-none">About</a></li>
+          <li><router-link to="/features" class="nav-link px-2 text-white d-none">Features</router-link></li>
+          <li><router-link to="/faqs" class="nav-link px-2 text-white d-none">FAQs</router-link></li>
+          <li><router-link to="/about" class="nav-link px-2 text-white d-none">About </router-link></li>
         </ul>
 
         <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 " role="search">
@@ -24,8 +23,9 @@
         </form>
 
         <div class="text-end">
-          <button type="button" class="btn btn-outline-light me-2 d-none" @click="login">Login</button>
-          <button type="button" class="btn btn-warning d-none" @click="signup">Sign-up</button>
+
+          <span class="btn btn-link text-white link-underline" @click="login">Login</span>
+          <button type="button" class="btn bg-primary-300 text-white" @click="signup">Sign-up</button>
         </div>
       </div>
     </div>

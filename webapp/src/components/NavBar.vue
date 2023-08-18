@@ -1,6 +1,6 @@
 <template>
   <div class="item">
-    <div>
+    <div >
       <router-link to="/">Home</router-link>
       <div v-if="this.isAuth">
         <div>

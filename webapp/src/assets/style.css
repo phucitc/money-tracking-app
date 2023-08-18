@@ -14,16 +14,30 @@ label {
     position: relative;
     top:5px;
 }
-.qrcode-box {
-    position: relative;
+.btn-transparent {
+    background-color: transparent;
+    border-color: transparent;
 }
-.qrcode-box img {
-    border: var(--bs-border-width) solid var(--bs-border-color);
-    border-radius: var(--bs-border-radius);
+
+.qrcode-box {
+    border: var(--zt-border-width) solid var(--zt-indigo);
+    border-radius: var(--zt-border-radius);
+    position: relative;
+    --s: 30px; /* the size on the corner */
+    --t: 5px; /* the thickness of the border */
+    --g: 20px; /* the gap between the border and image */
+    outline-offset: calc(-1 * var(--t));
+    -webkit-mask: conic-gradient(at var(--s) var(--s), #0000 75%, #000 0) 0 0/calc(100% - var(--s)) calc(100% - var(--s)),
+    linear-gradient(#000 0 0) content-box;
+    transition: .4s;
 }
 .qrcode-box .btn-download-qrcode {
     position: absolute;
     bottom: 0;
     left: 0;
     right: 0;
+}
+.text-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
 }

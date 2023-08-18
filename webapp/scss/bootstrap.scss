@@ -1,0 +1,46 @@
+// Variable overrides first
+$indigo: #6610f2;
+$primary: $indigo;
+$enable-shadows: true;
+$prefix: "zt-";
+
+// Then import Bootstrap
+@import "../node_modules/bootstrap/scss/bootstrap";
+
+.text-zt-dark {
+  background: $indigo-600
+}
+.btn-bg-dark {
+  background: $indigo-800
+}
+
+.bg-primary-100 {
+  background: $indigo-100
+}
+.bg-primary-200 {
+  background: $indigo-200
+}
+.bg-primary-300 {
+  background: $indigo-300
+}
+.bg-primary-300:hover {
+  background: $indigo-400
+}
+.bg-primary-400 {
+  background: $indigo-400
+}
+.bg-primary-500 {
+  background: $indigo-500
+}
+.bg-primary-600 {
+  background: $indigo-600
+}
+.bg-primary-700 {
+  background: $indigo-700
+}
+.bg-primary-800 {
+  background: $indigo-800
+}
+.bg-primary-900 {
+  background: $indigo-900
+}

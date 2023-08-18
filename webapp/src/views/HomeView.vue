@@ -3,6 +3,7 @@ import TheWelcome from '../components/TheWelcome.vue'
 import NavBar from '../components/NavBar.vue'
 import TopMenu from "@/components/TopMenu.vue";
 import ToolBox from "@/components/ToolBox.vue";
+import Footer from "@/components/Footer.vue";
 
 </script>
 
@@ -19,5 +20,6 @@ import ToolBox from "@/components/ToolBox.vue";
         <div class="col-2"></div>
       </div>
     </div>
+    <Footer/>
   </main>
 </template>
