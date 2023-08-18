@@ -1,8 +1,11 @@
+// CSS
 import '../scss/bootstrap.scss'
 import './assets/style.css'
 
+// JS
+import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+
 import {createApp} from 'vue'
-import Vuex from 'vuex';
 import App from './App.vue'
 import router from './router'
 import store from './ultils/store'
