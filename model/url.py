@@ -1,8 +1,8 @@
-from model.db import DB
+from model.model import Model
 from py.helper import calculate_md5_hash
 
 
-class URL(DB):
+class URL(Model):
     TABLE = 'urls'
     COLS_IGNORE = []
     COLS_EXE_FCT = ['public_id']
@@ -23,3 +23,4 @@ class URL(DB):
     def get_by_destination_link(self, destination_link):
         destination_link_hash = calculate_md5_hash(destination_link)
         return self.get_by_field('destination_link_hash', destination_link_hash)
+

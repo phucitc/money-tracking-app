@@ -1,7 +1,6 @@
-from model.db import DB
+from model.model import Model
 
-
-class User(DB):
+class User(Model):
     TABLE = 'users'
     COLS_IGNORE = ['user_id', 'created_at', 'updated_at']
     COLS_EXE_FCT = ['public_id']

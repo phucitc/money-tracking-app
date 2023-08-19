@@ -3,6 +3,9 @@ from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_restful import Api
 from dotenv import load_dotenv
+
+from api.admin_resource import AdminResource
+
 load_dotenv()
 
 from api.url_resource import URLResource
@@ -41,6 +44,7 @@ api.add_resource(TodoResource, '/todos/<int:todo_id>')
 api.add_resource(AuthResource, '/auth-callback')
 api.add_resource(UserResource, '/user/<int:user_id>')
 api.add_resource(URLResource, '/api/url/short-url')
+api.add_resource(AdminResource, '/admin/<string:action>')
 # route
 @app.route('/favicon.ico')
 def favicon():

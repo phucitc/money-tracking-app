@@ -1,49 +1,16 @@
-# DB class
-import os
-import urllib.parse
-
-import psycopg2
-from psycopg2.extras import RealDictCursor
+# Model class
+from model.psql import PSQL
 
 
-class DB:
+class Model:
     COLS_EXE_FCT = []
     COLS_IGNORE = []
 
     def __init__(self, **kwargs):
-        try:
-            # parse connection string
-            DB_URL = urllib.parse.urlparse(os.getenv('DWH'))
-            self.connection = psycopg2.connect(
-                database=DB_URL.path[1:],
-                user=DB_URL.username,
-                password=DB_URL.password,
-                host=DB_URL.hostname,
-                port=DB_URL.port
-            )
-            self.cursor = self.connection.cursor(cursor_factory=RealDictCursor)
-            self.table_name = kwargs.get('table_name')
-            self.columns = dict()
-            self.data = dict()
-            print('Connected to DB')
-        except Exception as e:
-            print(e)
-            print('Can not connect to DB')
-
-    def get_columns(self):
-        if self.table_name:
-            query = f"SELECT column_name, data_type FROM information_schema.columns WHERE table_name = '{self.table_name}'"
-            self.cursor.execute(query)
-
-            # Fetch all column information as a list of tuples (column_name, data_type)
-            results = self.cursor.fetchall()
-            for row in results:
-                self.columns[row['column_name']] = {
-                    'type': row['data_type'],
-                }
-            return self.columns
-        else:
-            print('No table name provided')
+        self.table_name = kwargs.get('table_name')
+        self.columns = dict()
+        self.data = dict()
+        self.psql = None
 
     def insert(self, params):
         try:
@@ -52,7 +19,7 @@ class DB:
 
             input_columns = set(params.keys())
 
-            default_columns = self.get_columns()
+            default_columns = self.get_plsql().get_columns(self.table_name)
             default_columns_name = default_columns.keys()
             return_columns_after_insert = default_columns_name
 
@@ -73,16 +40,21 @@ class DB:
                     holder += f"%({key})s,"
             holder = holder[:-1]  # remove last comma
 
-            query = f"INSERT INTO {self.table_name} ({columns_to_insert}) VALUES ({holder}) RETURNING {return_columns_after_insert}"
-            self.execute(query, params=params)
-            inserted_row = self.cursor.fetchone()
+            query = f"INSERT INTO {self.TABLE} ({columns_to_insert}) VALUES ({holder}) RETURNING {return_columns_after_insert}"
+            self.psql.execute(query, params=params)
+            inserted_row = self.psql.cursor.fetchone()
             self.data = inserted_row
-            self.connection.commit()
+            self.psql.connection.commit()
             return self
 
         except Exception as e:
             print(e)
             return False
+
+    def get_plsql(self):
+        if self.psql is None:
+            self.psql = PSQL()
+        return self.psql
 
     def update(self, params):
         try:
@@ -100,42 +72,22 @@ class DB:
             holder = holder[:-1]  # remove last comma
 
             query = f"UPDATE {self.table_name} SET {holder} WHERE id = {self.id} RETURNING {return_columns_after_update}"
-            self.execute(query, params=params)
-            updated_row = self.cursor.fetchone()
+            self.get_plsql().execute(query, params=params)
+            updated_row = self.get_plsql().cursor.fetchone()
             self.data = updated_row
-            self.connection.commit()
+            self.get_plsql().connection.commit()
             return updated_row
 
         except Exception as e:
             print(e)
             return False
 
-    def execute(self, query, params=None):
-        try:
-            self.cursor.execute(query, params)
-            self.connection.commit()
-        except Exception as e:
-            print(e)
-            return False
-
-    def fetch(self, query):
-        self.cursor.execute(query)
-        return self.cursor.fetchall()
-
-    def fetch_one(self, query, params=None):
-        self.cursor.execute(query, params)
-        return self.cursor.fetchone()
-
-    def close(self):
-        self.cursor.close()
-        self.connection.close()
-
     def get_by_field(self, field, value):
         query = 'SELECT * FROM {table_name} WHERE {field} = %(value)s'.format(table_name=self.table_name, field=field)
         params = {
             'value': value
         }
-        row = self.fetch_one(query, params=params)
+        row = self.get_plsql().fetch_one(query, params=params)
         if row:
             self.data = row
             return self
@@ -151,3 +103,18 @@ class DB:
         if column_name in self.data:
             return self.data[column_name]
         return None
+
+    def get_all(self, limit=100, offset=0):
+        query = f"SELECT * FROM {self.TABLE} LIMIT {limit} OFFSET {offset}"
+        rows = self.get_plsql().fetch(query)
+        results = []
+        for row in rows:
+            original_class = self.__class__
+            inst = original_class()
+            if 'created_at' in row:
+                row['created_at'] = row['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+            if 'updated_at' in row:
+                row['updated_at'] = row['updated_at'].strftime('%Y-%m-%d %H:%M:%S')
+            inst.data = row
+            results.append(inst)
+        return results
