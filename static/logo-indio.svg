@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="40" viewBox="0 0 110 40">
+  <defs>
+    <style>
+      .cls-1 {
+        font-size: 41.667px;
+        fill: #6610f2;
+        font-family: "Segoe UI";
+        font-weight: 700;
+      }
+    </style>
+  </defs>
+  <text id="ZIPIT" class="cls-1" x="4.75" y="35.5">ZIPIT</text>
+</svg>

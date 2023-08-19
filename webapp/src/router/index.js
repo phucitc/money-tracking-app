@@ -70,6 +70,13 @@ const router = createRouter({
             name: 'maintenance',
             component: MaintenanceView
         },
+        // Admin routes
+
+        {
+            path: '/admin',
+            name: 'admin-home',
+            component: () => import('../admin/views/AdminHome.vue'),
+        },
         // Add a wildcard route for 404 page
         {
             path: '/:catchAll(.*)',
