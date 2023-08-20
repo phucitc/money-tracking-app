@@ -34,11 +34,7 @@ export default {
       const auth0 = useAuth0();
       return {
         logout() {
-          auth0.logout( {
-            logoutParams: {
-              returnTo: 'http://localhost:5173/admin'
-            }
-          })
+          auth0.logout()
         },
       };
     },

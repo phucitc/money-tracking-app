@@ -1,6 +1,7 @@
 from flask_restful import Resource, reqparse
 
 from model.url import URL
+from py.auth_helper import authenticate_admin
 
 
 class AdminResource(Resource):
@@ -9,6 +10,7 @@ class AdminResource(Resource):
         # Define the request parser with the expected parameters
         self.parser = reqparse.RequestParser()
 
+    @authenticate_admin
     def get(self, action):
         results = []
         if action == 'get-urls':

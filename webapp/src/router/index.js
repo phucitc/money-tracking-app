@@ -9,6 +9,7 @@ import auth from "@/ultils/auth";
 import NotFoundView from "@/views/NotFoundView.vue";
 import MaintenanceView from "@/views/MaintenanceView.vue";
 import CommingSoonView from "@/views/CommingSoonView.vue";
+import LogoutView from "@/views/LogoutView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,6 +39,11 @@ const router = createRouter({
             path: '/login',
             name: 'login',
             component: LoginView
+        },
+        {
+            path: '/logout',
+            name: 'logout',
+            component: LogoutView
         },
         {
             path: '/callback',
@@ -71,11 +77,21 @@ const router = createRouter({
             component: MaintenanceView
         },
         // Admin routes
-
         {
             path: '/admin',
             name: 'admin-home',
             component: () => import('../admin/views/AdminHome.vue'),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
+            path: '/admin/urls',
+            name: 'admin-urls',
+            component: () => import('../admin/views/AdminURLs.vue'),
+            meta: {
+                requiresAuth: true,
+            },
         },
         // Add a wildcard route for 404 page
         {

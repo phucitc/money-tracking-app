@@ -1,6 +1,10 @@
 <template>
-  <div>
-    <h2>Callback</h2>
+  <div class="container">
+    <div class="row">
+      <div class="col text-center py-4">
+        <h2 class="text-success">You have logged in successfully. You will be redirected immediately.</h2>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -48,7 +52,7 @@ export default {
           this.updateAccessToken(this.auth0AccessToken)
           this.updateIsAuth(true)
 
-          // TODO: Send request to server to llogin then redirect to URL
+          // TODO: Send request to server to login then redirect to URL
           this.$router.push('/dashboard')
         }
       }

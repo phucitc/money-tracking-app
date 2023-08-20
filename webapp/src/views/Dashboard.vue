@@ -15,6 +15,7 @@ export default {
   setup() {
   },
   mounted() {
+    console.log(store.getters.getToken)
   },
   methods: {
   }

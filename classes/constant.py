@@ -31,4 +31,5 @@ class Constant:
         HTTP_SERVICE_UNAVAILABLE: 'Service Unavailable',
         HTTP_GATEWAY_TIMEOUT: 'Gateway Timeout'
     }
+    ADMIN_EMAILS = ['dhoangphuc237@gmail.com']
 

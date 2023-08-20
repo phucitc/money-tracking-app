@@ -8,3 +8,7 @@ export function get_btn_loading(min, max) {
   return '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>\n' +
       '  <span class="visually-hidden">Loading...</span>';
 }
+
+export function get_end_point() {
+    return import.meta.env.VITE_BE_URL
+}
