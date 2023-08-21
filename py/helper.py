@@ -28,14 +28,17 @@ def decode_jwt(token):
 
     try:
         # Decode and verify the token using the signing keys
-        decoded = jwt.decode(token, signing_key.key, algorithms=['RS256'], options={'verify_aud': False})
+        decoded = jwt.decode(token, signing_key.key, algorithms=['RS256'], options={'verify_aud': False, 'verify_iat': False})
         print(decoded)
         return decoded, 200
-    except jwt.ExpiredSignatureError:
+    except jwt.ExpiredSignatureError as e:
+        print('Error 1', str(e))
+
         # Token has expired
         return {'error': 'Expired token'}, 401
-    except jwt.InvalidTokenError:
+    except jwt.InvalidTokenError as e:
         # Invalid token
+        print('Error 2', str(e))
         return {'error': 'Invalid token'}, 401
 
 
@@ -56,6 +59,7 @@ def is_empty(value):
     if value in [None, '']:
         return True
     return False
+
 
 def create_simple_qrcode(content):
     try:
@@ -89,6 +93,7 @@ def create_simple_qrcode(content):
 def return_link(value):
     return os.getenv('APP_DOMAIN') + value
 
+
 def get_qrcode_link(public_id):
     return return_link('qrcode/' + public_id)
 
@@ -104,3 +109,11 @@ def get_root_path():
     return current_dir
 
 
+def is_production():
+    return os.getenv('APP_ENV') == 'production'
+
+
+def get_webapp_url():
+    if is_production():
+        return os.getenv('APP_DOMAIN')
+    return 'http://localhost:5173/'
