@@ -42,7 +42,7 @@ export default {
         this.updateIsAuth(false)
         // TODO: Send request to server to logout then redirect to URL
         console.log("Logout")
-        this.$router.push('/')
+        this.$router.push('/home')
       } else {
         // action: Login
         await auth0.checkSession();
