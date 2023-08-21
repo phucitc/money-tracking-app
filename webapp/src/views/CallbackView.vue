@@ -41,6 +41,7 @@ export default {
         this.updateAccessToken('')
         this.updateIsAuth(false)
         // TODO: Send request to server to logout then redirect to URL
+        console.log("Logout")
         this.$router.push('/')
       } else {
         // action: Login
