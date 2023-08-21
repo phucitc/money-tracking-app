@@ -5,11 +5,11 @@ from flask_restful import Api
 from dotenv import load_dotenv
 
 from api.admin_resource import AdminResource
+from api.auth_resource import AuthResource
 
 load_dotenv()
 
 from api.url_resource import URLResource
-from classes.auth_resource import AuthResource
 from classes.todo_resource import TodoResource
 from classes.user_resource import UserResource
 from my_app.home.home import home_blueprint
@@ -41,7 +41,7 @@ app.wsgi_app = app_middleware(app.wsgi_app)
 
 # Add the resource to the API
 api.add_resource(TodoResource, '/todos/<int:todo_id>')
-api.add_resource(AuthResource, '/auth-callback')
+api.add_resource(AuthResource, '/auth')
 api.add_resource(UserResource, '/user/<int:user_id>')
 api.add_resource(URLResource, '/api/url/short-url')
 api.add_resource(AdminResource, '/admin/<string:action>')

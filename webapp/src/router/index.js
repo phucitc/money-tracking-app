@@ -2,14 +2,13 @@ import {createRouter, createWebHistory} from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import SignupView from '../views/SignupView.vue'
 import CallbackView from '../views/CallbackView.vue'
-import LoginView from '../views/LoginView.vue'
 import AboutView from '../views/AboutView.vue'
-import {useAuth0} from "@auth0/auth0-vue";
 import auth from "@/ultils/auth";
 import NotFoundView from "@/views/NotFoundView.vue";
 import MaintenanceView from "@/views/MaintenanceView.vue";
 import CommingSoonView from "@/views/CommingSoonView.vue";
 import LogoutView from "@/views/LogoutView.vue";
+import LoginView from "@/view_share/LoginView.vue";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -86,6 +85,11 @@ const router = createRouter({
             },
         },
         {
+            path: '/admin/login',
+            name: 'admin-login',
+            component: LoginView
+        },
+        {
             path: '/admin/urls',
             name: 'admin-urls',
             component: () => import('../admin/views/AdminURLs.vue'),
@@ -104,15 +108,11 @@ const router = createRouter({
 router.beforeEach(async (to, from, next) => {
     // Send a pageview event to Google Analytics for each route change
     if (window.gtag) {
-        window.gtag('config', 'YOUR_GA_TRACKING_ID', {page_path: to.path});
+        window.gtag('config', 'G-2JR8BXX3D3', {page_path: to.path});
     }
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         // Route requires authentication, check if the user is logged in
-        // const auth0 = useAuth0()
-        // await auth0.checkSession();
-        // await auth0.getAccessTokenSilently()
-        // await auth.authenticate()
         if (await auth.authenticate()) {
             // User is authenticated, allow access
             next();

@@ -12,6 +12,7 @@ import {useRoute} from 'vue-router';
 import axios from "axios";
 import {useAuth0} from "@auth0/auth0-vue";
 import {mapState, mapActions} from 'vuex';
+import {get_end_point} from "@/ultils/helper";
 
 export default {
   data() {
@@ -52,8 +53,27 @@ export default {
           this.updateAccessToken(this.auth0AccessToken)
           this.updateIsAuth(true)
 
-          // TODO: Send request to server to login then redirect to URL
-          this.$router.push('/dashboard')
+          const config = {
+            headers: {
+              Authorization: `Bearer ${this.auth0Token}`,
+              'Content-Type': 'application/json',
+            },
+          };
+
+          await axios.post(get_end_point() + '/auth', {}, config)
+          .then(response => {
+            const redirect_uri = response.data.redirect_uri
+            if (redirect_uri !== undefined && redirect_uri !== '') {
+              this.$router.push(redirect_uri)
+            } else {
+              // TODO: show a toast error
+              // this.$router.push('/')
+            }
+          })
+          .catch(error => {
+            // TODO: show a toast error
+            console.log(error)
+          })
         }
       }
 
