@@ -24,8 +24,8 @@
 
         <div class="text-end">
 
-          <span class="btn btn-link text-white link-underline" @click="login">Login</span>
-          <button type="button" class="btn bg-primary-300 text-white" @click="signup">Sign-up</button>
+          <span class="btn btn-link text-white link-underline d-none" @click="login">Login</span>
+          <button type="button" class="btn bg-primary-300 text-white d-none" @click="signup">Sign-up</button>
         </div>
       </div>
     </div>
