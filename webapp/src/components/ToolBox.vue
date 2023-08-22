@@ -101,6 +101,7 @@ export default {
   setup() {
   },
   mounted() {
+    console.log(location.host)
   },
   methods: {
     submit_form() {},
