@@ -11,7 +11,7 @@ import LogoutView from "@/views/LogoutView.vue";
 import LoginView from "@/view_share/LoginView.vue";
 
 const router = createRouter({
-    history: createWebHistory(import.meta.env.VITE_BASE_URL),
+    history: createWebHistory(),
     routes: [
         {
             path: '/',
@@ -83,11 +83,6 @@ const router = createRouter({
             meta: {
                 requiresAuth: true,
             },
-        },
-        {
-            path: '/admin/login',
-            name: 'admin-login',
-            component: LoginView
         },
         {
             path: '/admin/urls',
