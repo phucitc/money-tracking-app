@@ -11,7 +11,7 @@ import LogoutView from "@/views/LogoutView.vue";
 import LoginView from "@/view_share/LoginView.vue";
 
 const router = createRouter({
-    history: createWebHistory(),
+    history: createWebHistory(import.meta.env.BASE_URL),
     routes: [
         {
             path: '/',
