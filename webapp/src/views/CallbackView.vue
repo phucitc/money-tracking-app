@@ -45,6 +45,7 @@ export default {
         this.$router.push('/')
 
       } else {
+        console.log("Logged")
         // action: Login
         await auth0.checkSession();
         this.auth0AccessToken = await auth0.getAccessTokenSilently()
