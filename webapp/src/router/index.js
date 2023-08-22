@@ -77,6 +77,11 @@ const router = createRouter({
         },
         // Admin routes
         {
+            path: '/admin/login',
+            name: 'admin-login',
+            component: LoginView
+        },
+        {
             path: '/admin',
             name: 'admin-home',
             component: () => import('../admin/views/AdminHome.vue'),

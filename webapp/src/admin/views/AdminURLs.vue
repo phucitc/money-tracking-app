@@ -58,7 +58,7 @@ export default {
         },
       };
 
-      axios.get(this.endpoint + '/admin/get-urls', config)
+      axios.get(this.endpoint + '/admin-api/get-urls', config)
       .then(response => {
         this.is_auth = true
         this.urls = response.data

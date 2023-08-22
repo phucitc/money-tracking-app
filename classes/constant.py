@@ -32,4 +32,10 @@ class Constant:
         HTTP_GATEWAY_TIMEOUT: 'Gateway Timeout'
     }
     ADMIN_EMAILS = ['dhoangphuc237@gmail.com']
+    VUEJS_PAGES = [
+        'home', 'login', 'signup',
+        'logout', 'profile', 'dashboard',
+        'about', 'callback', 'beta'
+    ]
 
+    VUEJS_ADMIN_PAGES = ['login', 'urls']

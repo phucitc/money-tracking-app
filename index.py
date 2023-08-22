@@ -44,7 +44,7 @@ api.add_resource(TodoResource, '/todos/<int:todo_id>')
 api.add_resource(AuthResource, '/auth')
 api.add_resource(UserResource, '/user/<int:user_id>')
 api.add_resource(URLResource, '/api/url/short-url')
-api.add_resource(AdminResource, '/admin/<string:action>')
+api.add_resource(AdminResource, '/admin-api/<string:action>')
 # route
 @app.route('/favicon.ico')
 def favicon():

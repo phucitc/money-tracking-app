@@ -2,6 +2,7 @@ import os
 
 from flask import Blueprint, render_template, redirect, send_file
 
+from classes.constant import Constant
 from model.url import URL
 from py.helper import is_empty, create_simple_qrcode, return_link
 
@@ -19,8 +20,7 @@ def redirect_link(slug):
     print("slug", slug)
     if slug is not None:
         # these are routes in VueJS
-        spa_routes = ['home', 'login', 'signup', 'logout', 'profile', 'dashboard', 'about', 'callback', 'beta']
-        if slug in spa_routes:
+        if slug in Constant.VUEJS_PAGES:
             print("Here, return vueJS template")
             return render_template('index.html')
 
@@ -35,6 +35,11 @@ def redirect_link(slug):
     else:
         return 'No link'
 
+@home_blueprint.route('/admin/<page_name>')
+def admin_pages(page_name):
+    if page_name in Constant.VUEJS_ADMIN_PAGES:
+        return render_template('index.html')
+    return render_template('index.html'), 404
 
 @home_blueprint.route('/qrcode/<url_public_id>')
 def download_qrcode(url_public_id):
