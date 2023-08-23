@@ -45,17 +45,15 @@ export default {
         this.$router.push('/')
 
       } else {
-        console.log("Logged")
+        console.log("Logged", route.query)
         // action: Login
         await auth0.checkSession();
         this.auth0AccessToken = await auth0.getAccessTokenSilently()
+        this.auth0Token = auth0.idTokenClaims.value.__raw
+        this.updateToken(this.auth0Token)
+        this.updateAccessToken(this.auth0AccessToken)
+        this.updateIsAuth(true)
         if (await auth0.isAuthenticated.value) {
-          this.auth0Token = auth0.idTokenClaims.value.__raw
-
-          this.updateToken(this.auth0Token)
-          this.updateAccessToken(this.auth0AccessToken)
-          this.updateIsAuth(true)
-
           const config = {
             headers: {
               Authorization: `Bearer ${this.auth0Token}`,
@@ -64,19 +62,24 @@ export default {
           };
 
           await axios.post(get_end_point() + '/auth', {}, config)
-          .then(response => {
-            const redirect_uri = response.data.redirect_uri
-            if (redirect_uri !== undefined && redirect_uri !== '') {
-              this.$router.push(redirect_uri)
-            } else {
-              // TODO: show a toast error
-              // this.$router.push('/')
-            }
-          })
-          .catch(error => {
-            // TODO: show a toast error
-            console.log(error)
-          })
+              .then(response => {
+                // const redirect_uri = response.data.redirect_uri
+                // if (redirect_uri !== undefined && redirect_uri !== '') {
+                //   this.$router.push(redirect_uri)
+                // } else {
+                //   // TODO: show a toast error
+                //   // this.$router.push('/')
+                // }
+                if (route.query.redirect_url !== undefined && route.query.redirect_url !== '') {
+                  this.$router.push(route.query.redirect_url)
+                } else {
+                  this.$router.push('/dashboard')
+                }
+              })
+              .catch(error => {
+                // TODO: show a toast error
+                console.log(error)
+              })
         }
       }
 

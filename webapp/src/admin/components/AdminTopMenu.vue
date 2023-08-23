@@ -34,7 +34,11 @@ export default {
       const auth0 = useAuth0();
       return {
         logout() {
-          auth0.logout()
+          auth0.logout({
+            logoutParams: {
+              returnTo: window.location.origin + '/callback?action=logout'
+            }
+          })
         },
       };
     },

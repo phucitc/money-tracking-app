@@ -38,7 +38,11 @@ export default {
           auth0.loginWithRedirect( {authorizationParams: {screen_hint: 'signup'}});
         },
         logout() {
-          auth0.logout();
+          auth0.logout({
+            logoutParams: {
+              returnTo: window.location.origin + '/callback?action=logout'
+            }
+          });
         }
       };
     },
@@ -51,15 +55,6 @@ export default {
     //   auth0.loginWithRedirect();
     // },
     // signup() {
-      // createAuth0({
-      //   domain: "dev-e0hn8bw4osg50wqz.us.auth0.com",
-      //   clientId: "gsV2RRopEbPsVoz1R5XcpVPNtXgM1Uhb",
-      //   authorizationParams: {
-      //     redirect_uri: 'http://localhost:5000/callback',
-      //   screen_hint: 'signup'
-      //   }
-      // })
-      // console.log("AAA")
       // const auth0 = useAuth0();
       // this.$auth0.authorizationParams.screen_hint = 'signup'
       // auth0.loginWithRedirect();

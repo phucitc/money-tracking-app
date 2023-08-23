@@ -9,6 +9,8 @@ import MaintenanceView from "@/views/MaintenanceView.vue";
 import CommingSoonView from "@/views/CommingSoonView.vue";
 import LogoutView from "@/views/LogoutView.vue";
 import LoginView from "@/view_share/LoginView.vue";
+import {useAuth0} from "@auth0/auth0-vue";
+import store from "@/ultils/store";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -94,7 +96,7 @@ const router = createRouter({
             name: 'admin-urls',
             component: () => import('../admin/views/AdminURLs.vue'),
             meta: {
-                requiresAuth: true,
+                requiresAuth: true
             },
         },
         // Add a wildcard route for 404 page
@@ -113,12 +115,17 @@ router.beforeEach(async (to, from, next) => {
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         // Route requires authentication, check if the user is logged in
-        if (await auth.authenticate()) {
+        const auth0 = useAuth0()
+        const isAuthenticated = await auth0.isAuthenticated.value;
+        if (isAuthenticated) {
             // User is authenticated, allow access
             next();
         } else {
             // User is not authenticated, redirect to login page or show access denied message
-            next('/login'); // Replace '/login' with your desired login route
+            // next('/login'); // Replace '/login' with your desired login route
+            auth0.loginWithRedirect({
+                redirect_uri: window.location.origin + '/callback?action=login&redirect_url=' + to.path,
+            });
         }
     } else {
         // Route does not require authentication, allow access
