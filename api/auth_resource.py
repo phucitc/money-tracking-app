@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 from classes.constant import Constant
+from model.user import User
 from py.helper import decode_jwt, is_empty, get_webapp_url
 
 
@@ -34,11 +35,11 @@ class AuthResource(Resource):
                 redirect_uri = ''
                 decode, code = decode_jwt(token)
                 if code == 200:
-
-                    if decode['email'] in Constant.ADMIN_EMAILS:
-                        redirect_uri = 'admin'
-                    else:
-                        redirect_uri = 'dashboard'
+                    User().check_and_insert_user(decode['email'])
+                    # if decode['email'] in Constant.ADMIN_EMAILS:
+                    #     redirect_uri = 'admin'
+                    # else:
+                    #     redirect_uri = 'dashboard'
 
                 return {'redirect_uri': redirect_uri}
         return {'error': 'Unauthorized'}, Constant.HTTP_UNAUTHORIZED
