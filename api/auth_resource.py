@@ -35,7 +35,10 @@ class AuthResource(Resource):
                 redirect_uri = ''
                 decode, code = decode_jwt(token)
                 if code == 200:
-                    User().check_and_insert_user(decode['email'])
+                    data = {
+                        'email': decode['email'],
+                    }
+                    User().check_and_insert_user(data)
                     # if decode['email'] in Constant.ADMIN_EMAILS:
                     #     redirect_uri = 'admin'
                     # else:

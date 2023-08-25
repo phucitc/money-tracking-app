@@ -1,8 +1,24 @@
+<style>
+.callback {
+  background: var(--zt-primary);
+  color: var(--zt-white);
+  height: 100%;
+  position: fixed;
+}
+</style>
 <template>
-  <div class="container">
+  <div class="container-fluid callback">
     <div class="row">
-      <div class="col text-center py-4">
-        <h2 class="text-success">You have logged in successfully. You will be redirected immediately.</h2>
+      <div class="col text-center py-5">
+        <div class="spinner-grow text-white" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-white mx-1" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
+        <div class="spinner-grow text-white" role="status">
+          <span class="visually-hidden">Loading...</span>
+        </div>
       </div>
     </div>
   </div>
@@ -42,10 +58,10 @@ export default {
         this.updateIsAuth(false)
         // TODO: Send request to server to logout then redirect to URL
         console.log("Logout")
-        this.$router.push('/')
-
+        const vue = this
+        setTimeout(function () { vue.$router.push('/') }, 1000)
       } else {
-        console.log("Logged", route.query)
+        console.log("Logged")
         // action: Login
         await auth0.checkSession();
         this.auth0AccessToken = await auth0.getAccessTokenSilently()
