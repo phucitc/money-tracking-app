@@ -64,10 +64,35 @@ const router = createRouter({
                 requiresAuth: true,
             },
         },
+        // User routes
         {
             path: '/dashboard',
             name: 'dashboard',
-            component: () => import('../views/Dashboard.vue'),
+            component: () => import('../user/views/DashboardView.vue'),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
+            path: '/dashboard/urls',
+            name: 'dashboard-urls',
+            component: () => import('../user/views/DashboardURLs.vue'),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
+            path: '/dashboard/api',
+            name: 'dashboard-api',
+            component: () => import('../user/views/DashboardAPI.vue'),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
+            path: '/dashboard/settings',
+            name: 'dashboard-settings',
+            component: () => import('../user/views/DashboardSettings.vue'),
             meta: {
                 requiresAuth: true,
             },

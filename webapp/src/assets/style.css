@@ -71,10 +71,6 @@ label {
   font-weight: 500;
 }
 
-.sidebar .nav-link.active {
-  color: #2470dc;
-}
-
 .sidebar-heading {
   font-size: .75rem;
 }

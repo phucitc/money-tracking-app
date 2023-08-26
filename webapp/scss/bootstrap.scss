@@ -14,6 +14,10 @@ $prefix: "zt-";
   background: $indigo-800
 }
 
+.bg-primary {
+  background: $indigo
+}
+
 .bg-primary-100 {
   background: $indigo-100
 }
@@ -43,4 +47,7 @@ $prefix: "zt-";
 }
 .bg-primary-900 {
   background: $indigo-900
+}
+.color-primary {
+  color: $indigo!important;
 }

@@ -1,33 +1,8 @@
 <template>
-  <header class="navbar sticky-top bg-dark flex-md-nowrap p-0 shadow" data-bs-theme="dark">
-    <a class="navbar-brand col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">ZIPIT</a>
-
-    <ul class="navbar-nav flex-row d-md-none">
-      <li class="nav-item text-nowrap">
-        <button class="nav-link px-3 text-white" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSearch"
-                aria-controls="navbarSearch" aria-expanded="false" aria-label="Toggle search">
-          <svg class="bi">
-            <use xlink:href="#search"></use>
-          </svg>
-        </button>
-      </li>
-      <li class="nav-item text-nowrap">
-        <button class="nav-link px-3 text-white" type="button" data-bs-toggle="offcanvas" data-bs-target="#sidebarMenu"
-                aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-          <svg class="bi">
-            <use xlink:href="#list"></use>
-          </svg>
-        </button>
-      </li>
-    </ul>
-
-    <div id="navbarSearch" class="navbar-search w-100 collapse">
-      <input class="form-control w-100 rounded-0 border-0" type="text" placeholder="Search" aria-label="Search">
-    </div>
-  </header>
+  <Header />
   <div class="container-fluid">
     <div class="row">
-      <SideBar />
+      <LeftSideBar />
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4">
         <div
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
@@ -191,18 +166,18 @@ import store from "@/ultils/store";
 import {Bar} from 'vue-chartjs'
 import BarChart from "@/components_share/BarChart.vue";
 import LineChart from "@/components_share/LineChart.vue";
-import SideBar from "@/components/SideBar.vue";
+import Header from "@/user/components/Header.vue";
+import LeftSideBar from "@/user/components/LeftSideBar.vue";
 
 
 export default {
-  components: {SideBar, LineChart, BarChart},
+  components: {LeftSideBar, Header, LineChart, BarChart},
   data() {
     return {}
   },
   setup() {
   },
   mounted() {
-    // console.log(store.getters.getToken)
   },
   methods: {}
 };
