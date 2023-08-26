@@ -58,23 +58,34 @@ class URLResource(Resource):
                 for item in url_aliases:
                     list_alias.append({'alias_name': return_link(item.alias_name)})
 
-            if is_empty(row.qrcode_path):
-                qrcode_path = create_simple_qrcode(return_link(public_id))
-                row.qrcode_path = qrcode_path
-                url.update({'qrcode_path': qrcode_path})
-
-            qrcode_file_path = get_root_path() + '/' + row.qrcode_path
-            img = Image.open(qrcode_file_path)
-            buffered = BytesIO()
-            img.save(buffered, format="PNG")
-            qrcode_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
-
+            qrcode_base64 = self.handler_qrcode(row)
         else:
             abort(Constant.HTTP_BAD_REQUEST, message="Invalid JSON")
         return {
             'short_link': return_link(public_id),
             'qrcode': get_qrcode_link(public_id),
             'list_alias': list_alias,
-            'qrcode_base64': 'data:image/png;base64,' + qrcode_base64
+            'qrcode_base64': qrcode_base64
         }
+
+    @staticmethod
+    def handler_qrcode(url):
+        # url is URL object
+        if is_empty(url.qrcode_path):
+            qrcode_path = create_simple_qrcode(return_link(url.public_id))
+            url.qrcode_path = qrcode_path
+            url.update({'qrcode_path': qrcode_path})
+
+        qrcode_file_path = get_root_path() + '/' + url.qrcode_path
+        img = Image.open(qrcode_file_path)
+        buffered = BytesIO()
+        img.save(buffered, format="PNG")
+        qrcode_base64 = base64.b64encode(buffered.getvalue()).decode('utf-8')
+        return 'data:image/png;base64,' + qrcode_base64
+
+    @staticmethod
+    def handler_url_alias(url):
+        list_alias = []
+        return list_alias
+
 
