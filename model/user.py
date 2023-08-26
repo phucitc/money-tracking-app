@@ -2,7 +2,7 @@ from model.model import Model
 
 class User(Model):
     TABLE = 'users'
-    COLS_IGNORE = ['user_id', 'created_at', 'updated_at']
+    COLS_IGNORE = ['id', 'created_at', 'updated_at']
     COLS_EXE_FCT = ['public_id']
     PUBLIC_ID_LENGTH = 5
 
