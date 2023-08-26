@@ -12,6 +12,7 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp',
 
 @home_blueprint.route('/')
 def index():
+    print("HOME")
     return render_template('index.html')
 
 
@@ -37,6 +38,7 @@ def redirect_link(slug):
 
 @home_blueprint.route('/admin/<page_name>')
 def admin_pages(page_name):
+    print("Admin page name", page_name)
     if page_name in Constant.VUEJS_ADMIN_PAGES:
         return render_template('index.html')
     return render_template('index.html'), 404
