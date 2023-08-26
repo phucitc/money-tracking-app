@@ -38,3 +38,12 @@ CREATE INDEX IF NOT EXISTS idx_public_id_user_id_destination_link_hash
     ON public.urls USING btree
     (public_id COLLATE pg_catalog."default" ASC NULLS LAST, user_id ASC NULLS LAST, destination_link_hash ASC NULLS LAST)
     TABLESPACE pg_default;
+
+
+-- DROP TABLE IF EXISTS public.url_aliases;
+CREATE TABLE IF NOT EXISTS public.url_aliases
+(
+    url_public_id character varying(8) COLLATE pg_catalog."default" NOT NULL,
+    alias_name character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    CONSTRAINT url_aliases_pkey PRIMARY KEY (url_public_id, alias_name)
+);
