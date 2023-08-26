@@ -1,6 +1,6 @@
 <template>
   <Header />
-  <div class="container-fluid">
+  <div class="container-fluid dashboard">
     <div class="row">
       <LeftSideBar />
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
