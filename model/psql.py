@@ -40,8 +40,8 @@ class PSQL:
         else:
             print('No table name provided')
 
-    def fetch(self, query):
-        self.cursor.execute(query)
+    def fetch(self, query, params=None):
+        self.cursor.execute(query, params)
         return self.cursor.fetchall()
 
     def fetch_one(self, query, params=None):
@@ -54,8 +54,10 @@ class PSQL:
 
     def execute(self, query, params=None):
         try:
+            print(params)
             self.cursor.execute(query, params)
             self.connection.commit()
+            return True
         except Exception as e:
             print(e)
             return False

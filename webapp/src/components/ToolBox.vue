@@ -27,9 +27,9 @@
             <input type="text" class="form-control text-center" placeholder="/" readonly disabled
                    aria-describedby="button-addon2">
           </div>
-          <div class="col d-none">
+          <div class="col">
             <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong></label>
-            <input type="text" class="form-control" name="short_url_alias" v-model="this.short_url_alias" placeholder="Example: my-link" aria-label="Enter a long link"
+            <input type="text" class="form-control" name="alias_name" v-model="this.alias_name" placeholder="Example: my-link" aria-label="Enter a long link"
                    aria-describedby="button-addon2">
           </div>
         </div>
@@ -45,12 +45,23 @@
       <div v-if="this.is_show_result">
         <div class="row">
           <div class="col col-md-8">
-            <label for="basic-url" class="form-label"><strong>Your short URL</strong></label>
+            <label class="form-label" for="short_url"><strong>Your short URL</strong></label>
             <div class="input-group mb-3">
-              <input type="text" class="form-control" name="short_url" v-model="this.short_url" placeholder="https://zipit.link/your-link"
+              <input type="text" class="form-control" name="short_url" id="short_url" v-model="this.short_url" placeholder="https://zipit.link/your-link"
                      aria-label="Enter a long link" readonly disabled
                      aria-describedby="button-addon2">
-              <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_short_url">{{ this.btn_copy_text }}</button>
+              <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_url()">{{ this.btn_copy_text }}</button>
+            </div>
+            <div v-if="this.list_alias.length > 0">
+            <label class="form-label" for="alias"><strong>Your Aliases URL</strong></label>
+            </div>
+            <div v-for="(item, index) in this.list_alias">
+              <div class="input-group mb-3">
+                <input type="text" class="form-control" name="short_url" id="alias" v-model="item.alias_name" placeholder="https://zipit.link/your-link"
+                       aria-label="Enter a long link" readonly disabled
+                       aria-describedby="button-addon2">
+                <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_alias_url(index)">{{ item.copied ? "Copied" : "Copy" }}</button>
+              </div>
             </div>
             <div class="input-group">
               <div class="text-center w-100">
@@ -68,14 +79,8 @@
             </div>
           </div>
         </div>
-
-
       </div>
-
     </form>
-
-
-
   </div>
 </template>
 <script>
@@ -87,15 +92,17 @@ export default {
     return {
       long_url: '',
       long_url_disable: false,
-      short_url_alias: '',
+      alias_name: '',
       short_url: '',
       is_show_result: false,
       btn_copy_text: 'Copy',
+      btn_copy_text_alias: 'Copy',
       btn_zip_url_text: 'Zip your URL',
       btn_zip_another_text: 'Zip another URL',
       form_css_was_validated: '',
       qrcode_base64: '',
       qrcode: '',
+      list_alias: [],
     }
   },
   setup() {
@@ -108,7 +115,7 @@ export default {
     async generate_short_link() {
       try {
         this.long_url = this.long_url.trim();
-        this.short_url_alias = this.short_url_alias.trim();
+        this.alias_name = this.alias_name.trim();
         if ( this.long_url === '' ) {
           this.form_css_was_validated = 'was-validated';
           return;
@@ -118,7 +125,7 @@ export default {
         this.btn_zip_url_text = get_border_spinner();
         const response = await axios.post( import.meta.env.VITE_BE_URL + '/api/url/short-url', {
           long_url: this.long_url,
-          short_url_alias: '',
+          alias_name: this.alias_name,
         }).finally(() => {
           this.btn_zip_url_text = btn_zip_url_text_ori;
         });
@@ -130,6 +137,7 @@ export default {
           this.long_url_disable = true;
           this.qrcode_base64 = response.data.qrcode_base64;
           this.qrcode = response.data.qrcode;
+          this.list_alias = response.data.list_alias;
         }
       } catch (error) {
         console.error('Error:', error);
@@ -138,16 +146,27 @@ export default {
     zip_another_link() {
       this.long_url = '';
       this.long_url_disable = false;
-      this.short_url_alias = '';
+      this.alias_name = '';
       this.short_url = '';
       this.is_show_result = false;
       this.btn_copy_text = 'Copy';
       this.qrcode_base64 = '';
       this.qrcode = ''
     },
-    copy_short_url() {
+    copy_url() {
       navigator.clipboard.writeText(this.short_url);
       this.btn_copy_text = 'Copied';
+      setTimeout(() => {
+        this.btn_copy_text = 'Copy';
+      }, 1500);
+    },
+    copy_alias_url(index) {
+      const item = this.list_alias[index];
+      navigator.clipboard.writeText(item.alias_name);
+      item.copied = true;
+      setTimeout(() => {
+        item.copied = false;
+      }, 1500);
     }
   }
 };

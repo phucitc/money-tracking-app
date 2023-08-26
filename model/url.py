@@ -24,3 +24,16 @@ class URL(Model):
         destination_link_hash = calculate_md5_hash(destination_link)
         return self.get_by_field('destination_link_hash', destination_link_hash)
 
+    def get_by_alias_name(self, alias_name):
+        from model.url_alias import URL_Alias
+        query = f"""
+            SELECT u.* FROM {self.TABLE} u 
+                LEFT JOIN {URL_Alias.TABLE} ua
+                    ON u.public_id = ua.url_public_id 
+            WHERE ua.alias_name = %(alias_name)s
+        """
+        row = self.fetch_one(query, params={'alias_name': alias_name})
+        if row:
+            self.data = row
+            return self
+        return None

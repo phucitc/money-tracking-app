@@ -7,6 +7,7 @@ from flask_restful import Resource, reqparse
 
 from classes.constant import Constant
 from model.url import URL
+from model.url_alias import URL_Alias
 from py.helper import is_empty, create_simple_qrcode, return_link, get_qrcode_link, get_root_path
 
 
@@ -22,6 +23,7 @@ class URLResource(Resource):
     def post(self):
         public_id = ''
         qrcode_base64 = ''
+        list_alias = []
         if request.is_json:
             payload = request.get_json()
 
@@ -34,6 +36,28 @@ class URLResource(Resource):
                 row = url.insert(data)
 
             public_id = row.public_id
+
+            data = dict()
+            data['url_public_id'] = public_id
+            # TODO split alias to other code block to easy maintenance
+            data['alias_name'] = payload['alias_name'].strip()
+            result = True
+            if data['alias_name'] != '':
+                # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
+                result = URL_Alias().insert_no_return(data)
+            if result is False:
+                return {'message': 'Invalid alias name'}, Constant.HTTP_BAD_REQUEST
+            else:
+                condition = [
+                    {
+                        'column': 'url_public_id',
+                        'value': public_id
+                    }
+                ]
+                url_aliases = URL_Alias().get_all(condition)
+                for item in url_aliases:
+                    list_alias.append({'alias_name': return_link(item.alias_name)})
+
             if is_empty(row.qrcode_path):
                 qrcode_path = create_simple_qrcode(return_link(public_id))
                 row.qrcode_path = qrcode_path
@@ -50,6 +74,7 @@ class URLResource(Resource):
         return {
             'short_link': return_link(public_id),
             'qrcode': get_qrcode_link(public_id),
+            'list_alias': list_alias,
             'qrcode_base64': 'data:image/png;base64,' + qrcode_base64
         }
 

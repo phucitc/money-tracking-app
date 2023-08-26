@@ -12,6 +12,41 @@ class Model:
         self.data = dict()
         self.psql = None
 
+    def insert_no_return(self, params):
+        try:
+            if len(params) == 0 or not isinstance(params, dict):
+                raise Exception('No data to insert or data is not a dictionary')
+
+            input_columns = set(params.keys())
+
+            default_columns = self.get_plsql().get_columns(self.table_name)
+            default_columns_name = default_columns.keys()
+            return_columns_after_insert = default_columns_name
+
+            default_columns_name = default_columns_name - set(self.COLS_IGNORE)
+
+            invalid_columns = input_columns - default_columns_name
+            # columns that are not in the table. Raise exception
+            if len(invalid_columns):
+                raise Exception(f'Invalid column(s): {invalid_columns}')
+
+            return_columns_after_insert = ', '.join(return_columns_after_insert)
+            columns_to_insert = ', '.join(params)
+            holder = ''
+            for key in params:
+                if key in self.COLS_EXE_FCT:
+                    holder += f"{params[key]},"
+                else:
+                    holder += f"%({key})s,"
+            holder = holder[:-1]  # remove last comma
+
+            query = f"INSERT INTO {self.TABLE} ({columns_to_insert}) VALUES ({holder}) ON CONFLICT DO NOTHING"
+            return self.psql.execute(query, params=params)
+
+        except Exception as e:
+            print(e)
+            return False
+
     def insert(self, params):
         try:
             if len(params) == 0 or not isinstance(params, dict):
@@ -104,9 +139,28 @@ class Model:
             return self.data[column_name]
         return None
 
-    def get_all(self, limit=100, offset=0):
-        query = f"SELECT * FROM {self.TABLE} LIMIT {limit} OFFSET {offset}"
-        rows = self.get_plsql().fetch(query)
+    def get_condition_query(self, conditions):
+        params = []
+        where = 'WHERE 1=1 '
+        query = ''
+        for condition in conditions:
+            if 'column' not in condition:
+                raise Exception('Column name is required. Payload should be like: [{"column": "name", "value": "John"}]')
+
+            query += 'AND {column} = %({column})s '.format(column=condition['column'])
+            params.append({
+                condition['column']: condition['value']
+            })
+        return where + query, params
+
+    def get_all(self, conditions=None, limit=100, offset=0):
+        where, params = self.get_condition_query(conditions)
+
+        # merge params to one dict
+        params = {k: v for d in params for k, v in d.items()}
+
+        query = f"SELECT * FROM {self.TABLE} {where} LIMIT {limit} OFFSET {offset}"
+        rows = self.get_plsql().fetch(query, params=params)
         results = []
         for row in rows:
             original_class = self.__class__
@@ -118,3 +172,7 @@ class Model:
             inst.data = row
             results.append(inst)
         return results
+
+    def fetch_one(self, query, params=None):
+        return self.get_plsql().fetch_one(query, params=params)
+    
