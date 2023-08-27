@@ -44,7 +44,17 @@ class URLResource(Resource):
             result = True
             if data['alias_name'] != '':
                 # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
-                result = URL_Alias().insert_no_return(data)
+                url_alias = URL().get_by_alias_name(data['alias_name'])
+                if url_alias is not None:
+                    if url_alias.url_public_id != public_id:
+                        return {'message': 'Alias name is not available.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
+                    elif url_alias.url_public_id == public_id:
+                        total_alias = url.get_total_alias_name_by_destination_link(row.destination_link)
+                        if total_alias >= Constant.MAX_URL_ALIAS_NON_USER:
+                            return {'message': 'Short URLs limit reached for this URL.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
+                else:
+                    # Create a new one alias name
+                    result = URL_Alias().insert_no_return(data)
             if result is False:
                 return {'message': 'Invalid alias name'}, Constant.HTTP_BAD_REQUEST
             else:

@@ -43,6 +43,18 @@ label {
 }
 
 /**
+    ToolBox
+ */
+.was-validated .form-control.error {
+    border-color: var(--zt-form-invalid-border-color);
+}
+.was-validated .form-control.error ~ .invalid-feedback {
+    display: block;
+}
+input[name="alias_name"] {
+    background-image: none!important;
+}
+/**
  * Begin Css Dashboard
  */
 .bi {

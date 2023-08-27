@@ -39,5 +39,5 @@ class Constant:
     ]
 
     VUEJS_ADMIN_PAGES = ['login', 'urls']
-    MAX_URL_ALIAS_NON_USER = 2
+    MAX_URL_ALIAS_NON_USER = 1
     MAX_URL_ALIAS_USER = 10

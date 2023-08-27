@@ -29,8 +29,15 @@
           </div>
           <div class="col">
             <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong></label>
-            <input type="text" class="form-control" name="alias_name" v-model="this.alias_name" placeholder="Example: my-link" aria-label="Enter a long link"
-                   aria-describedby="button-addon2">
+            <input type="text"
+                   :class="{'form-control': true, 'error': this.alias_error_msg !== ''}"
+                   name="alias_name" v-model="this.alias_name"
+                   placeholder="Example: my-link"
+                   aria-label="Enter a back-half you want"
+                   >
+            <div class="invalid-feedback">
+              {{ this.alias_error_msg }}
+            </div>
           </div>
         </div>
         <div class="row mt-3">
@@ -45,16 +52,14 @@
       <div v-if="this.is_show_result">
         <div class="row">
           <div class="col col-md-8">
-            <label class="form-label" for="short_url"><strong>Your short URL</strong></label>
+            <label class="form-label" for="short_url"><strong>Your shorten URLs</strong></label>
             <div class="input-group mb-3">
               <input type="text" class="form-control" name="short_url" id="short_url" v-model="this.short_url" placeholder="https://zipit.link/your-link"
                      aria-label="Enter a long link" readonly disabled
                      aria-describedby="button-addon2">
               <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_url()">{{ this.btn_copy_text }}</button>
             </div>
-            <div v-if="this.list_alias.length > 0">
-            <label class="form-label" for="alias"><strong>Your Aliases URL</strong></label>
-            </div>
+
             <div v-for="(item, index) in this.list_alias">
               <div class="input-group mb-3">
                 <input type="text" class="form-control" name="short_url" id="alias" v-model="item.alias_name" placeholder="https://zipit.link/your-link"
@@ -93,6 +98,7 @@ export default {
       long_url: '',
       long_url_disable: false,
       alias_name: '',
+      alias_error_msg: '',
       short_url: '',
       is_show_result: false,
       btn_copy_text: 'Copy',
@@ -121,6 +127,9 @@ export default {
           return;
         }
 
+        // reset error
+        this.alias_error_msg = '';
+
         let btn_zip_url_text_ori = this.btn_zip_url_text;
         this.btn_zip_url_text = get_border_spinner();
         const response = await axios.post( import.meta.env.VITE_BE_URL + '/api/url/short-url', {
@@ -140,6 +149,14 @@ export default {
           this.list_alias = response.data.list_alias;
         }
       } catch (error) {
+        // get response from error
+        const data = error.response.data;
+        console.log(data)
+        if ( data.type === 'alias_name' ) {
+          this.form_css_was_validated = 'was-validated';
+          this.alias_error_msg = data.message;
+          console.log(this.alias_error_msg)
+        }
         console.error('Error:', error);
       }
     },

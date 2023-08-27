@@ -27,7 +27,7 @@ class URL(Model):
     def get_by_alias_name(self, alias_name):
         from model.url_alias import URL_Alias
         query = f"""
-            SELECT u.* FROM {self.TABLE} u 
+            SELECT * FROM {self.TABLE} u 
                 LEFT JOIN {URL_Alias.TABLE} ua
                     ON u.public_id = ua.url_public_id 
             WHERE ua.alias_name = %(alias_name)s
@@ -37,3 +37,18 @@ class URL(Model):
             self.data = row
             return self
         return None
+
+    def get_total_alias_name_by_destination_link(self, destination_link):
+        from model.url_alias import URL_Alias
+        destination_link_hash = calculate_md5_hash(destination_link)
+        query = f"""
+            SELECT COUNT(*) AS total_count FROM {self.TABLE} u 
+                LEFT JOIN {URL_Alias.TABLE} ua
+                    ON u.public_id = ua.url_public_id 
+            WHERE u.destination_link_hash = %(destination_link_hash)s
+        """
+        row = self.fetch_one(query, params={'destination_link_hash': destination_link_hash})
+        if row:
+            return row['total_count']
+        return 0
+
