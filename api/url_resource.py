@@ -8,7 +8,7 @@ from flask_restful import Resource, reqparse
 from classes.constant import Constant
 from model.url import URL
 from model.url_alias import URL_Alias
-from py.helper import is_empty, create_simple_qrcode, return_link, get_qrcode_link, get_root_path
+from py.helper import is_empty, create_simple_qrcode, return_link, get_qrcode_link, get_root_path, convert_space_to_dash
 
 
 class URLResource(Resource):
@@ -43,6 +43,7 @@ class URLResource(Resource):
             data['alias_name'] = payload['alias_name'].strip()
             result = True
             if data['alias_name'] != '':
+                data['alias_name'] = convert_space_to_dash(data['alias_name'])
                 # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
                 url_alias = URL().get_by_alias_name(data['alias_name'])
                 if url_alias is not None:

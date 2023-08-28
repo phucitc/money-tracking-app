@@ -12,3 +12,7 @@ export function get_btn_loading(min, max) {
 export function get_end_point() {
     return import.meta.env.VITE_BE_URL
 }
+
+export function convert_space_to_dash(str) {
+    return str.replaceAll(' ', '-')
+}

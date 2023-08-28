@@ -118,3 +118,6 @@ def get_webapp_url():
     if is_production():
         return os.getenv('APP_DOMAIN')
     return 'http://localhost:5173/'
+
+def convert_space_to_dash(value):
+    return value.replace(' ', '-')

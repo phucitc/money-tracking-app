@@ -34,6 +34,7 @@
                    name="alias_name" v-model="this.alias_name"
                    placeholder="Example: my-link"
                    aria-label="Enter a back-half you want"
+                   v-on:change="this.process_alias_name(this.alias_name)"
                    >
             <div class="invalid-feedback">
               {{ this.alias_error_msg }}
@@ -91,8 +92,7 @@
 </template>
 <script>
 import axios from "axios";
-import {get_border_spinner} from "@/ultils/helper";
-
+import {convert_space_to_dash, get_border_spinner} from "@/ultils/helper";
 export default {
   data() {
     return {
@@ -119,6 +119,9 @@ export default {
   },
   methods: {
     submit_form() {},
+    process_alias_name(alias) {
+      this.alias_name = convert_space_to_dash(alias);
+    },
     async generate_short_link() {
       try {
         this.long_url = this.long_url.trim();
