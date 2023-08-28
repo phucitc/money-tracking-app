@@ -15,9 +15,9 @@
         </div>
       </div>
 
-      <div v-if="!this.is_show_result">
+      <div v-if="!this.is_show_result" class="m-0">
         <div class="row">
-          <div class="col">
+          <div class="col-md-6 col-sm-12 mt-3">
             <label for="basic-url" class="form-label"><strong>Domain</strong></label>
             <input type="text" class="form-control" placeholder="zipit.link" aria-label="Enter a long link" readonly disabled
                    aria-describedby="button-addon2">
@@ -27,7 +27,7 @@
             <input type="text" class="form-control text-center" placeholder="/" readonly disabled
                    aria-describedby="button-addon2">
           </div>
-          <div class="col">
+          <div class="col-md-6 col-sm-12 mt-3">
             <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong></label>
             <input type="text"
                    :class="{'form-control': true, 'error': this.alias_error_msg !== ''}"
