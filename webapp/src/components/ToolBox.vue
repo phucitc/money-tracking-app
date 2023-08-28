@@ -51,7 +51,7 @@
 
       <div v-if="this.is_show_result">
         <div class="row">
-          <div class="col col-md-8">
+          <div class="col-md-8 col-sm-12">
             <label class="form-label" for="short_url"><strong>Your shorten URLs</strong></label>
             <div class="input-group mb-3">
               <input type="text" class="form-control" name="short_url" id="short_url" v-model="this.short_url" placeholder="https://zipit.link/your-link"
@@ -68,13 +68,9 @@
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_alias_url(index)">{{ item.copied ? "Copied" : "Copy" }}</button>
               </div>
             </div>
-            <div class="input-group">
-              <div class="text-center w-100">
-                <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
-              </div>
-            </div>
+
           </div>
-          <div class="col col-md-4">
+          <div class="col-md-4 col-sm-12">
             <div class="text-center">
               <div class="qrcode-box overflow-hidden">
                 <img :src="this.qrcode_base64" alt="QR Code" class="img-fluid">
@@ -82,6 +78,11 @@
               </div>
 
             </div>
+          </div>
+          <div class="col-md-8 col-xs-12">
+              <div class="text-center">
+                <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
+              </div>
           </div>
         </div>
       </div>
