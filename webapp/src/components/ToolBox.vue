@@ -69,7 +69,10 @@
                 <button class="btn btn-outline-secondary" type="button" id="button-addon2" @click="this.copy_alias_url(index)">{{ item.copied ? "Copied" : "Copy" }}</button>
               </div>
             </div>
-
+            <div class="text-center d-none d-sm-block">
+              <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
+            </div>
+            <div class="mb-4"></div>
           </div>
           <div class="col-md-4 col-sm-12">
             <div class="text-center">
@@ -80,7 +83,7 @@
 
             </div>
           </div>
-          <div class="col-md-8 col-xs-12">
+          <div class="col-md-8 col-xs-12 mt-3 d-md-none d-lg-none d-xl-none d-xxl-none">
               <div class="text-center">
                 <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
               </div>
