@@ -18,7 +18,7 @@ from my_app.home.home import home_blueprint
 app = Flask(__name__, static_folder='static')
 api = Api(app)
 # CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://zipit.link", "https://zipit.link"]}})
-CORS(app, origins=["http://localhost:5173", "http://zipit.link", "https://zipit.link"])
+CORS(app, origins=["http://localhost:5173", "http://localhost:5000", "http://zipit.link", "https://zipit.link"])
 
 # Load environment variables
 for key, value in os.environ.items():
@@ -50,6 +50,7 @@ api.add_resource(AdminResource, '/admin-api/<string:action>')
 def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+
 app.register_blueprint(home_blueprint)
 
 @app.route("/app")
