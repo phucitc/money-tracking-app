@@ -47,3 +47,18 @@ CREATE TABLE IF NOT EXISTS public.url_aliases
     alias_name character varying(64) COLLATE pg_catalog."default" NOT NULL,
     CONSTRAINT url_aliases_pkey PRIMARY KEY (url_public_id, alias_name)
 );
+
+CREATE TABLE IF NOT EXISTS public.url_clicks
+(
+    id serial PRIMARY KEY,
+    url_id integer REFERENCES public.urls(id),
+    created_at timestamp without time zone DEFAULT now(),
+    user_agent text,
+    ip_address inet,
+    referer text,
+    alias_name character varying(64)
+);
+
+CREATE INDEX IF NOT EXISTS idx_url_clicks_url_id_created_at
+    ON public.url_clicks
+    (url_id ASC NULLS LAST, created_at ASC NULLS LAST);
