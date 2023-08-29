@@ -73,6 +73,7 @@ class URLResource(Resource):
         else:
             abort(Constant.HTTP_BAD_REQUEST, message="Invalid JSON")
         return {
+            'public_id': public_id,
             'short_link': return_link(public_id),
             'qrcode': get_qrcode_link(public_id),
             'list_alias': list_alias,

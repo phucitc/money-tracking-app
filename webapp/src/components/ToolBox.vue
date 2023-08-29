@@ -28,7 +28,14 @@
                    aria-describedby="button-addon2">
           </div>
           <div class="col-md-6 col-sm-12 mt-3">
-            <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong></label>
+            <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong>&nbsp;<span
+                ref="alias_name_info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                  class="bi bi-info-circle" viewBox="0 0 16 16">
+              <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
+              <path
+                  d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
+            </svg></span>
+            </label>
             <input type="text"
                    :class="{'form-control': true, 'error': this.alias_error_msg !== ''}"
                    name="alias_name" v-model="this.alias_name"
@@ -70,6 +77,7 @@
               </div>
             </div>
             <div class="text-center d-none d-sm-block">
+              <button class="btn btn-secondary btn-large mx-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-urls-recent" aria-controls="staticBackdrop">My URLs</button>
               <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
             </div>
             <div class="mb-4"></div>
@@ -85,17 +93,43 @@
           </div>
           <div class="col-md-8 col-xs-12 mt-3 d-md-none d-lg-none d-xl-none d-xxl-none">
               <div class="text-center">
-                <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
+                <button class="btn btn-primary btn-large">My URLs</button>
+                <button class="btn btn-primary btn-large" @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
               </div>
           </div>
         </div>
       </div>
     </form>
+
+    <!-- History !-->
+    <div class="offcanvas offcanvas-end non-user-history-width" data-bs-backdrop="static"
+       tabindex="-1" id="offcanvas-urls-recent" aria-labelledby="staticBackdropLabel">
+    <div class="offcanvas-header">
+      <h5 class="offcanvas-title" id="offcanvasExampleLabel">Your recent URLs</h5>
+      <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+      <div class="card mb-2" v-for="(item, index) in this.urls_recent">
+        <div class="card-body">
+          <h5 class="card-title">Card title</h5>
+          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
+          <p class="card-text">
+            Some quick example text to build on the card title and make up the bulk of the card's
+            content.
+          </p>
+          <a href="#" class="card-link">Card link</a>
+          <a href="#" class="card-link">Another link</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
   </div>
 </template>
 <script>
 import axios from "axios";
 import {convert_space_to_dash, get_border_spinner} from "@/ultils/helper";
+import { Tooltip } from 'bootstrap';
 export default {
   data() {
     return {
@@ -113,12 +147,21 @@ export default {
       qrcode_base64: '',
       qrcode: '',
       list_alias: [],
+      urls_recent: [],
     }
   },
   setup() {
   },
   mounted() {
-    console.log(location.host)
+    this.tooltip = new Tooltip(this.$refs.alias_name_info, {
+      title: "Special characters are not allowed.",
+      placement: 'top',
+    });
+
+    if (localStorage.urls_recent) {
+      this.urls_recent = JSON.parse(localStorage.urls_recent);
+      console.log(this.urls_recent)
+    }
   },
   methods: {
     submit_form() {},
@@ -154,6 +197,24 @@ export default {
           this.qrcode_base64 = response.data.qrcode_base64;
           this.qrcode = response.data.qrcode;
           this.list_alias = response.data.list_alias;
+
+          let urls_recent = {}
+          if (localStorage.urls_recent) {
+            urls_recent = JSON.parse(localStorage.urls_recent);
+          }
+          let public_id = response.data.public_id;
+          // // Check if public_id is exist in urls_recent
+          if (urls_recent[public_id] === undefined) {
+            let url_recent = {
+              long_url: this.long_url,
+              short_url: this.short_url,
+              qrcode_base64: this.qrcode_base64,
+            }
+            urls_recent[public_id] = url_recent
+            this.urls_recent.push(url_recent)
+            localStorage.urls_recent = JSON.stringify(urls_recent);
+          }
+
         }
       } catch (error) {
         // get response from error

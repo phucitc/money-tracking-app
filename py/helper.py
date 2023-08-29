@@ -121,3 +121,10 @@ def get_webapp_url():
 
 def convert_space_to_dash(value):
     return value.replace(' ', '-')
+
+def get_logo_by_domain(domain, size=64):
+    # remove https and http
+    domain = domain.replace('https://', '')
+    domain = domain.replace('http://', '')
+    uri = 'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://{domain}&size={size}'
+    return uri.format(domain=domain, size=size)

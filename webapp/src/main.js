@@ -3,7 +3,9 @@ import '../scss/bootstrap.scss'
 import './assets/style.css'
 
 // JS
-import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// import * as bootstrap from 'bootstrap'
+// import 'bootstrap/dist/js/bootstrap.bundle.min.js'
+// import '@popperjs/core/dist/umd/popper.min.js'
 
 import {createApp} from 'vue'
 import App from './App.vue'

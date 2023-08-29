@@ -110,6 +110,13 @@ input[name="alias_name"] {
 }
 
 /*
+Non-user history
+*/
+.offcanvas.offcanvas-end.non-user-history-width {
+    width: 40%;
+}
+
+/*
 Responsive
 */
 

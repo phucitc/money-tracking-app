@@ -16,3 +16,9 @@ export function get_end_point() {
 export function convert_space_to_dash(str) {
     return str.replaceAll(' ', '-')
 }
+
+export function get_favicon_by_domain(domain, size=64) {
+    domain = domain.replace('https://', '')
+    domain = domain.replace('http://', '')
+    return 'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://'+domain+'&size='+size
+}

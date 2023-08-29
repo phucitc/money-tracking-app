@@ -64,6 +64,12 @@ const router = createRouter({
                 requiresAuth: true,
             },
         },
+        {
+            path: '/bs-components',
+            name: 'bs-components',
+            component: () => import('../views/BootstrapComponent.vue')
+
+        },
         // User routes
         {
             path: '/dashboard',
