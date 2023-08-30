@@ -77,7 +77,10 @@
               </div>
             </div>
             <div class="text-center d-none d-sm-block">
-              <button class="btn btn-secondary btn-large mx-2" data-bs-toggle="offcanvas" data-bs-target="#offcanvas-urls-recent" aria-controls="staticBackdrop">My URLs</button>
+              <button class="btn btn-secondary btn-large mx-2" data-bs-toggle="offcanvas"
+                      data-bs-target="#offcanvas-urls-recent"
+                      aria-controls="staticBackdrop"
+                      @click="this.trigger_open_canvas()">My URLs</button>
               <button class="btn btn-primary btn-large"  @click="this.zip_another_link">{{  this.btn_zip_another_text }}</button>
             </div>
             <div class="mb-4"></div>
@@ -111,14 +114,41 @@
     <div class="offcanvas-body">
       <div class="card mb-2" v-for="(item, index) in this.urls_recent">
         <div class="card-body">
-          <h5 class="card-title">Card title</h5>
-          <h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>
-          <p class="card-text">
-            Some quick example text to build on the card title and make up the bulk of the card's
-            content.
-          </p>
-          <a href="#" class="card-link">Card link</a>
-          <a href="#" class="card-link">Another link</a>
+          <div class="row">
+            <div class="col-md-1">
+              <div class="text-center">
+                <img :src="item.destination_logo" alt="Title" class="img-fluid">
+              </div>
+            </div>
+            <div class="col-md-8">
+              <h5 class="card-title">{{ item.public_id }} - Untitled</h5>
+              <h6 class="card-subtitle mb-2"><a :href="item.short_url" class="text-decoration-none" target="_blank">{{ remove_protocol(item.short_url) }}</a></h6>
+              <p class="card-text">
+                {{ remove_protocol(item.long_url) }}
+              </p>
+
+              <a :href="item.short_url" target="_blank" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+  <path fill-rule="evenodd" d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+</svg>
+              </a>
+              <button class="mx-2 btn btn-success"><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-clipboard" viewBox="0 0 16 16">
+  <path d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+  <path d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+</svg></button>
+              <button class="me-2 btn btn-secondary " ref="rename_link" disabled>Rename</button>
+              <button class="btn btn-secondary" ref="edit_link"  disabled>Edit</button>
+            </div>
+            <div class="col-md-3">
+              <div>
+                <img :src="item.qrcode_base64" alt="QR Code" class="img-fluid">
+              </div>
+            </div>
+          </div>
+
+
+
         </div>
       </div>
     </div>
@@ -128,7 +158,7 @@
 </template>
 <script>
 import axios from "axios";
-import {convert_space_to_dash, get_border_spinner} from "@/ultils/helper";
+import {convert_space_to_dash, get_border_spinner, remove_protocol} from "@/ultils/helper";
 import { Tooltip } from 'bootstrap';
 export default {
   data() {
@@ -153,10 +183,13 @@ export default {
   setup() {
   },
   mounted() {
-    this.tooltip = new Tooltip(this.$refs.alias_name_info, {
+    new Tooltip(this.$refs.alias_name_info, {
       title: "Special characters are not allowed.",
       placement: 'top',
     });
+
+    console.log(this.$refs.rename_link)
+
 
     if (localStorage.urls_recent) {
       this.urls_recent = JSON.parse(localStorage.urls_recent);
@@ -164,7 +197,21 @@ export default {
     }
   },
   methods: {
+    remove_protocol,
     submit_form() {},
+    trigger_open_canvas() {
+      console.log(this.$refs.rename_link)
+    // new Tooltip(this.$refs.rename_link, {
+    //   title: "Please login to change your short link.",
+    //   placement: 'top',
+    // });
+    //
+    // new Tooltip(this.$refs.edit_link, {
+    //   title: "Please purchase a subscription to edit your destination link.",
+    //   placement: 'top',
+    // });
+      // this.$refs.canvas.click();
+    },
     process_alias_name(alias) {
       this.alias_name = convert_space_to_dash(alias);
     },
@@ -188,15 +235,15 @@ export default {
         }).finally(() => {
           this.btn_zip_url_text = btn_zip_url_text_ori;
         });
-
-        let short_link = response.data.short_link;
+        let response_data = response.data
+        let short_link = response_data.short_link;
         if ( short_link !== '' ) {
           this.short_url = short_link;
           this.is_show_result = true;
           this.long_url_disable = true;
-          this.qrcode_base64 = response.data.qrcode_base64;
-          this.qrcode = response.data.qrcode;
-          this.list_alias = response.data.list_alias;
+          this.qrcode_base64 = response_data.qrcode_base64;
+          this.qrcode = response_data.qrcode;
+          this.list_alias = response_data.list_alias;
 
           let urls_recent = {}
           if (localStorage.urls_recent) {
@@ -209,6 +256,8 @@ export default {
               long_url: this.long_url,
               short_url: this.short_url,
               qrcode_base64: this.qrcode_base64,
+              public_id: public_id,
+              destination_logo: response_data.destination_logo,
             }
             urls_recent[public_id] = url_recent
             this.urls_recent.push(url_recent)

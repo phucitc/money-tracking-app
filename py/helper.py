@@ -1,5 +1,6 @@
 import hashlib
 import os
+from urllib.parse import urlparse
 
 import qrcode
 import jwt
@@ -122,9 +123,12 @@ def get_webapp_url():
 def convert_space_to_dash(value):
     return value.replace(' ', '-')
 
-def get_logo_by_domain(domain, size=64):
+def get_hostname(url):
+    parsed_uri = urlparse(url)
+    return parsed_uri.hostname
+
+def get_favicon_by_domain(url, size=64):
     # remove https and http
-    domain = domain.replace('https://', '')
-    domain = domain.replace('http://', '')
+    hostname = get_hostname(url)
     uri = 'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://{domain}&size={size}'
-    return uri.format(domain=domain, size=size)
+    return uri.format(domain=hostname, size=size)

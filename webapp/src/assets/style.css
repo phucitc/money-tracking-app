@@ -115,6 +115,10 @@ Non-user history
 .offcanvas.offcanvas-end.non-user-history-width {
     width: 40%;
 }
+.offcanvas.offcanvas-end.non-user-history-width .btn svg {
+    position: relative;
+    top: -3px;
+}
 
 /*
 Responsive

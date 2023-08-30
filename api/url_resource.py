@@ -8,7 +8,8 @@ from flask_restful import Resource, reqparse
 from classes.constant import Constant
 from model.url import URL
 from model.url_alias import URL_Alias
-from py.helper import is_empty, create_simple_qrcode, return_link, get_qrcode_link, get_root_path, convert_space_to_dash
+from py.helper import is_empty, create_simple_qrcode, return_link, get_qrcode_link, get_root_path, \
+    convert_space_to_dash, get_favicon_by_domain
 
 
 class URLResource(Resource):
@@ -24,33 +25,34 @@ class URLResource(Resource):
         public_id = ''
         qrcode_base64 = ''
         list_alias = []
+        url = None
         if request.is_json:
             payload = request.get_json()
 
-            url = URL()
+            url_model = URL()
             data = dict()
             data['destination_link'] = payload['long_url'].strip()
 
-            row = url.get_by_destination_link(data['destination_link'])
-            if row is None:
-                row = url.insert(data)
+            url = url_model.get_by_destination_link(data['destination_link'])
+            if url is None:
+                url = url_model.insert(data)
 
-            public_id = row.public_id
+            public_id = url.public_id
 
             data = dict()
             data['url_public_id'] = public_id
             # TODO split alias to other code block to easy maintenance
-            data['alias_name'] = payload['alias_name'].strip()
+            data['alias_name'] = '' if 'alias_name' not in payload else payload['alias_name'].strip()
             result = True
             if data['alias_name'] != '':
                 data['alias_name'] = convert_space_to_dash(data['alias_name'])
                 # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
-                url_alias = URL().get_by_alias_name(data['alias_name'])
+                url_alias = url_model.get_by_alias_name(data['alias_name'])
                 if url_alias is not None:
                     if url_alias.url_public_id != public_id:
                         return {'message': 'Alias name is not available.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
                     elif url_alias.url_public_id == public_id:
-                        total_alias = url.get_total_alias_name_by_destination_link(row.destination_link)
+                        total_alias = url.get_total_alias_name_by_destination_link(url.destination_link)
                         if total_alias >= Constant.MAX_URL_ALIAS_NON_USER:
                             return {'message': 'Short URLs limit reached for this URL.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
                 else:
@@ -69,7 +71,7 @@ class URLResource(Resource):
                 for item in url_aliases:
                     list_alias.append({'alias_name': return_link(item.alias_name)})
 
-            qrcode_base64 = self.handler_qrcode(row)
+            qrcode_base64 = self.handler_qrcode(url)
         else:
             abort(Constant.HTTP_BAD_REQUEST, message="Invalid JSON")
         return {
@@ -77,7 +79,8 @@ class URLResource(Resource):
             'short_link': return_link(public_id),
             'qrcode': get_qrcode_link(public_id),
             'list_alias': list_alias,
-            'qrcode_base64': qrcode_base64
+            'qrcode_base64': qrcode_base64,
+            'destination_logo': get_favicon_by_domain(url.destination_link, 32)
         }
 
     @staticmethod
