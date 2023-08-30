@@ -120,6 +120,10 @@ Non-user history
     top: -3px;
 }
 
+.offcanvas.offcanvas-end.non-user-history-width .disable {
+    cursor: not-allowed;
+}
+
 /*
 Responsive
 */
