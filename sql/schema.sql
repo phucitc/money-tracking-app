@@ -24,7 +24,6 @@ CREATE TABLE IF NOT EXISTS public.urls
 (
     id integer NOT NULL GENERATED ALWAYS AS IDENTITY ( INCREMENT 1 START 1 MINVALUE 1 MAXVALUE 2147483647 CACHE 1 ),
     public_id character varying(8) COLLATE pg_catalog."default",
-    user_id integer,
     destination_link text COLLATE pg_catalog."default" NOT NULL,
     destination_link_hash character varying(33) COLLATE pg_catalog."default" NOT NULL,
     qrcode_path character varying(128) COLLATE pg_catalog."default",
@@ -45,6 +44,10 @@ CREATE TABLE IF NOT EXISTS public.url_aliases
 (
     url_public_id character varying(8) COLLATE pg_catalog."default" NOT NULL,
     alias_name character varying(64) COLLATE pg_catalog."default" NOT NULL,
+    user_id integer,
+    qrcode_path character varying(128) COLLATE pg_catalog."default",
+    created_at timestamp without time zone,
+    updated_at timestamp without time zone,
     CONSTRAINT url_aliases_pkey PRIMARY KEY (url_public_id, alias_name)
 );
 
