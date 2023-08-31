@@ -1,12 +1,12 @@
 import multiprocessing
 import os
 
-from flask import Blueprint, render_template, redirect, send_file, request
+from flask import Blueprint, render_template, redirect, send_file, request, make_response, session
 
 from classes.constant import Constant
 from model.url import URL
 from model.url_click import URL_Click
-from py.helper import is_empty, create_simple_qrcode, return_link
+from py.helper import is_empty, create_simple_qrcode, return_link, generate_uuid, generate_jwt, get_cookie, decode_jwt
 
 # VueJS need to build, then copy dist folder to this folder and rename to vuejs_webapp
 home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
@@ -91,6 +91,34 @@ def download_qrcode(url_public_id):
         return send_file(file_path, as_attachment=True, download_name=filename)
     else:
         return render_template('index.html'), 404
+
+
+@home_blueprint.route('/api/heartbeat')
+def heartbeat():
+    zipit_uuid = get_cookie(request, 'zipit_uuid')
+
+    if zipit_uuid is None:
+        print("VAO DAY NHA")
+        zipit_uuid = generate_uuid()
+
+    token_in_cookie = get_cookie(request, 'token')
+    if token_in_cookie is None:
+        token_in_cookie = generate_jwt(zipit_uuid)
+        print("token_in_cookies", token_in_cookie)
+    else:
+        result = decode_jwt(token_in_cookie)
+        if result is None:
+            # Expired and need to generate new token
+            token_in_cookie = generate_jwt(zipit_uuid)
+
+    response = make_response()
+    # response.set_cookie('zipit_token', token_in_cookie, secure=True, expires=) #5s
+    # response.set_cookie('zipit_uuid', zipit_uuid, secure=True, samesite=)
+    response.set_cookie('zipit_uuid', zipit_uuid, max_age=60 * 60 * 24 * 30)  # 30 days
+    response.set_cookie('zipit_token', token_in_cookie, max_age=60 * 60 * 24 * 30)  # 30 days
+
+    print("heartbeat")
+    return response, 204
 
 
 def background_task_tracking_click(params):

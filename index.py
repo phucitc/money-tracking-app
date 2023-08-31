@@ -2,6 +2,8 @@ import os
 from flask import Flask, send_from_directory
 from flask_cors import CORS
 from flask_restful import Api
+# from flask_wtf.csrf import CSRFProtect
+
 from dotenv import load_dotenv
 
 from api.admin_resource import AdminResource
@@ -16,6 +18,9 @@ from my_app.home.home import home_blueprint
 
 # Setup template_folder and static_folder are from VueJS build
 app = Flask(__name__, static_folder='static')
+# csrf = CSRFProtect()
+# csrf.init_app(app)
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY')
 api = Api(app)
 # CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://zipit.link", "https://zipit.link"]}})
 CORS(app, origins=["http://localhost:5173", "http://localhost:5000", "http://zipit.link", "https://zipit.link"])

@@ -3,7 +3,7 @@ from flask_restful import Resource
 
 from classes.constant import Constant
 from model.user import User
-from py.helper import decode_jwt, is_empty, get_webapp_url
+from py.helper import decode_auth0_jwt, is_empty, get_webapp_url
 
 
 class AuthResource(Resource):
@@ -33,7 +33,7 @@ class AuthResource(Resource):
             token = auth_header.split()[1]  # Assuming 'Bearer <token>'
             if is_empty(token) is False:
                 redirect_uri = ''
-                decode, code = decode_jwt(token)
+                decode, code = decode_auth0_jwt(token)
                 if code == 200:
                     data = {
                         'email': decode['email'],

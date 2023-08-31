@@ -1,3 +1,4 @@
+import datetime
 import hashlib
 import os
 
@@ -5,7 +6,7 @@ import qrcode
 import jwt
 from jwt import PyJWKClient
 
-def decode_jwt(token):
+def decode_auth0_jwt(token):
     # Retrieve the JSON Web Key Set (JWKS) from Auth0
     jwks_url = 'https://{domain}/.well-known/jwks.json'.format(domain=os.getenv('AUTH0_API_DOMAIN'))
     print(jwks_url)
@@ -121,3 +122,46 @@ def get_webapp_url():
 
 def convert_space_to_dash(value):
     return value.replace(' ', '-')
+
+def generate_jwt(id, seconds=15):
+    # Because we run heartbeats every 10 seconds, we need to add 5 seconds to the JWT
+    # Define the payload for the JWT
+    payload = {
+        'id': id,
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(seconds=seconds),
+    }
+    # Define a secret key (keep this secret!)
+    secret_key = os.getenv('SECRET_KEY')
+
+    # Generate the JWT
+    return jwt.encode(payload, secret_key, algorithm='HS256')
+
+def decode_jwt(token):
+    try:
+        # Decode the JWT
+        # options = {'verify_signature': False}
+        return jwt.decode(token, os.getenv('SECRET_KEY'), algorithms=['HS256'])
+    except Exception as e:
+        print("Expired token " + str(e))
+        return None
+
+
+def generate_uuid():
+    return hashlib.sha256(os.urandom(1024)).hexdigest()
+
+def get_cookie(request, key):
+    cookie_data = request.headers.get('Cookie', '')
+    if cookie_data == '':
+        return None
+    cookie_data = cookie_data.split(';')
+    for item in cookie_data:
+        data = item.split('=')
+        if data[0] == key:
+            return data[1]
+    return None
+
+
+
+
+
+

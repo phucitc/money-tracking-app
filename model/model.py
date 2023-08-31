@@ -165,9 +165,9 @@ class Model:
         for row in rows:
             original_class = self.__class__
             inst = original_class()
-            if 'created_at' in row:
+            if 'created_at' in row and row['created_at'] is not None:
                 row['created_at'] = row['created_at'].strftime('%Y-%m-%d %H:%M:%S')
-            if 'updated_at' in row:
+            if 'updated_at' in row and row['updated_at'] is not None:
                 row['updated_at'] = row['updated_at'].strftime('%Y-%m-%d %H:%M:%S')
             inst.data = row
             results.append(inst)
