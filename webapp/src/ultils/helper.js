@@ -16,3 +16,8 @@ export function get_end_point() {
 export function convert_space_to_dash(str) {
     return str.replaceAll(' ', '-')
 }
+
+export function get_csrf() {
+    const meta_tag = document.querySelector('meta[name="csrf-token"]');
+    return meta_tag.getAttribute('content');
+}

@@ -3,7 +3,7 @@ from flask_restful import Resource
 
 from classes.constant import Constant
 from model.user import User
-from py.helper import decode_auth0_jwt, is_empty, get_webapp_url
+from py.helper import Helper
 
 
 class AuthResource(Resource):

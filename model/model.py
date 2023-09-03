@@ -5,6 +5,7 @@ from model.psql import PSQL
 class Model:
     COLS_EXE_FCT = []
     COLS_IGNORE = []
+    CACHE = {}
 
     def __init__(self, **kwargs):
         self.table_name = kwargs.get('table_name')
@@ -87,8 +88,12 @@ class Model:
             return False
 
     def get_plsql(self):
+        if 'psql' in self.CACHE:
+            print('Using cached psql')
+            self.psql = self.CACHE['psql']
         if self.psql is None:
             self.psql = PSQL()
+            self.CACHE['psql'] = self.psql
         return self.psql
 
     def update(self, params):
@@ -172,6 +177,18 @@ class Model:
             inst.data = row
             results.append(inst)
         return results
+
+    def get_by_conditions(self, conditions=None):
+        where, params = self.get_condition_query(conditions)
+        # merge params to one dict
+        params = {k: v for d in params for k, v in d.items()}
+
+        query = f"SELECT * FROM {self.TABLE} {where}"
+        row = self.get_plsql().fetch_one(query, params=params)
+        if row:
+            self.data = row
+            return self
+        return None
 
     def fetch_one(self, query, params=None):
         return self.get_plsql().fetch_one(query, params=params)
