@@ -28,7 +28,7 @@ class URL(Model):
     def get_by_alias_name_or_public_id(self, alias_name_or_public_id):
         from model.url_alias import URL_Alias
         query = f"""
-            SELECT * FROM {self.TABLE} u 
+            SELECT *, ua.id as url_alias_id FROM {self.TABLE} u 
                 LEFT JOIN {URL_Alias.TABLE} ua
                     ON u.id = ua.url_id 
             WHERE COALESCE (ua.alias_name, ua.public_id) = %(alias_name_or_public_id)s

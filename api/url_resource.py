@@ -1,14 +1,9 @@
-import base64
-from io import BytesIO
-
-from PIL import Image
 from flask import request, abort
 from flask_restful import Resource, reqparse
 
 from classes.constant import Constant
 from model.url import URL
 from model.url_alias import URL_Alias
-from model.url_history import URL_History
 from py.auth_helper import check_csrf
 from py.helper import Helper
 from py.url_helper import URL_Helper
