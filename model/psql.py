@@ -49,6 +49,7 @@ class PSQL:
         return self.cursor.fetchone()
 
     def close(self):
+        print('Closing connection')
         self.cursor.close()
         self.connection.close()
 

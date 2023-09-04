@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from api.admin_resource import AdminResource
 from api.auth_resource import AuthResource
+from model.model import Model
 
 load_dotenv()
 
@@ -42,6 +43,8 @@ def app_middleware(next_handler):
         response = next_handler(*args, **kwargs)
         # Perform any post-request processing here
         print("Executing custom middleware after request")
+        model = Model()
+        model.get_plsql().close()
         return response
     return middleware
 
