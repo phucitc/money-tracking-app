@@ -20,3 +20,9 @@ export function convert_space_to_dash(str) {
 export function remove_protocol(url) {
     return url.replace(/(^\w+:|^)\/\//, '');
 }
+
+
+export function get_csrf() {
+    const meta_tag = document.querySelector('meta[name="csrf-token"]');
+    return meta_tag.getAttribute('content');
+}

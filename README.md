@@ -65,6 +65,7 @@ Then run command:
 ```
 sudo systemctl daemon-reload
 sudo systemctl start zipit
+sudo systemctl restart zipit
 
 sudo systemctl enable zipit
 sudo systemctl status zipit

@@ -182,9 +182,12 @@
 </template>
 <script>
 import axios from "axios";
-import {convert_space_to_dash, get_border_spinner, remove_protocol} from "@/ultils/helper";
+import {convert_space_to_dash, get_border_spinner, remove_protocol, get_csrf, get_end_point} from "@/ultils/helper";
+import Cookies from 'js-cookie';
+import { v4 as uuidv4 } from 'uuid';
 import {Toast, Tooltip} from 'bootstrap';
 import ToastHtml from "@/components_share/ToastHtml.vue";
+
 
 export default {
   components: {ToastHtml},
@@ -204,6 +207,7 @@ export default {
       qrcode_base64: '',
       qrcode: '',
       list_alias: [],
+      token_non_user: '',
       urls_recent: [],
       toast: {
         header_content: '',
@@ -213,6 +217,18 @@ export default {
     }
   },
   setup() {
+  },
+  created() {
+    // this.heartbeat();
+    axios.defaults.headers.common['X-CSRFToken'] = get_csrf();
+    let zipit_uuid = Cookies.get('Zipit-Uuid');
+    if ( zipit_uuid === undefined ) {
+      zipit_uuid = uuidv4()
+      console.log(zipit_uuid);
+      Cookies.set('Zipit-Uuid', zipit_uuid, { expires: 365 });
+    }
+    axios.defaults.headers.common['Zipit-Uuid'] = zipit_uuid;
+    console.log(zipit_uuid)
   },
   mounted() {
     new Tooltip(this.$refs.alias_name_info, {
@@ -254,7 +270,7 @@ export default {
       try {
         this.long_url = this.long_url.trim();
         this.alias_name = this.alias_name.trim();
-        if (this.long_url === '') {
+        if ( this.long_url === '' ) {
           this.form_css_was_validated = 'was-validated';
           return;
         }
@@ -264,7 +280,8 @@ export default {
 
         let btn_zip_url_text_ori = this.btn_zip_url_text;
         this.btn_zip_url_text = get_border_spinner();
-        const response = await axios.post(import.meta.env.VITE_BE_URL + '/api/url/short-url', {
+        console.log(Cookies.get('zipit_uuid'))
+        const response = await axios.post( import.meta.env.VITE_BE_URL + '/api/url/short-url', {
           long_url: this.long_url,
           alias_name: this.alias_name,
         }).finally(() => {
@@ -304,7 +321,7 @@ export default {
         // get response from error
         const data = error.response.data;
         console.log(data)
-        if (data.type === 'alias_name') {
+        if ( data.type === 'alias_name' ) {
           this.form_css_was_validated = 'was-validated';
           this.alias_error_msg = data.message;
           console.log(this.alias_error_msg)
@@ -348,7 +365,13 @@ export default {
       setTimeout(() => {
         item.copied = false;
       }, 1500);
-    }
+    },
+    heartbeat() {
+      const url = get_end_point() + '/api/heartbeat';
+      setInterval(async function () {
+        await axios.get(url)
+      }, 10000)
+    },
   }
 };
 </script>

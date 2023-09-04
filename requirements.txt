@@ -9,3 +9,4 @@ python-dotenv
 qrcode
 Pillow
 cryptography==37.0.4
+flask_wtf
