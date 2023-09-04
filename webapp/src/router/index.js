@@ -139,10 +139,14 @@ const router = createRouter({
 });
 
 router.beforeEach(async (to, from, next) => {
-    // Send a pageview event to Google Analytics for each route change
-    if (window.gtag) {
-        window.gtag('config', 'G-2JR8BXX3D3', {page_path: to.path});
+    const hostname = window.location.hostname;
+    if (hostname === 'zipit.link') {
+        // Send a pageview event to Google Analytics for each route change
+        if (window.gtag) {
+            window.gtag('config', 'G-2JR8BXX3D3', {page_path: to.path});
+        }
     }
+
 
     if (to.matched.some((record) => record.meta.requiresAuth)) {
         // Route requires authentication, check if the user is logged in
