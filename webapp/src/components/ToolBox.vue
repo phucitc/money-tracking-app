@@ -95,7 +95,10 @@
 </template>
 <script>
 import axios from "axios";
-import {convert_space_to_dash, get_border_spinner} from "@/ultils/helper";
+import {convert_space_to_dash, get_border_spinner, get_csrf, get_end_point} from "@/ultils/helper";
+import Cookies from 'js-cookie';
+import { v4 as uuidv4 } from 'uuid';
+
 export default {
   data() {
     return {
@@ -113,9 +116,22 @@ export default {
       qrcode_base64: '',
       qrcode: '',
       list_alias: [],
+      token_non_user: ''
     }
   },
   setup() {
+  },
+  created() {
+    // this.heartbeat();
+    axios.defaults.headers.common['X-CSRFToken'] = get_csrf();
+    let zipit_uuid = Cookies.get('Zipit-Uuid');
+    if ( zipit_uuid === undefined ) {
+      zipit_uuid = uuidv4()
+      console.log(zipit_uuid);
+      Cookies.set('Zipit-Uuid', zipit_uuid, { expires: 365 });
+    }
+    axios.defaults.headers.common['Zipit-Uuid'] = zipit_uuid;
+    console.log(zipit_uuid)
   },
   mounted() {
     console.log(location.host)
@@ -139,6 +155,7 @@ export default {
 
         let btn_zip_url_text_ori = this.btn_zip_url_text;
         this.btn_zip_url_text = get_border_spinner();
+        console.log(Cookies.get('zipit_uuid'))
         const response = await axios.post( import.meta.env.VITE_BE_URL + '/api/url/short-url', {
           long_url: this.long_url,
           alias_name: this.alias_name,
@@ -191,7 +208,13 @@ export default {
       setTimeout(() => {
         item.copied = false;
       }, 1500);
-    }
+    },
+    heartbeat() {
+      const url = get_end_point() + '/api/heartbeat';
+      setInterval(async function () {
+        await axios.get(url)
+      }, 10000)
+    },
   }
 };
 </script>

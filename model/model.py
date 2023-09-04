@@ -5,6 +5,7 @@ from model.psql import PSQL
 class Model:
     COLS_EXE_FCT = []
     COLS_IGNORE = []
+    CACHE = {}
 
     def __init__(self, **kwargs):
         self.table_name = kwargs.get('table_name')
@@ -87,8 +88,12 @@ class Model:
             return False
 
     def get_plsql(self):
+        if 'psql' in self.CACHE:
+            print('Using cached psql')
+            self.psql = self.CACHE['psql']
         if self.psql is None:
             self.psql = PSQL()
+            self.CACHE['psql'] = self.psql
         return self.psql
 
     def update(self, params):
@@ -165,13 +170,25 @@ class Model:
         for row in rows:
             original_class = self.__class__
             inst = original_class()
-            if 'created_at' in row:
+            if 'created_at' in row and row['created_at'] is not None:
                 row['created_at'] = row['created_at'].strftime('%Y-%m-%d %H:%M:%S')
-            if 'updated_at' in row:
+            if 'updated_at' in row and row['updated_at'] is not None:
                 row['updated_at'] = row['updated_at'].strftime('%Y-%m-%d %H:%M:%S')
             inst.data = row
             results.append(inst)
         return results
+
+    def get_by_conditions(self, conditions=None):
+        where, params = self.get_condition_query(conditions)
+        # merge params to one dict
+        params = {k: v for d in params for k, v in d.items()}
+
+        query = f"SELECT * FROM {self.TABLE} {where}"
+        row = self.get_plsql().fetch_one(query, params=params)
+        if row:
+            self.data = row
+            return self
+        return None
 
     def fetch_one(self, query, params=None):
         return self.get_plsql().fetch_one(query, params=params)
