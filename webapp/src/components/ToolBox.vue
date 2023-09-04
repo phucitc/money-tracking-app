@@ -18,18 +18,13 @@
 
       <div v-if="!this.is_show_result" class="m-0">
         <div class="row">
-          <div class="col-md-6 col-sm-12 mt-3">
+          <div class="col-md-5 col-sm-12 mt-3">
             <label for="basic-url" class="form-label"><strong>Domain</strong></label>
             <input type="text" class="form-control" placeholder="zipit.link" aria-label="Enter a long link" readonly
                    disabled
                    aria-describedby="button-addon2">
           </div>
-          <div class="col-1 p-0 d-none">
-            <label for="basic-url" class="form-label">&nbsp;</label>
-            <input type="text" class="form-control text-center" placeholder="/" readonly disabled
-                   aria-describedby="button-addon2">
-          </div>
-          <div class="col-md-6 col-sm-12 mt-3">
+          <div class="col-md-7 col-sm-12 mt-3">
             <label for="basic-url" class="form-label"><strong>Enter a back-half you want (optional)</strong>&nbsp;<span
                 ref="alias_name_info"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                                            class="bi bi-info-circle" viewBox="0 0 16 16">
@@ -128,6 +123,15 @@
         <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
       </div>
       <div class="offcanvas-body">
+        <div v-if="this.is_loading_urls_recent" class="row mb-2">
+          <div content="col">
+            <div class="w-100 text-center">
+              <div class="spinner-border text-center" role="status">
+            <span class="visually-hidden">Loading...</span>
+            </div>
+          </div>
+          </div>
+        </div>
         <div class="card mb-2" v-for="(item, index) in this.urls_recent">
           <div class="card-body">
             <div class="row">
@@ -141,12 +145,12 @@
                 <h6 class="card-subtitle mb-2">
                   <a :href="item.short_url"
                      class="text-decoration-none"
-                     target="_blank">{{ remove_protocol(item.short_url) }}</a></h6>
+                     target="_blank">{{ item.short_url }}</a></h6>
                 <p class="card-text">
-                  {{ remove_protocol(item.long_url) }}
+                  {{ item.long_url }}
                 </p>
 
-                <a :href="item.short_url" target="_blank" class="btn btn-primary">
+                <a :href="item.short_url" target="_blank" class="btn btn-primary" ref="btn_url_recent_visit_url">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                        class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
                     <path fill-rule="evenodd"
@@ -155,7 +159,7 @@
                           d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
                   </svg>
                 </a>
-                <button class="mx-2 btn btn-success" @click="this.copy_url(item.short_url, true)">
+                <button class="mx-2 btn btn-success" @click="this.copy_url(item.short_url, true)" ref="btn_url_recent_copy">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor"
                        class="bi bi-clipboard" viewBox="0 0 16 16">
                     <path
@@ -164,8 +168,17 @@
                         d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
                   </svg>
                 </button>
-                <button class="me-2 btn btn-secondary opacity-50 disable" ref="rename_link">Rename</button>
-                <button class="btn btn-secondary opacity-50 disable" ref="edit_link">Edit</button>
+                <button class="me-2 btn btn-success" ref="btn_url_recent_download_qrcode">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                    <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"/>
+                    <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"/>
+                    <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z"/>
+                    <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"/>
+                    <path d="M12 9h2V8h-2v1Z"/>
+                  </svg>
+                </button>
+                <button class="me-2 btn btn-secondary opacity-50 disable d-none" ref="btn_url_recent_rename_link">Rename</button>
+                <button class="btn btn-secondary opacity-50 disable d-none" ref="btn_url_recent_edit_link">Edit</button>
               </div>
               <div class="col-md-3">
                 <div>
@@ -174,6 +187,9 @@
               </div>
             </div>
           </div>
+        </div>
+        <div class="row">
+          <div class=""></div>
         </div>
       </div>
     </div>
@@ -209,6 +225,11 @@ export default {
       list_alias: [],
       token_non_user: '',
       urls_recent: [],
+      is_loading_urls_recent: true,
+      tooltips: {
+        edit_link: [],
+        visit_url: [],
+      },
       toast: {
         header_content: '',
         date_friendly: '',
@@ -224,44 +245,59 @@ export default {
     let zipit_uuid = Cookies.get('Zipit-Uuid');
     if ( zipit_uuid === undefined ) {
       zipit_uuid = uuidv4()
-      console.log(zipit_uuid);
       Cookies.set('Zipit-Uuid', zipit_uuid, { expires: 365 });
     }
     axios.defaults.headers.common['Zipit-Uuid'] = zipit_uuid;
-    console.log(zipit_uuid)
   },
   mounted() {
     new Tooltip(this.$refs.alias_name_info, {
       title: "Special characters are not allowed.",
       placement: 'top',
     });
-
-    console.log(this.$refs.rename_link)
-
-
-    if (localStorage.urls_recent) {
-      this.urls_recent = JSON.parse(localStorage.urls_recent);
-      console.log(this.urls_recent)
-    }
   },
   updated() {
+
+    if ( this.$refs.btn_url_recent_edit_link !== undefined ) {
+      for (let i = 0; i < this.$refs.btn_url_recent_edit_link.length; i++) {
+        new Tooltip(this.$refs.btn_url_recent_edit_link[i], {
+          title: "Please purchase a subscription to edit your destination link.",
+          placement: 'top',
+        });
+        this.tooltips['edit_link'].push(new Tooltip(this.$refs.btn_url_recent_edit_link[i], {
+          title: "Please purchase a subscription to edit your destination link.",
+          placement: 'top',
+        }));
+
+        new Tooltip(this.$refs.btn_url_recent_rename_link[i], {
+          title: "Please login to change your short link.",
+          placement: 'top',
+        });
+
+        new Tooltip(this.$refs.btn_url_recent_copy[i], {
+          title: "Copy",
+          placement: 'top',
+        });
+
+        new Tooltip(this.$refs.btn_url_recent_download_qrcode[i], {
+          title: "Download QRCODE",
+          placement: 'top',
+        });
+
+        new Tooltip(this.$refs.btn_url_recent_visit_url[i], {
+          title: "Visit URL",
+          placement: 'left',
+        });
+      }
+    }
+
   },
   methods: {
     remove_protocol,
     submit_form() {
     },
     trigger_open_canvas() {
-      for (let i = 0; i < this.$refs.edit_link.length; i++) {
-        new Tooltip(this.$refs.edit_link[i], {
-          title: "Please purchase a subscription to edit your destination link.",
-          placement: 'top',
-        });
-
-        new Tooltip(this.$refs.rename_link[i], {
-          title: "Please login to change your short link.",
-          placement: 'top',
-        });
-      }
+      this.is_loading_urls_recent = true;
+      this.get_urls();
     },
     process_alias_name(alias) {
       this.alias_name = convert_space_to_dash(alias);
@@ -280,7 +316,6 @@ export default {
 
         let btn_zip_url_text_ori = this.btn_zip_url_text;
         this.btn_zip_url_text = get_border_spinner();
-        console.log(Cookies.get('zipit_uuid'))
         const response = await axios.post( import.meta.env.VITE_BE_URL + '/api/url/short-url', {
           long_url: this.long_url,
           alias_name: this.alias_name,
@@ -295,26 +330,26 @@ export default {
           this.long_url_disable = true;
           this.qrcode_base64 = response_data.qrcode_base64;
           this.qrcode = response_data.qrcode;
-          this.list_alias = response_data.list_alias;
 
-          let urls_recent = {}
-          if (localStorage.urls_recent) {
-            urls_recent = JSON.parse(localStorage.urls_recent);
-          }
-          let public_id = response.data.public_id;
-          // // Check if public_id is exist in urls_recent
-          if (urls_recent[public_id] === undefined) {
-            let url_recent = {
-              long_url: this.long_url,
-              short_url: response_data.list_alias.length > 0 ? response_data.list_alias[0]['alias_name'] : this.short_url,
-              qrcode_base64: this.qrcode_base64,
-              public_id: public_id,
-              destination_logo: response_data.destination_logo,
-            }
-            urls_recent[public_id] = url_recent
-            this.urls_recent.push(url_recent)
-            localStorage.urls_recent = JSON.stringify(urls_recent);
-          }
+          // this.list_alias = response_data.list_alias;
+          // let urls_recent = {}
+          // if (localStorage.urls_recent) {
+          //   urls_recent = JSON.parse(localStorage.urls_recent);
+          // }
+          // let public_id = response.data.public_id;
+          // // // Check if public_id is exist in urls_recent
+          // if (urls_recent[public_id] === undefined) {
+          //   let url_recent = {
+          //     long_url: this.long_url,
+          //     short_url: response_data.list_alias.length > 0 ? response_data.list_alias[0]['alias_name'] : this.short_url,
+          //     qrcode_base64: this.qrcode_base64,
+          //     public_id: public_id,
+          //     destination_logo: response_data.destination_logo,
+          //   }
+          //   urls_recent[public_id] = url_recent
+          //   this.urls_recent.push(url_recent)
+          //   localStorage.urls_recent = JSON.stringify(urls_recent);
+          // }
 
         }
       } catch (error) {
@@ -328,6 +363,11 @@ export default {
         }
         console.error('Error:', error);
       }
+    },
+    async get_urls() {
+      const response = await axios.get( get_end_point() + '/api/url/short-url');
+      this.urls_recent = response.data.list_alias;
+      this.is_loading_urls_recent = false;
     },
     zip_another_link() {
       this.long_url = '';
@@ -359,7 +399,7 @@ export default {
 
     },
     copy_alias_url(index) {
-      const item = this.list_alias[index];
+      const item = this.urls_recent[index];
       navigator.clipboard.writeText(item.alias_name);
       item.copied = true;
       setTimeout(() => {

@@ -15,8 +15,27 @@ class URLResource(Resource):
         # Define the request parser with the expected parameters
         self.parser = reqparse.RequestParser()
 
+    @check_csrf
     def get(self):
-        return {'message': 'URL get'}
+        cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
+        if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
+            cookie_uuid = request.headers['Zipit-Uuid']
+
+        url_model = URL()
+        urls = url_model.get_list_by_cookie_uuid(cookie_uuid)
+        results = []
+        for url in urls:
+            data = {
+                'long_url': Helper.remove_protocol(url.destination_link),
+                'public_id': url.public_id,
+                'short_url': Helper.return_link(url.public_id),
+                'qrcode': Helper.get_qrcode_link(url.public_id),
+                'qrcode_base64': URL_Helper.handler_qrcode(url),
+                'destination_logo': Helper.get_favicon_by_domain(url.destination_link, 32)
+            }
+            results.append(data)
+
+        return {'list_alias': results}
 
     @check_csrf
     def post(self):

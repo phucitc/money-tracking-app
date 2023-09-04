@@ -53,3 +53,34 @@ class URL(Model):
             return row['total_count']
         return 0
 
+    def get_list_by_cookie_uuid(self, cookie_uuid):
+        from model.url_alias import URL_Alias
+        query = f"""
+            SELECT 
+                ua.public_id,
+                ua.qrcode_path,
+                u.destination_link,
+                COALESCE(ua.alias_name, ua.public_id) AS alias_name
+            FROM {self.TABLE} u 
+                LEFT JOIN {URL_Alias.TABLE} ua
+                    ON u.id = ua.url_id 
+            WHERE ua.cookie_uuid = %(cookie_uuid)s
+        """
+        params = {
+            'cookie_uuid': cookie_uuid,
+        }
+        kwargs = {
+            'query': query,
+            'limit': 5,
+            'page': 1,
+            'order_by': 'ORDER BY ua.created_at DESC'
+        }
+
+        rows = self.get_list(params, **kwargs)
+        if rows:
+            return rows
+        return []
+
+
+
+

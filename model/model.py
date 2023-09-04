@@ -185,6 +185,31 @@ class Model:
             results.append(inst)
         return results
 
+    @staticmethod
+    def get_offset(page, limit):
+        return (page - 1) * limit
+
+
+    def get_list(self, params, **kwargs):
+        limit = kwargs.get('limit', 100)
+        query = kwargs.get('query', None)
+        offset = Model.get_offset(kwargs.get('page', 1), limit)
+        order_by = kwargs.get('order_by', '')
+        query = query + "  {order_by} LIMIT {limit} OFFSET {offset}".format(limit=limit, offset=offset, order_by=order_by)
+
+        rows = self.get_plsql().fetch(query, params=params)
+        results = []
+        for row in rows:
+            original_class = self.__class__
+            inst = original_class()
+            if 'created_at' in row and row['created_at'] is not None:
+                row['created_at'] = row['created_at'].strftime('%Y-%m-%d %H:%M:%S')
+            if 'updated_at' in row and row['updated_at'] is not None:
+                row['updated_at'] = row['updated_at'].strftime('%Y-%m-%d %H:%M:%S')
+            inst.data = row
+            results.append(inst)
+        return results
+
     def get_by_conditions(self, conditions=None):
         where, params = self.get_condition_query(conditions)
         # merge params to one dict

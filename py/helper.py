@@ -168,6 +168,11 @@ class Helper:
         return None
 
     @staticmethod
+    def remove_protocol(url):
+        return url.replace('http://', '').replace('https://', '')
+
+
+    @staticmethod
     def get_hostname(url):
         parsed_uri = urlparse(url)
         return parsed_uri.hostname

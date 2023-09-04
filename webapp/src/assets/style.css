@@ -54,6 +54,15 @@ label {
 input[name="alias_name"] {
     background-image: none!important;
 }
+.toast-header {
+    background-color: var(--zt-indigo);
+    color: white;
+}
+.toast-header .btn-close {
+    color: white;
+    opacity: 1;
+    --zt-btn-close-color: white;
+}
 /**
  * Begin Css Dashboard
  */
