@@ -91,6 +91,9 @@ class Model:
         if 'psql' in self.CACHE:
             print('Using cached psql')
             self.psql = self.CACHE['psql']
+            print('psql', self.psql.cursor.closed)
+            # if self.psql.cursor.closed:
+            #     self.psql.cursor = self.psql.connection.cursor()
         if self.psql is None:
             self.psql = PSQL()
             self.CACHE['psql'] = self.psql
