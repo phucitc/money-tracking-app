@@ -87,16 +87,20 @@ class Model:
             print(e)
             return False
 
-    def get_plsql(self):
-        if 'psql' in self.CACHE:
+    def get_plsql(self, force=False):
+        if force is False and 'psql' in self.CACHE:
             print('Using cached psql')
             self.psql = self.CACHE['psql']
-            print('psql', self.psql.cursor.closed)
-            # if self.psql.cursor.closed:
-            #     self.psql.cursor = self.psql.connection.cursor()
-        if self.psql is None:
+            print('psql 111', self.psql.cursor.closed)
+            if self.psql.cursor.closed is True:
+                return self.get_plsql(force=True)
+
+        if force is True or self.psql is None:
+            print('psql 222', force)
             self.psql = PSQL()
             self.CACHE['psql'] = self.psql
+            print('psql 333', self.psql.cursor.closed)
+
         return self.psql
 
     def update(self, params):
