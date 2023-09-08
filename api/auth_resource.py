@@ -31,9 +31,9 @@ class AuthResource(Resource):
         if auth_header:
             # Extract the token from the header
             token = auth_header.split()[1]  # Assuming 'Bearer <token>'
-            if is_empty(token) is False:
+            if Helper.is_empty(token) is False:
                 redirect_uri = ''
-                decode, code = decode_auth0_jwt(token)
+                decode, code = Helper.decode_auth0_jwt(token)
                 if code == 200:
                     data = {
                         'email': decode['email'],
