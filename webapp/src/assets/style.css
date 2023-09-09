@@ -54,6 +54,15 @@ label {
 input[name="alias_name"] {
     background-image: none!important;
 }
+.toast-header {
+    background-color: var(--zt-indigo);
+    color: white;
+}
+.toast-header .btn-close {
+    color: white;
+    opacity: 1;
+    --zt-btn-close-color: white;
+}
 /**
  * Begin Css Dashboard
  */
@@ -107,6 +116,21 @@ input[name="alias_name"] {
 
 .navbar .form-control {
   padding: .75rem 1rem;
+}
+
+/*
+Non-user history
+*/
+.offcanvas.offcanvas-end.non-user-history-width {
+    width: 40%;
+}
+.offcanvas.offcanvas-end.non-user-history-width .btn svg {
+    position: relative;
+    top: -3px;
+}
+
+.offcanvas.offcanvas-end.non-user-history-width .disable {
+    cursor: not-allowed;
 }
 
 /*

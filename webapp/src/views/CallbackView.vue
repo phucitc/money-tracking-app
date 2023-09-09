@@ -27,8 +27,9 @@
 import {useRoute} from 'vue-router';
 import axios from "axios";
 import {useAuth0} from "@auth0/auth0-vue";
-import {mapState, mapActions} from 'vuex';
-import {get_end_point} from "@/ultils/helper";
+import {mapActions, mapState} from 'vuex';
+import {get_csrf, get_end_point} from "@/ultils/helper";
+import Cookies from "js-cookie";
 
 export default {
   data() {
@@ -39,6 +40,10 @@ export default {
     }
   },
   setup() {
+  },
+  created() {
+    axios.defaults.headers.common['X-CSRFToken'] = get_csrf();
+    axios.defaults.headers.common['Zipit-Uuid'] = Cookies.get('Zipit-Uuid');
   },
   mounted() {
     this.postData()
@@ -77,7 +82,9 @@ export default {
             },
           };
 
-          await axios.post(get_end_point() + '/auth', {}, config)
+          await axios.post(get_end_point() + '/auth', {
+            flow: action
+          }, config)
               .then(response => {
                 // const redirect_uri = response.data.redirect_uri
                 // if (redirect_uri !== undefined && redirect_uri !== '') {

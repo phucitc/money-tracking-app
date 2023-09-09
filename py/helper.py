@@ -1,6 +1,7 @@
 import datetime
 import hashlib
 import os
+from urllib.parse import urlparse
 
 import qrcode
 import jwt
@@ -165,3 +166,20 @@ class Helper:
             if data[0] == key:
                 return data[1]
         return None
+
+    @staticmethod
+    def remove_protocol(url):
+        return url.replace('http://', '').replace('https://', '')
+
+
+    @staticmethod
+    def get_hostname(url):
+        parsed_uri = urlparse(url)
+        return parsed_uri.hostname
+
+    @staticmethod
+    def get_favicon_by_domain(url, size=64):
+        # remove https and http
+        hostname = Helper.get_hostname(url)
+        uri = 'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://{domain}&size={size}'
+        return uri.format(domain=hostname, size=size)
