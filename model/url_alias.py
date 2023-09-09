@@ -105,10 +105,10 @@ class URL_Alias(Model):
         query = f"""
             SELECT COUNT(*) AS total_count FROM {self.TABLE} ua
                 LEFT JOIN {URL.TABLE} u
-                    ON u.public_id = ua.public_id
-                    AND u.destination_link_hash = %(destination_link_hash)s
-            WHERE 
-                ua.cookie_uuid = %(cookie_uuid)s
+                    ON u.id = ua.url_id 
+            WHERE
+                u.destination_link_hash = %(destination_link_hash)s
+                AND ua.cookie_uuid = %(cookie_uuid)s
         """
         row = self.fetch_one(query, params={
             'destination_link_hash': destination_link_hash,
