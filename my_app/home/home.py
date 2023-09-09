@@ -30,9 +30,9 @@ def redirect_link(slug):
             return render_template('index.html')
 
         print(f"Query DB to get destination_link {slug}")
-        url_obj = URL()
+        url_alias_model = URL_Alias()
         slug = slug.strip()
-        url = url_obj.get_by_alias_name_or_public_id(slug)
+        url = url_alias_model.get_by_alias_name_or_public_id(slug)
         if url:
             # Process to track click here
             # Create a process for the background task
@@ -62,7 +62,7 @@ def admin_pages(page_name):
 @home_blueprint.route('/qrcode/<url_public_id>')
 def download_qrcode(url_public_id):
     url_alias_model = URL_Alias()
-    item = url_alias_model.get_by_public_id(url_public_id)
+    item = url_alias_model.get_by_alias_name_or_public_id(url_public_id)
     if item and Helper.is_empty(item.qrcode_path) is False:
         root_path = os.path.dirname(os.path.abspath(__file__))
         # go up multi level
