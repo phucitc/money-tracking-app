@@ -39,20 +39,6 @@ class URL(Model):
             return self
         return None
 
-    def get_total_alias_name_by_destination_link(self, destination_link):
-        from model.url_alias import URL_Alias
-        destination_link_hash = Helper.calculate_md5_hash(destination_link)
-        query = f"""
-            SELECT COUNT(*) AS total_count FROM {self.TABLE} u 
-                LEFT JOIN {URL_Alias.TABLE} ua
-                    ON u.public_id = ua.url_public_id 
-            WHERE u.destination_link_hash = %(destination_link_hash)s
-        """
-        row = self.fetch_one(query, params={'destination_link_hash': destination_link_hash})
-        if row:
-            return row['total_count']
-        return 0
-
     def get_list_by_cookie_uuid(self, cookie_uuid):
         from model.url_alias import URL_Alias
         query = f"""
