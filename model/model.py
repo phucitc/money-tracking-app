@@ -118,7 +118,7 @@ class Model:
                     holder += f"{key} = %({key})s,"
             holder = holder[:-1]  # remove last comma
 
-            query = f"UPDATE {self.table_name} SET {holder} WHERE id = {self.id} RETURNING {return_columns_after_update}"
+            query = f"UPDATE {self.table_name} SET {holder} WHERE id = {self.id}"
             self.get_plsql().execute(query, params=params)
             updated_row = self.get_plsql().cursor.fetchone()
             self.data = updated_row
