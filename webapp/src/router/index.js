@@ -3,14 +3,12 @@ import HomeView from '../views/HomeView.vue'
 import SignupView from '../views/SignupView.vue'
 import CallbackView from '../views/CallbackView.vue'
 import AboutView from '../views/AboutView.vue'
-import auth from "@/ultils/auth";
 import NotFoundView from "@/views/NotFoundView.vue";
 import MaintenanceView from "@/views/MaintenanceView.vue";
 import CommingSoonView from "@/views/CommingSoonView.vue";
 import LogoutView from "@/views/LogoutView.vue";
 import LoginView from "@/view_share/LoginView.vue";
 import {useAuth0} from "@auth0/auth0-vue";
-import store from "@/ultils/store";
 
 const router = createRouter({
     history: createWebHistory(import.meta.env.BASE_URL),
@@ -18,8 +16,8 @@ const router = createRouter({
         {
             path: '/',
             name: 'home',
-            // component: HomeView
-            component: CommingSoonView
+            // component: CommingSoonView
+            component: HomeView
         },
         {
             path: '/beta',
