@@ -5,6 +5,7 @@ from flask import Blueprint, render_template, redirect, send_file, request
 
 from classes.constant import Constant
 from model.url import URL
+from model.url_alias import URL_Alias
 from model.url_click import URL_Click
 from py.helper import Helper
 
@@ -60,8 +61,8 @@ def admin_pages(page_name):
 
 @home_blueprint.route('/qrcode/<url_public_id>')
 def download_qrcode(url_public_id):
-    url = URL()
-    item = url.get_by_public_id(url_public_id)
+    url_alias_model = URL_Alias()
+    item = url_alias_model.get_by_public_id(url_public_id)
     if item and Helper.is_empty(item.qrcode_path) is False:
         root_path = os.path.dirname(os.path.abspath(__file__))
         # go up multi level
@@ -74,7 +75,7 @@ def download_qrcode(url_public_id):
             Helper.create_simple_qrcode(Helper.return_link(url_public_id))
 
         print("file_path", file_path)
-        filename = 'qrcode-image.png'
+        filename = url_public_id + '-qrcode-image.png'
         return send_file(file_path, as_attachment=True, download_name=filename)
     else:
         return render_template('index.html'), 404

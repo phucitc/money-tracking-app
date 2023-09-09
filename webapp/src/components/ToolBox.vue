@@ -168,7 +168,7 @@
                         d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
                   </svg>
                 </button>
-                <button class="me-2 btn btn-success" ref="btn_url_recent_download_qrcode">
+                <a :href="item.qrcode" class="me-2 btn btn-success" ref="btn_url_recent_download_qrcode">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
                     <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"/>
                     <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"/>
@@ -176,7 +176,7 @@
                     <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"/>
                     <path d="M12 9h2V8h-2v1Z"/>
                   </svg>
-                </button>
+                </a>
                 <button class="me-2 btn btn-secondary opacity-50 disable d-none" ref="btn_url_recent_rename_link">Rename</button>
                 <button class="btn btn-secondary opacity-50 disable d-none" ref="btn_url_recent_edit_link">Edit</button>
               </div>
@@ -273,11 +273,6 @@ export default {
           placement: 'top',
         });
 
-        new Tooltip(this.$refs.btn_url_recent_copy[i], {
-          title: "Copy",
-          placement: 'top',
-        });
-
         new Tooltip(this.$refs.btn_url_recent_download_qrcode[i], {
           title: "Download QRCODE",
           placement: 'top',
@@ -355,11 +350,9 @@ export default {
       } catch (error) {
         // get response from error
         const data = error.response.data;
-        console.log(data)
         if ( data.type === 'alias_name' ) {
           this.form_css_was_validated = 'was-validated';
           this.alias_error_msg = data.message;
-          console.log(this.alias_error_msg)
         }
         console.error('Error:', error);
       }

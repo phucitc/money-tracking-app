@@ -18,10 +18,15 @@ export default {
       const auth0 = useAuth0();
       return {
         login() {
-          auth0.loginWithRedirect();
+          auth0.loginWithRedirect({
+            redirect_uri: window.location.origin + '/callback?action=login'
+          });
         },
         signup() {
-          auth0.loginWithRedirect( {authorizationParams: {screen_hint: 'signup'}});
+          auth0.loginWithRedirect( {
+            authorizationParams: {screen_hint: 'signup'},
+            redirect_uri: window.location.origin + '/callback?action=signup',
+          });
         }
       };
     },

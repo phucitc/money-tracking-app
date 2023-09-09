@@ -2,6 +2,7 @@ from flask import request
 from flask_restful import Resource
 
 from classes.constant import Constant
+from model.url_alias import URL_Alias
 from model.user import User
 from py.helper import Helper
 
@@ -27,6 +28,7 @@ class AuthResource(Resource):
         # print(results.content)
 
     def post(self):
+        # Sign up user
         auth_header = request.headers.get('Authorization')
         if auth_header:
             # Extract the token from the header
@@ -38,11 +40,26 @@ class AuthResource(Resource):
                     data = {
                         'email': decode['email'],
                     }
-                    User().check_and_insert_user(data)
-                    # if decode['email'] in Constant.ADMIN_EMAILS:
-                    #     redirect_uri = 'admin'
-                    # else:
-                    #     redirect_uri = 'dashboard'
+                    user = User().check_and_insert_user(data)
+                    if user:
+                        user_id = user.id
+                        payload = request.get_json()
+                        flow = payload['flow']
+                        print('flow', flow)
+                        if flow == 'signup':
+                            cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
+                            if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
+                                cookie_uuid = request.headers['Zipit-Uuid']
+                                url_alias_model = URL_Alias()
+                                list_url = url_alias_model.get_list_by_cookie_uuid(cookie_uuid)
+                                for url in list_url:
+                                    if url.user_id is None:
+                                        url.update({'user_id': user_id, 'cookie_uuid': None})
+
+                        # if decode['email'] in Constant.ADMIN_EMAILS:
+                        #     redirect_uri = 'admin'
+                        # else:
+                        #     redirect_uri = 'dashboard'
 
                 return {'redirect_uri': redirect_uri}
         return {'error': 'Unauthorized'}, Constant.HTTP_UNAUTHORIZED
