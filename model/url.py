@@ -56,7 +56,9 @@ class URL(Model):
     def get_list_by_cookie_uuid(self, cookie_uuid):
         from model.url_alias import URL_Alias
         query = f"""
-            SELECT 
+            SELECT
+                ua.id,
+                ua.user_id,
                 ua.public_id,
                 ua.qrcode_path,
                 u.destination_link,
@@ -80,6 +82,7 @@ class URL(Model):
         if rows:
             return rows
         return []
+
 
 
 

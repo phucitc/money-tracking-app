@@ -21,8 +21,8 @@ class URLResource(Resource):
         if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
             cookie_uuid = request.headers['Zipit-Uuid']
 
-        url_model = URL()
-        urls = url_model.get_list_by_cookie_uuid(cookie_uuid)
+        url_alias_model = URL_Alias()
+        urls = url_alias_model.get_list_by_cookie_uuid(cookie_uuid)
         results = []
         for url in urls:
             data = {

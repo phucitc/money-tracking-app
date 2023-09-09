@@ -18,6 +18,9 @@ class URL_Alias(Model):
             data['public_id'] = f"generate_public_id('{self.TABLE}'::text, {self.PUBLIC_ID_LENGTH})"
         return super().insert(data)
 
+    def get_by_public_id(self, public_id):
+        return self.get_by_field('public_id', public_id)
+
     def get_by_url_id_cookie_uuid(self, url_id, cookie_uuid):
         conditions = [
             {
@@ -30,4 +33,34 @@ class URL_Alias(Model):
             }
         ]
         return self.get_by_conditions(conditions)
+
+    def get_list_by_cookie_uuid(self, cookie_uuid):
+        from model.url import URL
+        query = f"""
+            SELECT
+                ua.id,
+                ua.user_id,
+                ua.public_id,
+                ua.qrcode_path,
+                u.destination_link,
+                COALESCE(ua.alias_name, ua.public_id) AS alias_name
+            FROM {URL.TABLE} u 
+                LEFT JOIN {self.TABLE} ua
+                    ON u.id = ua.url_id 
+            WHERE ua.cookie_uuid = %(cookie_uuid)s
+        """
+        params = {
+            'cookie_uuid': cookie_uuid,
+        }
+        kwargs = {
+            'query': query,
+            'limit': 5,
+            'page': 1,
+            'order_by': 'ORDER BY ua.created_at DESC'
+        }
+
+        rows = self.get_list(params, **kwargs)
+        if rows:
+            return rows
+        return []
 
