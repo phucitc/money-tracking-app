@@ -54,8 +54,14 @@ class URL_Alias(Model):
         ]
         return self.get_by_conditions(conditions)
 
-    def get_list_by_cookie_uuid(self, cookie_uuid):
+    def get_list_by_cookie_uuid(self, cookie_uuid, **kwargs):
         from model.url import URL
+
+        url_id = kwargs.get('url_id')
+        more_condition = ''
+        if url_id:
+            more_condition = f"AND ua.url_id = %(url_id)s"
+
         query = f"""
             SELECT
                 ua.id,
@@ -63,15 +69,24 @@ class URL_Alias(Model):
                 ua.public_id,
                 ua.qrcode_path,
                 u.destination_link,
-                COALESCE(ua.alias_name, ua.public_id) AS alias_name
+                CASE
+                    WHEN ua.alias_name IN (NULL, '') THEN ua.public_id
+                    ELSE ua.alias_name
+				END AS alias_name
             FROM {URL.TABLE} u 
                 LEFT JOIN {self.TABLE} ua
                     ON u.id = ua.url_id 
-            WHERE ua.cookie_uuid = %(cookie_uuid)s
-        """
+            WHERE
+                ua.cookie_uuid = %(cookie_uuid)s
+                {more_condition}
+        """.format(more_condition=more_condition)
+
         params = {
             'cookie_uuid': cookie_uuid,
         }
+        if url_id:
+            params['url_id'] = url_id
+
         kwargs = {
             'query': query,
             'limit': 5,
@@ -87,10 +102,18 @@ class URL_Alias(Model):
     def get_by_alias_name_or_public_id(self, alias_name_or_public_id):
         from model.url import URL
         query = f"""
-            SELECT *, ua.id as url_alias_id FROM {self.TABLE} ua
+            SELECT *, 
+                ua.id as url_alias_id
+            FROM {self.TABLE} ua
                 LEFT JOIN {URL.TABLE} u
                     ON u.id = ua.url_id 
-            WHERE COALESCE (ua.alias_name, ua.public_id) = %(alias_name_or_public_id)s
+            WHERE
+                CASE
+                    WHEN ua.alias_name IN (NULL, '') THEN 
+                        ua.public_id = %(alias_name_or_public_id)s
+                    ELSE
+                        ua.alias_name = %(alias_name_or_public_id)s
+                END
         """
         row = self.fetch_one(query, params={'alias_name_or_public_id': alias_name_or_public_id})
         if row:

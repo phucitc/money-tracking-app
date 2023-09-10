@@ -325,8 +325,7 @@ export default {
           this.long_url_disable = true;
           this.qrcode_base64 = response_data.qrcode_base64;
           this.qrcode = response_data.qrcode;
-
-          // this.list_alias = response_data.list_alias;
+          this.list_alias = response_data.list_alias;
           // let urls_recent = {}
           // if (localStorage.urls_recent) {
           //   urls_recent = JSON.parse(localStorage.urls_recent);
@@ -392,7 +391,7 @@ export default {
 
     },
     copy_alias_url(index) {
-      const item = this.urls_recent[index];
+      const item = this.list_alias[index];
       navigator.clipboard.writeText(item.alias_name);
       item.copied = true;
       setTimeout(() => {
