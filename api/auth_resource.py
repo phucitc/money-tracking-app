@@ -44,7 +44,7 @@ class AuthResource(Resource):
                     if user:
                         user_id = user.id
                         payload = request.get_json()
-                        flow = payload['flow']
+                        flow = payload.get('flow')
                         print('flow', flow)
                         if flow == 'signup':
                             cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
