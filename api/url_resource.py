@@ -92,6 +92,12 @@ class URLResource(Resource):
                     url_alias = url_alias_obj.insert(data_alias)
                 public_id = url_alias.public_id
             qrcode_base64 = URL_Helper.handler_qrcode(url_alias)
+            url_aliases = url_alias_obj.get_list_by_cookie_uuid(cookie_uuid, url_id=url.id)
+            for item in url_aliases:
+                # Ignore current alias name
+                if item.public_id != public_id:
+                    list_alias.append({'alias_name': Helper.return_link(item.alias_name)})
+
             return {
                 'public_id': public_id,
                 'short_link': Helper.return_link(public_id),
