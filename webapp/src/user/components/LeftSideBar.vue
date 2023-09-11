@@ -10,6 +10,15 @@
       <div class="offcanvas-body d-md-flex flex-column p-0 pt-lg-3 overflow-y-auto">
         <ul class="nav flex-column">
           <li class="nav-item">
+              <router-link to="/dashboard/create-url" class="nav-link d-flex align-items-center gap-2 ">
+                <button type="button" class="btn btn-primary align-svg">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-plus-lg" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2Z"/>
+</svg>
+                  Create new</button>
+              </router-link>
+          </li>
+          <li class="nav-item">
             <router-link class="nav-link d-flex align-items-center gap-2 active " to="/dashboard" aria-current="page">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                    class="bi bi-speedometer2" viewBox="0 0 16 16">

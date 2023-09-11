@@ -66,6 +66,11 @@ input[name="alias_name"] {
 /**
  * Begin Css Dashboard
  */
+.user-dashboard .form-control, .user-dashboard .form-select {
+    font-size: 1.1rem;
+    line-height: 1.5;
+}
+
 .bi {
   display: inline-block;
   width: 1rem;
@@ -75,6 +80,14 @@ input[name="alias_name"] {
 .dashboard .sidebar {
     position: fixed;
     height: 100%;
+}
+.align-svg svg {
+    position: relative;
+    top: -1px;
+}
+.svg-pos-sub-2 {
+    position: relative;
+    top: -2px;
 }
 
 /*

@@ -70,6 +70,14 @@ const router = createRouter({
         },
         // User routes
         {
+            path: '/dashboard/create-url',
+            name: 'dashboard-create',
+            component: () => import('../user/views/ToolCreateURLView.vue'),
+            meta: {
+                requiresAuth: true,
+            },
+        },
+        {
             path: '/dashboard',
             name: 'dashboard',
             component: () => import('../user/views/DashboardView.vue'),
