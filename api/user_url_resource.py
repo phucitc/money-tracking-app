@@ -1,43 +1,22 @@
-from flask import request, abort
-from flask_restful import Resource, reqparse
+from flask import request
+from flask_restful import Resource, reqparse, abort
 
 from classes.constant import Constant
-from model.url import URL
-from model.url_alias import URL_Alias
-from py.auth_helper import check_csrf
+from py.auth_helper import authenticate
 from py.helper import Helper
 from py.url_helper import URL_Helper
 
 
-class URLResource(Resource):
-
+class UserURLResource(Resource):
     def __init__(self):
         # Define the request parser with the expected parameters
         self.parser = reqparse.RequestParser()
 
-    @check_csrf
     def get(self):
-        cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
-        if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
-            cookie_uuid = request.headers['Zipit-Uuid']
+        return {'list_alias': 'OK'}
 
-        url_alias_model = URL_Alias()
-        urls = url_alias_model.get_list_by_cookie_uuid(cookie_uuid)
-        results = []
-        for url in urls:
-            data = {
-                'long_url': Helper.remove_protocol(url.destination_link),
-                'public_id': url.public_id,
-                'short_url': Helper.return_link(url.public_id),
-                'qrcode': Helper.get_qrcode_link(url.public_id),
-                'qrcode_base64': URL_Helper.handler_qrcode(url),
-                'destination_logo': Helper.get_favicon_by_domain(url.destination_link, 32)
-            }
-            results.append(data)
 
-        return {'list_alias': results}
-
-    @check_csrf
+    @authenticate
     def post(self):
         # For non-user
         public_id = ''
@@ -45,7 +24,7 @@ class URLResource(Resource):
         list_alias = []
         cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
         if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
-            cookie_uuid =request.headers['Zipit-Uuid']
+            cookie_uuid = request.headers['Zipit-Uuid']
             print("zipit_uuid in request.headers", request.headers['zipit_uuid'])
         print('zipit_uuid', cookie_uuid)
         if request.is_json:
@@ -108,11 +87,3 @@ class URLResource(Resource):
             }
         else:
             abort(Constant.HTTP_BAD_REQUEST, message="Invalid JSON")
-
-    @staticmethod
-    def handler_url_alias(url):
-        list_alias = []
-        return list_alias
-
-
-

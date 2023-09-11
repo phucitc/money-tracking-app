@@ -8,6 +8,7 @@ from dotenv import load_dotenv
 
 from api.admin_resource import AdminResource
 from api.auth_resource import AuthResource
+from api.user_url_resource import UserURLResource
 from model.model import Model
 
 load_dotenv()
@@ -57,6 +58,8 @@ api.add_resource(AuthResource, '/auth')
 api.add_resource(UserResource, '/user/<int:user_id>')
 api.add_resource(URLResource, '/api/url/short-url')
 api.add_resource(AdminResource, '/admin-api/<string:action>')
+
+api.add_resource(UserURLResource, '/user/url')
 # route
 @app.route('/favicon.ico')
 def favicon():

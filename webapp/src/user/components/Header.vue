@@ -1,7 +1,7 @@
 <template>
   <div class="dashboard">
     <header class="navbar sticky-top flex-md-nowrap p-0 shadow bg-primary" data-bs-theme="dark">
-      <a class="navbar-brand bg-primary-600 col-md-3 col-lg-2 me-0 px-3 fs-6 text-white" href="#">ZIPIT</a>
+      <router-link to="/dashboard" class="navbar-brand bg-primary-600 col-md-3 col-lg-2 me-0 px-3 fs-6 text-white">ZIPIT</router-link>
 
       <ul class="navbar-nav flex-row d-md-none">
         <li class="nav-item text-nowrap">
