@@ -63,6 +63,11 @@ def favicon():
     return send_from_directory(os.path.join(app.root_path, 'static'),
                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
 
+@app.route('/sitemap.xml')
+def return_sitemap():
+    result = open(app.static_folder + '/sitemap.xml', 'r').read()
+    return result, 200, {'Content-Type': 'application/xml; charset=utf-8'}
+
 app.register_blueprint(home_blueprint)
 
 @app.route("/app")
