@@ -8,7 +8,7 @@
             class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
           <h1 class="h2"><strong>Create new</strong></h1>
         </div>
-        <form class="row g-3 needs-validation" novalidate>
+        <form class="row g-3 needs-validation" novalidate  @submit.prevent="submit_form">
           <div class="col-md-6">
             <div class="col-md-12 mb-3">
               <label for="long_url" class="form-label"><strong>Destination</strong></label>
@@ -56,7 +56,7 @@
               </div>
             </div>
             <div class="col-md-12 text-center">
-              <button class="btn btn-primary" type="submit">Create</button>
+              <button class="btn btn-primary" type="submit" @click="this.create_url()">Create</button>
             </div>
 
           </div>
@@ -69,6 +69,9 @@
 <script>
 import Header from "@/user/components/Header.vue";
 import LeftSideBar from "@/user/components/LeftSideBar.vue";
+import {useAuth0} from "@auth0/auth0-vue";
+import axios from "axios";
+import {get_end_point} from "@/ultils/helper";
 
 export default {
   components: {
@@ -77,6 +80,12 @@ export default {
   },
   data() {
     return {
+      axios_config: {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': ''
+        }
+      },
       long_url: '',
       long_url_disable: false,
       title: '',
@@ -87,7 +96,7 @@ export default {
           domain_name: 'zipit.link',
           selected: true
         },
-          {
+        {
           id: 1,
           domain_name: 'zip.ly',
           selected: false
@@ -117,6 +126,22 @@ export default {
         date_friendly: '',
         message: '',
       },
+    }
+  },
+  created() {
+    const auth0 = useAuth0()__raw
+    this.axios_config.headers.Authorization = 'Bearer ' + this.token
+  },
+  methods: {
+    submit_form() {
+    },
+    async create_url() {
+      const response = await axios.post(get_end_point() + '/user/url', {
+        long_url: this.long_url,
+        alias_name: this.alias_name,
+      }, this.axios_config).finally(() => {
+      });
+      console.log(response)
     }
   }
 }

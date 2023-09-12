@@ -18,8 +18,8 @@ def authenticate(func):
             token = auth_header.split()[1]  # Assuming 'Bearer <token>'
             print('token', token)
             # Check if the token is valid (example check)
-            if token == 'your_token':  # Replace with your authentication logic
-                return func(*args, **kwargs)
+            # if token == 'your_token':  # Replace with your authentication logic
+            return func(*args, **kwargs)
         # Unauthorized access
         return {'error': 'Unauthorized'}, 401
     return wrapper

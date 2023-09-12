@@ -141,4 +141,6 @@ class URL_Alias(Model):
             return row['total_count']
         return 0
 
+    def get_list_by_user_id(self, user_id):
+        return 0
 
