@@ -7,6 +7,8 @@ import qrcode
 import jwt
 from jwt import PyJWKClient
 
+from classes.constant import Constant
+
 
 class Helper:
     @staticmethod
@@ -185,3 +187,17 @@ class Helper:
         hostname = Helper.get_hostname(url)
         uri = 'https://t1.gstatic.com/faviconV2?client=SOCIAL&type=FAVICON&fallback_opts=TYPE,SIZE,URL&url=https://{domain}&size={size}'
         return uri.format(domain=hostname, size=size)
+
+    @staticmethod
+    def is_crawler_bot(user_agent):
+        user_agent_bots = Constant.USER_AGENT_BOTS
+        # cast user_agent_bots to lower case
+        user_agent_bots = [x.lower() for x in user_agent_bots]
+        user_agent = user_agent.lower()
+
+        # find user_agent in user_agent_bots
+        for bot in user_agent_bots:
+            if bot in user_agent:
+                return True
+        return False
+
