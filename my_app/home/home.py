@@ -82,8 +82,12 @@ def download_qrcode(url_public_id):
 
 def background_task_tracking_click(params):
     # TODO Need improve performance by using queue
-    url_alias_id = params['url_alias_id']
     flask_request = params['flask_request']
+    user_agent = flask_request.headers.get('User-Agent')
+    if Helper.is_crawler_bot(user_agent):
+        return
+
+    url_alias_id = params['url_alias_id']
     data = {
         'url_alias_id': url_alias_id,
         'user_agent': flask_request.headers.get('User-Agent'),
