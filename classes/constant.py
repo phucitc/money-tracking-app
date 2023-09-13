@@ -41,3 +41,23 @@ class Constant:
     VUEJS_ADMIN_PAGES = ['login', 'urls']
     MAX_URL_ALIAS_NON_USER = 2
     MAX_URL_ALIAS_USER = 10
+
+    USER_AGENT_BOTS = [
+        'Googlebot',
+        'Googlebot/2.1',
+        'Bingbot',
+        'bingbot/2.0',
+        'Yahoo! Slurp',
+        'Yahoo! Slurp China',
+        'Baiduspider'
+        'Baiduspider-image',
+        'YandexBot',
+        'DuckDuckBot',
+        'FacebookExternalHit/1.1',
+        'Twitterbot',
+        'LinkedInBot',
+        'Pinterest/0.1',
+        'Applebot',
+        'Slackbot',
+        'TelegramBot',
+    ]
