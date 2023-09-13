@@ -5,6 +5,7 @@ from flask import request
 from flask_wtf import CSRFProtect
 
 from classes.constant import Constant
+from model.user import User
 from py.helper import Helper
 
 
@@ -17,9 +18,15 @@ def authenticate(func):
             # Extract the token from the header
             token = auth_header.split()[1]  # Assuming 'Bearer <token>'
             print('token', token)
-            # Check if the token is valid (example check)
-            # if token == 'your_token':  # Replace with your authentication logic
-            return func(*args, **kwargs)
+            if Helper.is_empty(token) is False:
+                decode, code = Helper.decode_auth0_jwt(token)
+                if code == 200:
+                    user_model = User()
+                    user = user_model.get_by_email(decode['email'])
+                    if user:
+                        kwargs['user'] = user
+                        return func(*args, **kwargs)
+
         # Unauthorized access
         return {'error': 'Unauthorized'}, 401
     return wrapper

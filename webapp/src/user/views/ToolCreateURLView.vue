@@ -129,8 +129,8 @@ export default {
     }
   },
   created() {
-    const auth0 = useAuth0()__raw
-    this.axios_config.headers.Authorization = 'Bearer ' + this.token
+    const auth0 = useAuth0()
+    this.axios_config.headers.Authorization = 'Bearer ' + auth0.idTokenClaims.value.__raw
   },
   methods: {
     submit_form() {
@@ -138,6 +138,8 @@ export default {
     async create_url() {
       const response = await axios.post(get_end_point() + '/user/url', {
         long_url: this.long_url,
+        title: this.title,
+        domain_id: this.domain_id,
         alias_name: this.alias_name,
       }, this.axios_config).finally(() => {
       });
