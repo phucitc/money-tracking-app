@@ -69,12 +69,14 @@ class URLResource(Resource):
             url_alias = None
             if data_alias['alias_name'] != '':
                 # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
-                total_alias = url_alias_obj.get_total_alias_name_by_destination_link(url.destination_link, cookie_uuid)
+                total_alias = url_alias_obj.get_total_alias_name_by_destination_link(url.destination_link,
+                                                                                     cookie_uuid=cookie_uuid)
                 if total_alias >= Constant.MAX_URL_ALIAS_NON_USER:
                     return {'message': 'Short URLs limit reached for this URL.',
                             'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
 
-                url_alias = url_alias_obj.get_by_alias_name_cookie_uuid(data_alias['alias_name'], cookie_uuid)
+                url_alias = url_alias_obj.get_by_alias_name(data_alias['alias_name'],
+                                                            cookie_uuid=cookie_uuid)
                 if url_alias and url_alias.alias_name == data_alias['alias_name']:
                     return {'message': 'Alias name is not available.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
                 else:
@@ -87,7 +89,7 @@ class URLResource(Resource):
             if url_alias:
                 public_id = url_alias.alias_name if url_alias.alias_name is not None else url_alias.public_id
             else:
-                url_alias = url_alias_obj.get_by_url_id_cookie_uuid(url.id, data_alias['cookie_uuid'])
+                url_alias = url_alias_obj.get_by_url_id(url.id, cookie_uuid=data_alias['cookie_uuid'])
                 if url_alias is None:
                     url_alias = url_alias_obj.insert(data_alias)
                 public_id = url_alias.public_id

@@ -25,7 +25,7 @@ class UserURLResource(Resource):
         user = kwargs.get('user')
         if request.is_json:
             payload = request.get_json()
-
+            user_id = user.id
             url_obj = URL()
             url_alias_obj = URL_Alias()
             data = dict()
@@ -38,17 +38,19 @@ class UserURLResource(Resource):
             data_alias = dict()
             data_alias['url_id'] = url.id
             # TODO split alias to other code block to easy maintenance
+            data_alias['user_id'] = user_id
             data_alias['alias_name'] = '' if 'alias_name' not in payload else payload['alias_name'].strip()
             data_alias['alias_name'] = Helper.convert_space_to_dash(data_alias['alias_name'])
             url_alias = None
             if data_alias['alias_name'] != '':
-                # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
-                total_alias = url_alias_obj.get_total_alias_name_by_destination_link(url.destination_link, cookie_uuid)
-                if total_alias >= Constant.MAX_URL_ALIAS_NON_USER:
+                total_alias = url_alias_obj.get_total_alias_name_by_destination_link(url.destination_link,
+                                                                                     user_id=user_id)
+                if total_alias >= Constant.MAX_URL_ALIAS_USER:
                     return {'message': 'Short URLs limit reached for this URL.',
                             'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
 
-                url_alias = url_alias_obj.get_by_alias_name_cookie_uuid(data_alias['alias_name'], cookie_uuid)
+                url_alias = url_alias_obj.get_by_alias_name(data_alias['alias_name'],
+                                                            user_id=user_id)
                 if url_alias and url_alias.alias_name == data_alias['alias_name']:
                     return {'message': 'Alias name is not available.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
                 else:
@@ -61,7 +63,7 @@ class UserURLResource(Resource):
             if url_alias:
                 public_id = url_alias.alias_name if url_alias.alias_name is not None else url_alias.public_id
             else:
-                url_alias = url_alias_obj.get_by_url_id_cookie_uuid(url.id, data_alias['cookie_uuid'])
+                url_alias = url_alias_obj.get_by_url_id(url.id, user_id=user_id)
                 if url_alias is None:
                     url_alias = url_alias_obj.insert(data_alias)
                 public_id = url_alias.public_id

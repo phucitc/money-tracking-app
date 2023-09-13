@@ -28,30 +28,46 @@ class URL_Alias(Model):
     def get_by_public_id(self, public_id):
         return self.get_by_field('public_id', public_id)
 
-    def get_by_url_id_cookie_uuid(self, url_id, cookie_uuid):
+    def get_by_url_id(self, url_id, **kwargs):
+        cookie_uuid = kwargs.get('cookie_uuid')
+        user_id = kwargs.get('user_id')
         conditions = [
             {
                 'column': 'url_id',
                 'value': url_id
-            },
-            {
-                'column': 'cookie_uuid',
-                'value': cookie_uuid
             }
         ]
+        if cookie_uuid:
+            conditions.append({
+                'column': 'cookie_uuid',
+                'value': cookie_uuid
+            })
+        elif user_id:
+            conditions.append({
+                'column': 'user_id',
+                'value': user_id
+            })
         return self.get_by_conditions(conditions)
 
-    def get_by_alias_name_cookie_uuid(self, alias_name, cookie_uuid):
+    def get_by_alias_name(self, alias_name, **kwargs):
+        cookie_uuid = kwargs.get('cookie_uuid')
+        user_id = kwargs.get('user_id')
         conditions = [
             {
                 'column': 'alias_name',
                 'value': alias_name
-            },
-            {
-                'column': 'cookie_uuid',
-                'value': cookie_uuid
             }
         ]
+        if cookie_uuid:
+            conditions.append({
+                'column': 'cookie_uuid',
+                'value': cookie_uuid
+            })
+        elif user_id:
+            conditions.append({
+                'column': 'user_id',
+                'value': user_id
+            })
         return self.get_by_conditions(conditions)
 
     def get_list_by_cookie_uuid(self, cookie_uuid, **kwargs):
@@ -121,21 +137,32 @@ class URL_Alias(Model):
             return self
         return None
 
-    def get_total_alias_name_by_destination_link(self, destination_link, cookie_uuid):
+    def get_total_alias_name_by_destination_link(self, destination_link, **kwargs):
         from model.url import URL
         from py.helper import Helper
+        cookie_uuid = kwargs.get('cookie_uuid')
+        user_id = kwargs.get('user_id')
         destination_link_hash = Helper.calculate_md5_hash(destination_link)
+
+        more_condition = ''
+        if cookie_uuid:
+            more_condition = f"AND ua.cookie_uuid = %(cookie_uuid)s"
+        elif user_id:
+            more_condition = f"AND ua.user_id = %(user_id)s"
+
         query = f"""
             SELECT COUNT(*) AS total_count FROM {self.TABLE} ua
                 LEFT JOIN {URL.TABLE} u
                     ON u.id = ua.url_id 
             WHERE
                 u.destination_link_hash = %(destination_link_hash)s
-                AND ua.cookie_uuid = %(cookie_uuid)s
-        """
+                {more_condition}
+        """.format(more_condition=more_condition)
+
         row = self.fetch_one(query, params={
             'destination_link_hash': destination_link_hash,
-            'cookie_uuid': cookie_uuid
+            'cookie_uuid': cookie_uuid,
+            'user_id': user_id
         })
         if row:
             return row['total_count']
