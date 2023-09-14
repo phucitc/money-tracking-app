@@ -144,6 +144,7 @@ export default {
       }, this.axios_config).finally(() => {
       });
       console.log(response)
+      this.$router.push('/dashboard/urls')
     }
   }
 }

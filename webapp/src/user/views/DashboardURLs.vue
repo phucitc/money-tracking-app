@@ -5,139 +5,76 @@
       <LeftSideBar />
       <main class="col-md-9 ms-sm-auto col-lg-10 px-md-4 py-4">
         <h2>Your URLs</h2>
-        <div class="table-responsive small">
-        <table class="table table-striped table-sm">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-              <th scope="col">Header</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>1,001</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,002</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,003</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,004</td>
-              <td>text</td>
-              <td>random</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,005</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>placeholder</td>
-            </tr>
-            <tr>
-              <td>1,006</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,007</td>
-              <td>placeholder</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>irrelevant</td>
-            </tr>
-            <tr>
-              <td>1,008</td>
-              <td>random</td>
-              <td>data</td>
-              <td>placeholder</td>
-              <td>text</td>
-            </tr>
-            <tr>
-              <td>1,009</td>
-              <td>placeholder</td>
-              <td>irrelevant</td>
-              <td>visual</td>
-              <td>layout</td>
-            </tr>
-            <tr>
-              <td>1,010</td>
-              <td>data</td>
-              <td>rich</td>
-              <td>dashboard</td>
-              <td>tabular</td>
-            </tr>
-            <tr>
-              <td>1,011</td>
-              <td>information</td>
-              <td>placeholder</td>
-              <td>illustrative</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,012</td>
-              <td>text</td>
-              <td>placeholder</td>
-              <td>layout</td>
-              <td>dashboard</td>
-            </tr>
-            <tr>
-              <td>1,013</td>
-              <td>dashboard</td>
-              <td>irrelevant</td>
-              <td>text</td>
-              <td>visual</td>
-            </tr>
-            <tr>
-              <td>1,014</td>
-              <td>dashboard</td>
-              <td>illustrative</td>
-              <td>rich</td>
-              <td>data</td>
-            </tr>
-            <tr>
-              <td>1,015</td>
-              <td>random</td>
-              <td>tabular</td>
-              <td>information</td>
-              <td>text</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div class="row mt-4">
+          <div class="col-md-2"></div>
+          <div class="col-md-8">
+            <div class="card mb-3" v-for="(url_alias, index) in this.list_aliases">
+              <div class="card-body">
+                <div class="row">
+                  <div class="col-md-1">
+
+                  </div>
+                  <div class="col-md-9">
+                    <h5 class="card-title">Title</h5>
+                    <h6 class="card-subtitle mb-2"><a href="http://localhost:5000/Fvk6C" class="text-decoration-none" target="_blank">http://localhost:5000/Fvk6C</a></h6>
+                    <p class="card-text">vnexpress.net/tp-hcm-co-6-quan-thuoc-dien-sap-nhap-4637538.html</p>
+                  </div>
+                  <div class="col-md-2">
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-md-2"></div>
+        </div>
+
       </main>
     </div>
   </div>
 
 </template>
-<script setup>
+<script>
 import LeftSideBar from "@/user/components/LeftSideBar.vue";
 import Header from "@/user/components/Header.vue";
+import {useAuth0} from "@auth0/auth0-vue";
+import axios from "axios";
+import {get_end_point} from "@/ultils/helper";
+export default {
+  components: {
+    LeftSideBar,
+    Header
+  },
+  data() {
+    return {
+      axios_config: {
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': ''
+        }
+      },
+      list_aliases: []
+    }
+  },
+  created() {
+    const auth0 = useAuth0()
+    this.axios_config.headers.Authorization = 'Bearer ' + auth0.idTokenClaims.value.__raw
+  },
+  mounted() {
+    this.get_list_aliases()
+  },
+  methods: {
+    async get_list_aliases() {
+      const response = await axios.get( get_end_point() + '/user/url', this.axios_config)
+          .finally(() => {
+
+          }
+        );
+      this.list_aliases = response.data.list_aliases
+      console.log(this.list_aliases)
+    }
+  },
+
+}
 </script>

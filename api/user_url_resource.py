@@ -14,11 +14,23 @@ class UserURLResource(Resource):
         # Define the request parser with the expected parameters
         self.parser = reqparse.RequestParser()
 
-    @check_csrf
-    def get(self):
-        return {'list_aliases': 'OK'}
+    @authenticate
+    def get(self, **kwargs):
+        user = kwargs.get('user')
+        url_alias_model = URL_Alias()
+        list_aliases = url_alias_model.get_list_by_user_id(user.id)
+        results = []
+        for url_alias in list_aliases:
+            results.append({
+                'long_url': Helper.remove_protocol(url_alias.destination_link),
+                'public_id': url_alias.public_id,
+                'short_url': Helper.return_link(url_alias.public_id),
+                'qrcode': Helper.get_qrcode_link(url_alias.public_id),
+                'qrcode_base64': URL_Helper.handler_qrcode(url_alias),
+                'destination_logo': Helper.get_favicon_by_domain(url_alias.destination_link, 32)
+            })
+        return {'list_aliases': results}
 
-    # @check_csrf
     @authenticate
     def post(self, **kwargs):
         # For non-user

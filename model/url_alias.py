@@ -169,5 +169,39 @@ class URL_Alias(Model):
         return 0
 
     def get_list_by_user_id(self, user_id):
-        return 0
+        from model.url import URL
+
+        query = f"""
+                    SELECT
+                        ua.id,
+                        ua.user_id,
+                        ua.public_id,
+                        ua.qrcode_path,
+                        u.destination_link,
+                        CASE
+                            WHEN ua.alias_name IN (NULL, '') THEN ua.public_id
+                            ELSE ua.alias_name
+        				END AS alias_name
+                    FROM {URL.TABLE} u 
+                        LEFT JOIN {self.TABLE} ua
+                            ON u.id = ua.url_id 
+                    WHERE
+                        ua.user_id = %(user_id)s
+                """
+
+        params = {
+            'user_id': user_id,
+        }
+
+        kwargs = {
+            'query': query,
+            'limit': 5,
+            'page': 1,
+            'order_by': 'ORDER BY ua.id DESC'
+        }
+
+        rows = self.get_list(params, **kwargs)
+        if rows:
+            return rows
+        return []
 

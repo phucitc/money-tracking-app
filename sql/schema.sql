@@ -26,6 +26,7 @@ CREATE TABLE IF NOT EXISTS public.urls
     public_id character varying(8) COLLATE pg_catalog."default",
     destination_link text COLLATE pg_catalog."default" NOT NULL,
     destination_link_hash character varying(33) COLLATE pg_catalog."default" NOT NULL,
+    title character varying(255),
     created_at timestamp without time zone DEFAULT now(),
     updated_at timestamp without time zone DEFAULT now(),
     CONSTRAINT urls_pkey PRIMARY KEY (id)
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS public.url_aliases
 (
     id serial,
     url_id integer,
+    title character varying(255),
     alias_name character varying(64),
     user_id integer,
     qrcode_path character varying(128),
