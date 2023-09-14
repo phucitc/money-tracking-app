@@ -61,3 +61,5 @@ class Constant:
         'Slackbot',
         'TelegramBot',
     ]
+
+    LIMIT_PER_PAGE = 10

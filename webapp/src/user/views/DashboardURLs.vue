@@ -26,6 +26,21 @@
 
               </div>
             </div>
+            <div class="clearfix"></div>
+            <div class="d-flex justify-content-center">
+            <nav aria-label="" >
+              <ul class="pagination">
+                <li v-for="index in this.total_pages"
+                    :class="{'page-item': true, 'active': index === this.current_page}"
+                    :aria-current="index === this.current_page ? 'page': ''">
+                  <span v-if="index === this.current_page" class="page-link"> {{ index }}</span>
+                  <span v-else>
+                    <a class="page-link" href="#">{{ index }}</a>
+                  </span>
+                </li>
+              </ul>
+            </nav>
+              </div>
           </div>
           <div class="col-md-2"></div>
         </div>
@@ -54,7 +69,9 @@ export default {
           'Authorization': ''
         }
       },
-      list_aliases: []
+      list_aliases: [],
+      total_pages: 1,
+      current_page: 1,
     }
   },
   created() {
@@ -71,7 +88,9 @@ export default {
 
           }
         );
-      this.list_aliases = response.data.list_aliases
+      const data = response.data
+      this.list_aliases = data.list_aliases
+      this.total_pages = data.total_pages
       console.log(this.list_aliases)
     }
   },

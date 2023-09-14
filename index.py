@@ -44,8 +44,8 @@ def app_middleware(next_handler):
         response = next_handler(*args, **kwargs)
         # Perform any post-request processing here
         print("Executing custom middleware after request")
-        # model = Model()
-        # model.get_plsql().close()
+        model = Model()
+        model.get_plsql().close()
         return response
     return middleware
 

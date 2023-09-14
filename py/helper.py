@@ -201,3 +201,8 @@ class Helper:
                 return True
         return False
 
+    @staticmethod
+    def get_total_pages(total_links, limit_per_page=Constant.LIMIT_PER_PAGE):
+        if total_links % limit_per_page > 0:
+            return int(total_links / limit_per_page) + 1
+        return 1

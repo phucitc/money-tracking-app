@@ -19,6 +19,11 @@ class UserURLResource(Resource):
         user = kwargs.get('user')
         url_alias_model = URL_Alias()
         list_aliases = url_alias_model.get_list_by_user_id(user.id)
+        conditions = [{
+            'column': 'user_id',
+            'value': user.id
+        }]
+        total_links = url_alias_model.get_count(conditions=conditions)
         results = []
         for url_alias in list_aliases:
             results.append({
@@ -27,9 +32,16 @@ class UserURLResource(Resource):
                 'short_url': Helper.return_link(url_alias.public_id),
                 'qrcode': Helper.get_qrcode_link(url_alias.public_id),
                 'qrcode_base64': URL_Helper.handler_qrcode(url_alias),
-                'destination_logo': Helper.get_favicon_by_domain(url_alias.destination_link, 32)
+                'destination_logo': Helper.get_favicon_by_domain(url_alias.destination_link, 32),
+
             })
-        return {'list_aliases': results}
+        # calculate total pages from total links
+        total_pages = Helper.get_total_pages(total_links)
+        total_pages = 10
+        return {
+            'list_aliases': results,
+            'total_pages': total_pages
+        }
 
     @authenticate
     def post(self, **kwargs):

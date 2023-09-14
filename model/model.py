@@ -223,4 +223,15 @@ class Model:
 
     def fetch_one(self, query, params=None):
         return self.get_plsql().fetch_one(query, params=params)
+
+    def get_count(self, conditions=None):
+        where, params = self.get_condition_query(conditions)
+        params = {k: v for d in params for k, v in d.items()}
+        query = f"SELECT COUNT(*) AS total FROM {self.TABLE} {where}"
+        row = self.get_plsql().fetch_one(query, params=params)
+        return row['total']
+
+
+
+
     
