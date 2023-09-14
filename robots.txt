@@ -1,0 +1,4 @@
+User-agent: *
+Disallow: /login
+Disallow: /signup
+Sitemap: https://zipit.link/sitemap.xml

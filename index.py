@@ -68,8 +68,14 @@ def favicon():
 
 @app.route('/sitemap.xml')
 def return_sitemap():
-    result = open(app.static_folder + '/sitemap.xml', 'r').read()
+    result = open('sitemap.xml', 'r').read()
     return result, 200, {'Content-Type': 'application/xml; charset=utf-8'}
+
+
+@app.route('/robots.txt')
+def return_robots():
+    result = open('robots.txt', 'r').read()
+    return result, 200, {'Content-Type': 'text/plain; charset=utf-8'}
 
 app.register_blueprint(home_blueprint)
 
