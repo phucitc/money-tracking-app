@@ -27,17 +27,19 @@ class UserURLResource(Resource):
         results = []
         for url_alias in list_aliases:
             results.append({
-                'long_url': Helper.remove_protocol(url_alias.destination_link),
+                'title': 'Untitled',
+                'long_url': url_alias.destination_link,
                 'public_id': url_alias.public_id,
                 'short_url': Helper.return_link(url_alias.public_id),
                 'qrcode': Helper.get_qrcode_link(url_alias.public_id),
                 'qrcode_base64': URL_Helper.handler_qrcode(url_alias),
                 'destination_logo': Helper.get_favicon_by_domain(url_alias.destination_link, 32),
+                'domain_id': 0,
+                'created_at': url_alias.created_at,
 
             })
         # calculate total pages from total links
         total_pages = Helper.get_total_pages(total_links)
-        total_pages = 10
         return {
             'list_aliases': results,
             'total_pages': total_pages

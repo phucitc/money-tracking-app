@@ -21,8 +21,19 @@ export function remove_protocol(url) {
     return url.replace(/(^\w+:|^)\/\//, '');
 }
 
-
 export function get_csrf() {
     const meta_tag = document.querySelector('meta[name="csrf-token"]');
     return meta_tag.getAttribute('content');
+}
+
+export function copy_url(url_alias) {
+    const item = url_alias.short_url;
+    navigator.clipboard.writeText(url_alias.short_url);
+    url_alias.copied = true;
+    setTimeout(() => {
+        url_alias.copied = false;
+    }, 1500);
+}
+
+export function prevent_submit_form() {
 }

@@ -178,6 +178,7 @@ class URL_Alias(Model):
                         ua.public_id,
                         ua.qrcode_path,
                         u.destination_link,
+                        ua.created_at,
                         CASE
                             WHEN ua.alias_name IN (NULL, '') THEN ua.public_id
                             ELSE ua.alias_name

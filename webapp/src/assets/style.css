@@ -41,6 +41,18 @@ label {
     font-size: 1.5rem;
     font-weight: 900;
 }
+.tp-1 {
+    top: 1px;
+}
+.tp-2 {
+    top: 2px;
+}
+.tp-3 {
+    top: 3px;
+}
+.tp-4 {
+    top: 4px;
+}
 
 /**
     ToolBox
@@ -89,6 +101,23 @@ input[name="alias_name"] {
     position: relative;
     top: -2px;
 }
+
+.cursor-pointer {
+    cursor: pointer;
+}
+
+
+.dashboard .btn svg {
+    position: relative;
+    top: -2px;
+}
+.no-dropdown-toggle::after {
+    display: none;
+}
+/*.modal-url .form-control {*/
+/*    font-size: inherit!important;*/
+/*    line-height: inherit!important;*/
+/*}*/
 
 /*
  * Sidebar
