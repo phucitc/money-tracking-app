@@ -1,5 +1,6 @@
 import multiprocessing
 import os
+import socket
 
 from flask import Blueprint, render_template, redirect, send_file, request
 
@@ -15,7 +16,9 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp',
 @home_blueprint.route('/debug')
 def debug_url():
     # print("params", request.remote_addr)
-    return request.remote_addr
+    hostname = socket.gethostname()
+    ip_address = socket.gethostbyname(hostname)
+    return str(hostname) + str(ip_address)
 
 @home_blueprint.route('/')
 def index():
