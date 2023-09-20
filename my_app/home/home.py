@@ -1,6 +1,5 @@
 import multiprocessing
 import os
-import socket
 
 from flask import Blueprint, render_template, redirect, send_file, request
 
@@ -13,12 +12,6 @@ from py.helper import Helper
 # VueJS need to build, then copy dist folder to this folder and rename to vuejs_webapp
 home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
 
-@home_blueprint.route('/debug')
-def debug_url():
-    # print("params", request.remote_addr)
-    hostname = socket.gethostname()
-    ip_address = socket.gethostbyname(hostname)
-    return str(hostname) + str(ip_address)
 
 @home_blueprint.route('/')
 def index():
@@ -104,7 +97,7 @@ def background_task_tracking_click(params):
     data = {
         'url_alias_id': url_alias_id,
         'user_agent': flask_request.headers.get('User-Agent'),
-        'ip_address': flask_request.remote_addr,
+        'ip_address': flask_request.headers.get('X-Real-Ip', '127.0.0.1'),
         'referer': flask_request.headers.get('Referer', ''),
         'alias_name': params['alias_name'] if 'alias_name' in params else ''
     }
