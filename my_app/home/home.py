@@ -16,7 +16,13 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp',
 @home_blueprint.route('/')
 def index():
     print("HOME")
-    return render_template('index.html')
+    hostname = request.host
+    domain = hostname.split(':')[0]
+
+    if Helper.alllow_domains(domain):
+        return render_template('index.html')
+    else:
+        return 'Sorry! Access restricted.'
 
 
 @home_blueprint.route('/<slug>')

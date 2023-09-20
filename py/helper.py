@@ -173,7 +173,6 @@ class Helper:
     def remove_protocol(url):
         return url.replace('http://', '').replace('https://', '')
 
-
     @staticmethod
     def get_hostname(url):
         parsed_uri = urlparse(url)
@@ -199,3 +198,12 @@ class Helper:
                 return True
         return False
 
+    @staticmethod
+    def alllow_domains(domain):
+        if domain in [
+            'zipit.vn',
+            'www.zipit.vn',
+            'localhost'
+        ]:
+            return True
+        return False
