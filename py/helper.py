@@ -201,8 +201,8 @@ class Helper:
     @staticmethod
     def alllow_domains(domain):
         if domain in [
-            'zipit.vn',
-            'www.zipit.vn',
+            'zipit.link',
+            'www.zipit.link',
             'localhost'
         ]:
             return True
