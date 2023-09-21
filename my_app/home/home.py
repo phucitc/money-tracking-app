@@ -13,6 +13,12 @@ from py.helper import Helper
 home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
 
 
+@home_blueprint.route('/debug')
+def debug():
+    print("Debug")
+    print(request.headers)
+    return ''
+
 @home_blueprint.route('/')
 def index():
     print("HOME")
