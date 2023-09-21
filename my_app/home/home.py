@@ -12,10 +12,6 @@ from py.helper import Helper
 # VueJS need to build, then copy dist folder to this folder and rename to vuejs_webapp
 home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
 
-@home_blueprint.route('/debug')
-def debug():
-    print(request.headers)
-    return ''
 
 @home_blueprint.route('/')
 def index():
@@ -114,5 +110,4 @@ def background_task_tracking_click(params):
         'alias_name': params['alias_name'] if 'alias_name' in params else '',
         'country': country
     }
-    print("data", data)
     URL_Click().insert(data)
