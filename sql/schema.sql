@@ -65,7 +65,8 @@ CREATE TABLE IF NOT EXISTS public.url_clicks
     user_agent text,
     ip_address inet,
     referer text,
-    alias_name character varying(64)
+    alias_name character varying(64),
+    country character varying(10)
 );
 
 CREATE INDEX IF NOT EXISTS idx_url_clicks_url_id_created_at

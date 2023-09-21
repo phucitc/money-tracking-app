@@ -13,12 +13,6 @@ from py.helper import Helper
 home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
 
 
-@home_blueprint.route('/debug')
-def debug():
-    print("Debug")
-    print(request.headers)
-    return ''
-
 @home_blueprint.route('/')
 def index():
     print("HOME")
@@ -64,12 +58,14 @@ def redirect_link(slug):
     else:
         return render_template('index.html'), 404
 
+
 @home_blueprint.route('/admin/<page_name>')
 def admin_pages(page_name):
     print("Admin page name", page_name)
     if page_name in Constant.VUEJS_ADMIN_PAGES:
         return render_template('index.html')
     return render_template('index.html'), 404
+
 
 @home_blueprint.route('/qrcode/<url_public_id>')
 def download_qrcode(url_public_id):
@@ -92,6 +88,7 @@ def download_qrcode(url_public_id):
     else:
         return render_template('index.html'), 404
 
+
 def background_task_tracking_click(params):
     # TODO Need improve performance by using queue
     flask_request = params['flask_request']
@@ -100,11 +97,17 @@ def background_task_tracking_click(params):
         return
 
     url_alias_id = params['url_alias_id']
+    real_ip = flask_request.headers.get('Cf-Connecting-Ip')  # Cloudflare proxy
+    country = flask_request.headers.get('Cf-Ipcountry', '')  # Cloudflare proxy
+    if real_ip is None:
+        real_ip = flask_request.remote_addr
+
     data = {
         'url_alias_id': url_alias_id,
         'user_agent': flask_request.headers.get('User-Agent'),
-        'ip_address': flask_request.headers.get('X-Real-Ip', '127.0.0.1'),
+        'ip_address': real_ip,
         'referer': flask_request.headers.get('Referer', ''),
-        'alias_name': params['alias_name'] if 'alias_name' in params else ''
+        'alias_name': params['alias_name'] if 'alias_name' in params else '',
+        'country': country
     }
     URL_Click().insert(data)
