@@ -6,6 +6,7 @@ import AboutView from '../views/AboutView.vue'
 import NotFoundView from "@/views/NotFoundView.vue";
 import MaintenanceView from "@/views/MaintenanceView.vue";
 import CommingSoonView from "@/views/CommingSoonView.vue";
+import ContactView from "@/views/ContactView.vue";
 import LogoutView from "@/views/LogoutView.vue";
 import LoginView from "@/view_share/LoginView.vue";
 import {useAuth0} from "@auth0/auth0-vue";
@@ -23,6 +24,11 @@ const router = createRouter({
             path: '/beta',
             name: 'home-beta',
             component: HomeView
+        },
+        {
+            path: '/contact',
+            name: 'contact',
+            component: ContactView
         },
         {
             path: '/home',
