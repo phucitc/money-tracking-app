@@ -26,6 +26,7 @@
 
           <span class="btn btn-link text-white link-underline d-none" @click="login">Login</span>
           <button type="button" class="btn bg-primary-300 text-white d-none" @click="signup">Sign-up</button>
+          <a class="btn bg-primary-300 text-white"  href="mailto:shello@zipit.link">Contact</a>
         </div>
       </div>
     </div>
