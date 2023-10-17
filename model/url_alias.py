@@ -109,7 +109,8 @@ class URL_Alias(Model):
                     ON u.id = ua.url_id 
             WHERE
                 CASE
-                    WHEN ua.alias_name IS NULL OR ua.alias_name = '' THEN 
+                    WHEN ua.alias_name IS NULL OR ua.alias_name = '' OR POSITION('/' IN ua.alias_name) > 0 THEN 
+                    -- POSITION('/' IN ua.alias_name) > 0 is to check if alias_name is invalid
                         ua.public_id = %(alias_name_or_public_id)s
                     ELSE
                         ua.alias_name = %(alias_name_or_public_id)s
