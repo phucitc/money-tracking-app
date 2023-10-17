@@ -109,7 +109,7 @@ class URL_Alias(Model):
                     ON u.id = ua.url_id 
             WHERE
                 CASE
-                    WHEN ua.alias_name IN (NULL, '') THEN 
+                    WHEN ua.alias_name IS NULL OR ua.alias_name = '' THEN 
                         ua.public_id = %(alias_name_or_public_id)s
                     ELSE
                         ua.alias_name = %(alias_name_or_public_id)s
