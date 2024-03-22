@@ -1,0 +1,180 @@
+:root {
+    --blue: #6610f2;
+    --purple: #8a2be2;
+    --white: #ffffff;
+    --black: #000000;
+    --gray: #808080;
+    --light-gray: #f2f2f2;
+    --dark-gray: #282828;
+    --border: rgba(60, 60, 60, 0.12);
+    --border-hover: rgba(60, 60, 60, 0.29);
+    --text-light: var(--purple);
+    --text-dark: var(--white);
+    --section-gap: 160px;
+
+}
+
+.bg-purple {
+    background: var(--purple);
+}
+.text-zt-dark {
+    background: var(--blue);
+}
+.form-control {
+    font-size: 1.2rem;
+    line-height: 2.2;
+}
+label {
+    font-size: 1.2rem;
+}
+.btn-large {
+    font-size: 1.2rem;
+    padding: 0.5rem 1rem;
+    line-height: 2;
+}
+.btn .spinner-border {
+    position: relative;
+    top:5px;
+}
+.btn-transparent {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.qrcode-box {
+    border: var(--zt-border-width) solid var(--zt-indigo);
+    border-radius: var(--zt-border-radius);
+    position: relative;
+    --s: 30px; /* the size on the corner */
+    --t: 5px; /* the thickness of the border */
+    --g: 20px; /* the gap between the border and image */
+    outline-offset: calc(-1 * var(--t));
+    -webkit-mask: conic-gradient(at var(--s) var(--s), #0000 75%, #000 0) 0 0/calc(100% - var(--s)) calc(100% - var(--s)),
+    linear-gradient(#000 0 0) content-box;
+    transition: .4s;
+}
+.qrcode-box .btn-download-qrcode {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+.text-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+}
+
+/**
+    ToolBox
+ */
+.was-validated .form-control.error {
+    border-color: var(--zt-form-invalid-border-color);
+}
+.was-validated .form-control.error ~ .invalid-feedback {
+    display: block;
+}
+input[name="alias_name"] {
+    background-image: none!important;
+}
+.toast-header {
+    background-color: var(--zt-indigo);
+    color: white;
+}
+.toast-header .btn-close {
+    color: white;
+    opacity: 1;
+    --zt-btn-close-color: white;
+}
+/**
+ * Begin Css Dashboard
+ */
+.bi {
+  display: inline-block;
+  width: 1rem;
+  height: 1rem;
+}
+
+.dashboard .sidebar {
+    position: fixed;
+    height: 100%;
+}
+
+/*
+ * Sidebar
+ */
+
+@media (min-width: 768px) {
+  .sidebar .offcanvas-lg {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 48px;
+  }
+  .navbar-search {
+    display: block;
+  }
+}
+
+.sidebar .nav-link {
+  font-size: .875rem;
+  font-weight: 500;
+}
+
+.sidebar-heading {
+  font-size: .75rem;
+}
+
+
+
+/*
+ * Navbar
+ */
+
+.navbar-brand {
+  padding-top: .75rem;
+  padding-bottom: .75rem;
+  background-color: rgba(0, 0, 0, .25);
+  box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+}
+
+.navbar .form-control {
+  padding: .75rem 1rem;
+}
+
+/*
+Non-user history
+*/
+.offcanvas.offcanvas-end.non-user-history-width {
+    width: 40%;
+}
+.offcanvas.offcanvas-end.non-user-history-width .btn svg {
+    position: relative;
+    top: -3px;
+}
+
+.offcanvas.offcanvas-end.non-user-history-width .disable {
+    cursor: not-allowed;
+}
+
+/*
+Responsive
+*/
+
+/* Small devices (landscape phones, 576px and up)*/
+@media (min-width: 576px) {
+}
+
+ /*Medium devices (tablets, 768px and up)*/
+@media (min-width: 768px) {
+}
+
+ /*Large devices (desktops, 992px and up)*/
+@media (min-width: 992px) {
+}
+
+ /*X-Large devices (large desktops, 1200px and up)*/
+@media (min-width: 1200px) {
+}
+
+/*XX-Large devices (larger desktops, 1400px and up)*/
+@media (min-width: 1400px) {
+}

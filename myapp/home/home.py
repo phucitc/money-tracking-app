@@ -10,7 +10,7 @@ from model.url_click import URL_Click
 from py.helper import Helper
 
 # VueJS need to build, then copy dist folder to this folder and rename to vuejs_webapp
-home_blueprint = Blueprint('homepage', __name__, template_folder='vuejs_webapp', static_folder='vuejs_webapp/assets')
+home_blueprint = Blueprint('homepage', __name__, template_folder='templates')
 
 
 @home_blueprint.route('/')
@@ -19,41 +19,41 @@ def index():
     # hostname = request.host
     # domain = hostname.split(':')[0]
 
-    return render_template('index.html')
+    return render_template('home.html')
 
 
-@home_blueprint.route('/<slug>')
-def redirect_link(slug):
-    print("slug", slug)
-    if slug is not None:
-        slug = slug.strip()
-        # these are routes in VueJS
-        if slug in Constant.VUEJS_PAGES:
-            print("Here, return vueJS template")
-            return render_template('index.html')
-
-        print(f"Query DB to get destination_link {slug}")
-        url_alias_model = URL_Alias()
-        slug = slug.strip()
-        url = url_alias_model.get_by_alias_name_or_public_id(slug)
-        if url:
-            # Process to track click here
-            # Create a process for the background task
-            params = {
-                'url_alias_id': url.url_alias_id,
-                'flask_request': request,
-                'alias_name': slug
-            }
-
-            # Start the background process
-            background_process = multiprocessing.Process(target=background_task_tracking_click(params))
-            background_process.start()
-
-            return redirect(url.destination_link, code=301)
-        else:
-            return render_template('index.html'), 404
-    else:
-        return render_template('index.html'), 404
+# @home_blueprint.route('/<slug>')
+# def redirect_link(slug):
+#     print("slug", slug)
+#     if slug is not None:
+#         slug = slug.strip()
+#         # these are routes in VueJS
+#         if slug in Constant.VUEJS_PAGES:
+#             print("Here, return vueJS template")
+#             return render_template('index.html')
+#
+#         print(f"Query DB to get destination_link {slug}")
+#         url_alias_model = URL_Alias()
+#         slug = slug.strip()
+#         url = url_alias_model.get_by_alias_name_or_public_id(slug)
+#         if url:
+#             # Process to track click here
+#             # Create a process for the background task
+#             params = {
+#                 'url_alias_id': url.url_alias_id,
+#                 'flask_request': request,
+#                 'alias_name': slug
+#             }
+#
+#             # Start the background process
+#             background_process = multiprocessing.Process(target=background_task_tracking_click(params))
+#             background_process.start()
+#
+#             return redirect(url.destination_link, code=301)
+#         else:
+#             return render_template('index.html'), 404
+#     else:
+#         return render_template('index.html'), 404
 
 
 @home_blueprint.route('/admin/<page_name>')

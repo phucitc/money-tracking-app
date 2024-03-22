@@ -1,0 +1,73 @@
+{% extends '/body.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2 col-sm-12"></div>
+            <div class="col-md-8 col-sm-12"><h1 class="text-center pt-5">Shorten a long URL</h1>
+                <div class="toolbox">
+                    <form class="row g-3 needs-validation" novalidate="">
+                        <div class="col-12"><label for="long_url" class="form-label"><strong>Paste a long
+                            URL</strong></label><input type="text" class="form-control" name="long_url" id="long_url"
+                                                       placeholder="Example: https://your-domain.com/your-url-too-long"
+                                                       aria-label="Enter a long link" required="">
+                            <div class="invalid-feedback"> The Long URL field is required.</div>
+                        </div>
+                        <div class="m-0">
+                            <div class="row">
+                                <div class="col-md-5 col-sm-12 mt-3"><label for="basic-url" class="form-label"><strong>Domain</strong></label><input
+                                        type="text" class="form-control" placeholder="zipit.link"
+                                        aria-label="Enter a long link" readonly="" disabled=""
+                                        aria-describedby="button-addon2"></div>
+                                <div class="col-md-7 col-sm-12 mt-3"><label for="basic-url" class="form-label"><strong>Enter
+                                    a back-half you want (optional)</strong>&nbsp;<span><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                        class="bi bi-info-circle" viewBox="0 0 16 16"><path
+                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path><path
+                                        d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"></path></svg></span></label><input
+                                        type="text" class="form-control" name="alias_name"
+                                        placeholder="Example: my-link" aria-label="Enter a back-half you want">
+                                    <div class="invalid-feedback"></div>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col text-center">
+                                    <button type="submit" class="btn btn-primary btn-large"><span>Zip your URL</span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div><!----></form>
+                    <div class="offcanvas offcanvas-end non-user-history-width" data-bs-backdrop="static" tabindex="-1"
+                         id="offcanvas-urls-recent" aria-labelledby="staticBackdropLabel">
+                        <div class="offcanvas-header"><h5 class="offcanvas-title" id="offcanvasExampleLabel">Your recent
+                            URLs</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div class="row mb-2">
+                                <div content="col">
+                                    <div class="w-100 text-center">
+                                        <div class="spinner-border text-center" role="status"><span
+                                                class="visually-hidden">Loading...</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="live_toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header"><strong class="me-auto"></strong><small></small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-2 col-sm-12"></div>
+        </div>
+    </div>
+{% endblock %}

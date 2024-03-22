@@ -15,7 +15,7 @@ load_dotenv()
 from api.url_resource import URLResource
 from classes.todo_resource import TodoResource
 from classes.user_resource import UserResource
-from my_app.home.home import home_blueprint
+from myapp.home.home import home_blueprint
 
 # Setup template_folder and static_folder are from VueJS build
 app = Flask(__name__, static_folder='static')
@@ -26,7 +26,7 @@ app.config['WTF_CSRF_CHECK_DEFAULT'] = False
 # TODO Uncomment this line if you want deploy app to Production
 csrf = CSRFProtect()
 csrf.init_app(app)
-api = Api(app)
+# api = Api(app)
 # CORS(app, resources={r"/*": {"origins": ["http://localhost:5173", "http://zipit.link", "https://zipit.link"]}})
 CORS(app, origins=["http://localhost:5173", "http://localhost:5000", "http://zipit.link", "https://zipit.link"])
 
@@ -52,33 +52,33 @@ def app_middleware(next_handler):
 app.wsgi_app = app_middleware(app.wsgi_app)
 
 # Add the resource to the API
-api.add_resource(TodoResource, '/todos/<int:todo_id>')
-api.add_resource(AuthResource, '/auth')
-api.add_resource(UserResource, '/user/<int:user_id>')
-api.add_resource(URLResource, '/api/url/short-url')
-api.add_resource(AdminResource, '/admin-api/<string:action>')
+# api.add_resource(TodoResource, '/todos/<int:todo_id>')
+# api.add_resource(AuthResource, '/auth')
+# api.add_resource(UserResource, '/user/<int:user_id>')
+# api.add_resource(URLResource, '/api/url/short-url')
+# api.add_resource(AdminResource, '/admin-api/<string:action>')
 # route
-@app.route('/favicon.ico')
-def favicon():
-    return send_from_directory(os.path.join(app.root_path, 'static'),
-                               'favicon.ico', mimetype='image/vnd.microsoft.icon')
-
-@app.route('/sitemap.xml')
-def return_sitemap():
-    result = open('sitemap.xml', 'r').read()
-    return result, 200, {'Content-Type': 'application/xml; charset=utf-8'}
-
-
-@app.route('/robots.txt')
-def return_robots():
-    result = open('robots.txt', 'r').read()
-    return result, 200, {'Content-Type': 'text/plain; charset=utf-8'}
+# @app.route('/favicon.ico')
+# def favicon():
+#     return send_from_directory(os.path.join(app.root_path, 'static'),
+#                                'favicon.ico', mimetype='image/vnd.microsoft.icon')
+#
+# @app.route('/sitemap.xml')
+# def return_sitemap():
+#     result = open('sitemap.xml', 'r').read()
+#     return result, 200, {'Content-Type': 'application/xml; charset=utf-8'}
+#
+#
+# @app.route('/robots.txt')
+# def return_robots():
+#     result = open('robots.txt', 'r').read()
+#     return result, 200, {'Content-Type': 'text/plain; charset=utf-8'}
 
 app.register_blueprint(home_blueprint)
 
-@app.route("/app")
-def hello():
-    return "Hello"
+# @app.route("/app")
+# def hello():
+#     return "Hello"
 
 
 if __name__ == '__main__':
