@@ -1,0 +1,37 @@
+{% extends '/body.html' %}
+{% block content %}
+<div class="container">
+    <h1>Shorten URL</h1>
+    <p-input :com-props="longURLProps"></p-input>
+    <span>${longURLProps.val}</span>
+</div>
+
+<script type="module">
+const { createApp, ref, onMounted, OnErrorCaptured } = Vue;
+import PInput from '{{ url_for('static', filename='js/components/p-input.js') }}';
+    createApp({
+        setup() {
+            const helper = new Helper();
+            const long_url = ref('');
+            const alias_name = ref('');
+            const longURLProps = ref({
+                placeHolder: 'Ex: https://yourdomain.com/url-too-long'
+            });
+            const globalProps = ref({
+                'helper': helper
+            });
+            return {
+                long_url,
+                alias_name,
+                longURLProps
+            }
+        },
+        delimiters: ['${', '}'],
+        components: {
+            'p-input': PInput
+        }
+    })
+    .mount('#app');
+</script>
+
+{% endblock %}

@@ -1,5 +1,6 @@
 :root {
     --blue: #6610f2;
+    --blue-dark: #580dd3;
     --purple: #8a2be2;
     --white: #ffffff;
     --black: #000000;
@@ -63,6 +64,10 @@ label {
     font-size: 1.5rem;
     font-weight: 900;
 }
+.container-center {
+    /* It should has a width */
+    margin: 0 auto;
+}
 
 /**
     ToolBox
@@ -84,6 +89,20 @@ input[name="alias_name"] {
     color: white;
     opacity: 1;
     --zt-btn-close-color: white;
+}
+.blue-btn {
+    background: var(--blue);
+    border-color: var(--blue);
+    color: var(--white);
+
+}
+.blue-btn:hover {
+    background: var(--blue-dark);
+    border-color: var(--blue-dark);
+}
+.btn.blue-btn:active {
+    background: var(--blue-dark);
+    border-color: var(--blue-dark);
 }
 /**
  * Begin Css Dashboard
@@ -154,7 +173,12 @@ Non-user history
 .offcanvas.offcanvas-end.non-user-history-width .disable {
     cursor: not-allowed;
 }
-
+.bg-primary-300 {
+    background:#a370f7;
+}
+.bg-primary-300:hover,.bg-primary-400 {
+    background: #8540f5
+}
 /*
 Responsive
 */

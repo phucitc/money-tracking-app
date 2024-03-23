@@ -21,6 +21,11 @@ def index():
 
     return render_template('home.html')
 
+@home_blueprint.route('/components')
+def components():
+    return render_template('components.html')
+
+
 
 # @home_blueprint.route('/<slug>')
 # def redirect_link(slug):
