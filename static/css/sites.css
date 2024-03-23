@@ -104,6 +104,10 @@ input[name="alias_name"] {
     background: var(--blue-dark);
     border-color: var(--blue-dark);
 }
+.p-input.input-group label {
+    width: 100%;
+    display: block;
+}
 /**
  * Begin Css Dashboard
  */

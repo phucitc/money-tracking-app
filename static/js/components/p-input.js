@@ -4,8 +4,11 @@ export default {
     },
     created() {
         console.log('created input');
-        if ( !this.comProps.hasOwnProp('ruleValidate') ) {
+        if ( !this.comProps.hasOwnProperty('ruleValidate') ) {
             this.comProps.ruleValidate = ''
+        }
+        if ( !this.comProps.hasOwnProperty('type') ) {
+            this.comProps.type = ''
         }
 
     },
@@ -30,15 +33,16 @@ export default {
     },
     props:['comProps', 'globalProps'],
     template: `
-        <div class="form-group mb-3">
-            <label for="long_url" class="form-label"><strong>{{this.comProps.label}}</strong></label>
+        <div class="mb-3 p-input" :class="{'form-group': comProps.type == '', 'input-group': comProps.type == 'inputGroup'}" >
+            <label for="long_url" class="form-label"><strong>{{comProps.label}}</strong></label>
             <input class="form-control" 
                 type="text" 
-                v-model="this.comProps.val"
-                :placeholder="this.comProps.placeHolder"
-                :disabled="this.comProps.disabled"
+                v-model="comProps.val"
+                :placeholder="comProps.placeHolder"
+                :disabled="comProps.disabled"
                 @blur="handleBlur"
-            >
+            ><span v-if="comProps.type == 'inputGroup'" class="input-group-text" id="basic-addon2">Copy</span>
+            
         </div>
     `,
 }

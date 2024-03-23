@@ -7,7 +7,8 @@ export default {
     },
     methods: {
         handleClick() {
-            console.log("Button clicked");
+            console.log("Button clicked 1");
+            this.$emit('button-clicked');
         }
     },
     props:['comProps', 'globalProps'],
