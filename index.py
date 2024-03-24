@@ -1,5 +1,7 @@
 import os
-from flask import Flask, send_from_directory
+
+from authlib.integrations.flask_client import OAuth
+from flask import Flask, send_from_directory, current_app
 from flask_cors import CORS
 from flask_restful import Api
 from flask_wtf.csrf import CSRFProtect
@@ -75,6 +77,19 @@ app.wsgi_app = app_middleware(app.wsgi_app)
 #     return result, 200, {'Content-Type': 'text/plain; charset=utf-8'}
 
 app.register_blueprint(home_blueprint)
+
+oauth = OAuth(app)
+
+oauth.register(
+    "auth0",
+    client_id=app.config["AUTH0_CLIENT_ID"],
+    client_secret=app.config["AUTH0_CLIENT_SECRET"],
+    client_kwargs={
+        "scope": "openid profile email",
+    },
+    server_metadata_url=f'https://{app.config["AUTH0_DOMAIN"]}/.well-known/openid-configuration'
+)
+app.config["oauth"] = oauth
 
 # @app.route("/app")
 # def hello():

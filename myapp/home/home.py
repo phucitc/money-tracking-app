@@ -1,7 +1,9 @@
 import multiprocessing
 import os
+from urllib.parse import urlencode, quote_plus
 
-from flask import Blueprint, render_template, redirect, send_file, request, make_response, jsonify
+from flask import Blueprint, render_template, redirect, send_file, request, make_response, jsonify, url_for, \
+    current_app, session
 
 from classes.constant import Constant
 from model.url import URL
@@ -16,19 +18,62 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='templates')
 
 @home_blueprint.route('/')
 def index():
-    print("HOME")
-    # hostname = request.host
-    # domain = hostname.split(':')[0]
-
+    print(session.get('user'))
     return render_template('home.html')
+
 
 @home_blueprint.route('/components')
 def components():
     return render_template('components.html')
 
+
 @home_blueprint.route('/about')
 def about():
     return render_template('about.html')
+
+
+@home_blueprint.route('/login')
+def login():
+    oauth = current_app.config['oauth']
+    return oauth.auth0.authorize_redirect(
+        redirect_uri=url_for("homepage.callback", _external=True)
+    )
+
+
+@home_blueprint.route('/signup')
+def signup():
+    oauth = current_app.config['oauth']
+    return oauth.auth0.authorize_redirect(
+        redirect_uri=url_for("homepage.callback", _external=True),
+        screen_hint="signup"
+    )
+
+
+@home_blueprint.route('/logout')
+def logout():
+    session.clear()
+    return redirect(
+        "https://" + current_app.config["AUTH0_DOMAIN"]
+        + "/v2/logout?"
+        + urlencode(
+            {
+                "returnTo": url_for("homepage.index", _external=True),
+                "client_id": current_app.config["AUTH0_CLIENT_ID"],
+            },
+            quote_via=quote_plus,
+        )
+    )
+
+
+@home_blueprint.route('/callback',  methods=["GET", "POST"])
+def callback():
+    oauth = current_app.config['oauth']
+    token = oauth.auth0.authorize_access_token()
+    session["user"] = token
+    print('token', token)
+
+    return redirect("/")
+
 
 @home_blueprint.route('/zip-url', methods=['POST'])
 def zip_url():

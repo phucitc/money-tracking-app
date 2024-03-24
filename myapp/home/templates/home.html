@@ -36,10 +36,12 @@
                         </div>
                          <div class="col-md-4">
                             <div class="text-center">
-                                <div class="qrcode-box overflow-hidden"><img
-                                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAUoAAAFKAQAAAABTUiuoAAAB7klEQVR4nO2aTYqzQBCGn/oUZtneIEfRq82Rvhu0R8kNdDnQ8s6iuxMTZiAJaISpWjSm8ixeaMr608SDNv57lARHHXXUUUcd3RK1Ym1+grkF5uoeNhfg6DNoL0maQFLChuxtJEm6RbcR4Ogz6FxDaOxAn11xm1m7jwBHX0H7cwuw1Pff7gIc/d3an5wGTbJ9BDj6AhokRYDxlFCEckhpHwGOPmLrOoJG9NP1qO5ekuLbtTpqd5MnI0z5uDefPB0FNesWs2Fu8/sP5hYb5pLUbNhcgKOPWW6pIo1y8tLUrDqvNfJ2rY5e0MVy8T6eEmanBGPXSDFINuwhwNEHLFcZvRKKQTc2NSWpeZVxRHQ2Y7SWkre4rRiPpfVPojW2pkb0q6cEhBp0nrcOgq6jp59KolIMKf8sf/htHQNdxZZi0KoxzoVhpASd39YB0DonDAmDNgGLMZ6EAVg/dbWBfrtWRzO6mgle5oQ5je0kwNEn0OvuWDp/1AZrbgHvt46HXnbHEL6sjJ9C+gndRoCjz6B1d2xDHhGaMZrlHVe5vMNodfRi46kWhtBI8bpFPp7WP48qshiEhGJI/l3GsdBLBS9gBuvPH4K5Q7C09P+7bQU4+uIsg7w2KfPddcfs3fEx0Pvd8e/mu2NHHXXUUUffj34DmJM0XixOW7QAAAAASUVORK5CYII="
-                                        alt="QR Code" class="img-fluid"><a href="https://zipit.link/qrcode/F8mEV"
-                                                                           class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover btn-download-qrcode">Download</a>
+                                <div class="qrcode-box overflow-hidden">
+                                    <img
+                                        :src="resultURLProps.qrcodeImage"
+                                        alt="QR Code" class="img-fluid">
+                                        <a :href="resultURLProps.qrcodeURL"
+                                            class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover btn-download-qrcode">Download</a>
                                 </div>
                             </div>
                         </div>
@@ -122,8 +124,10 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
             });
             const resultURLProps = ref({
                 shortURL: '',
-                publicID: '0ae33f98de96e08f53bed831c1429723',
-                qrcodeImage: '/static/qrcode/0ae33f98de96e08f53bed831c1429723.png',
+                publicID: '',
+                qrcodeImage: '',
+                qrcodeURL: '',
+                listAlias: []
             });
             const handleZipURL = async () => {
                 console.log("CLICKED")
@@ -133,8 +137,15 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 }
                 window.axios.post('/zip-url', payload)
                     .then((response) => {
+                        console.log(response.data)
                         longURLProps.value.disabled = true;
                         globalProps.value.isVisibleZipURLResult = true;
+                        resultURLProps.value.publicID = response.data.public_id;
+                        resultURLProps.value.shortURL = response.data.short_link;
+                        resultURLProps.value.qrcodeImage = response.data.qrcode_base64;
+                        resultURLProps.value.listAlias = response.data.list_alias;
+                        resultURLProps.value.qrcodeURL = response.data.qrcode;
+                        shortURLProps.value.val = response.data.short_link;
                         console.log(response.data)
                     })
                     .catch((error) => {
