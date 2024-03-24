@@ -224,4 +224,7 @@ class Model:
 
     def fetch_one(self, query, params=None):
         return self.get_plsql().fetch_one(query, params=params)
+
+    def get_data(self):
+        return self.data
     

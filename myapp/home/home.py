@@ -9,6 +9,7 @@ from classes.constant import Constant
 from model.url import URL
 from model.url_alias import URL_Alias
 from model.url_click import URL_Click
+from model.user import User
 from py.helper import Helper
 from py.url_helper import URL_Helper
 
@@ -72,10 +73,17 @@ def logout():
 def callback():
     oauth = current_app.config['oauth']
     token = oauth.auth0.authorize_access_token()
-    session["user"] = token
-    print('token', token)
+    if token is None:
+        return redirect(url_for("homepage.index"))
+    else:
+        data = {
+            'email': token['userinfo']['email']
+        }
+        user = User().check_and_insert_user(data)
+        session["auth0_token"] = token
+        session["user"] = user
 
-    return redirect("/")
+    return redirect(url_for("homepage.index"))
 
 
 @home_blueprint.route('/zip-url', methods=['POST'])

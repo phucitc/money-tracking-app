@@ -24,4 +24,4 @@ class User(Model):
         user = self.get_by_email(data['email'])
         if user is None:
             user = self.insert(data)
-        return user
+        return user.get_data() if user else None
