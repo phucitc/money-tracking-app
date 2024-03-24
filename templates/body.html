@@ -29,11 +29,15 @@
 
             <div class="text-end">
                 <span class="btn btn-link text-white link-underline d-none">Login</span>
+                {% if 'user' not in session %}
                 <button type="button" class="btn bg-primary-300 text-white d-none">Sign-up</button>
                 <a class="btn bg-primary-300 text-white me-2" href="/signup">Signup</a>
                 <a class="btn bg-primary-300 text-white me-2" href="/login">Login</a>
+                {% endif %}
+                {% if 'user' in session %}
                 <a class="btn bg-primary-300 text-white" href="/logout">Logout</a>
-                <a class="btn bg-primary-300 text-white" href="mailto:hello@zipit.link">Contact</a>
+                {% endif %}
+
             </div>
         </div>
     </div>

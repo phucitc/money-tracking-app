@@ -19,17 +19,20 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='templates')
 @home_blueprint.route('/')
 def index():
     print(session.get('user'))
-    return render_template('home.html')
+    return render_template('home.html',
+                           session=session)
 
 
 @home_blueprint.route('/components')
 def components():
-    return render_template('components.html')
+    return render_template('components.html',
+                           session=session)
 
 
 @home_blueprint.route('/about')
 def about():
-    return render_template('about.html')
+    return render_template('about.html',
+                           session=session)
 
 
 @home_blueprint.route('/login')

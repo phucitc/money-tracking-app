@@ -1,7 +1,7 @@
 import os
 
 from authlib.integrations.flask_client import OAuth
-from flask import Flask, send_from_directory, current_app
+from flask import Flask, send_from_directory, current_app, session
 from flask_cors import CORS
 from flask_restful import Api
 from flask_wtf.csrf import CSRFProtect
@@ -37,21 +37,33 @@ for key, value in os.environ.items():
     app.config[key] = value
 
 # Define your middleware function
-def app_middleware(next_handler):
+# def app_middleware(next_handler):
+#     def middleware(*args, **kwargs):
+#         # Perform any pre-request processing here
+#         print("Executing custom middleware before request")
+#         if session is None or 'user' not in session:
+#             session['user'] = None
+#         # Call the next handler in the chain
+#         response = next_handler(*args, **kwargs)
+#         # Perform any post-request processing here
+#         print("Executing custom middleware after request")
+#         # model = Model()
+#         # model.get_plsql().close()
+#         return response
+#     return middleware
+def app_middle(next_handler):
     def middleware(*args, **kwargs):
-        # Perform any pre-request processing here
         print("Executing custom middleware before request")
-        # Call the next handler in the chain
+        if session is None or 'user' not in session:
+            session['user'] = None
         response = next_handler(*args, **kwargs)
-        # Perform any post-request processing here
         print("Executing custom middleware after request")
-        # model = Model()
-        # model.get_plsql().close()
         return response
     return middleware
 
 # Apply the middleware to all routes
-app.wsgi_app = app_middleware(app.wsgi_app)
+# app.wsgi_app = app_middleware(app.wsgi_app)
+app_middle(app)
 
 # Add the resource to the API
 # api.add_resource(TodoResource, '/todos/<int:todo_id>')
