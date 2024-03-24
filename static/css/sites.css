@@ -12,9 +12,15 @@
     --text-light: var(--purple);
     --text-dark: var(--white);
     --section-gap: 160px;
+    --border-1: 1px;
+    --border-2: 2px;
+    --border-3: 3px;
+    --border-4: 4px;
 
 }
-
+[v-cloak] {
+    display: none;
+}
 .bg-purple {
     background: var(--purple);
 }
@@ -43,8 +49,8 @@ label {
 }
 
 .qrcode-box {
-    border: var(--zt-border-width) solid var(--zt-indigo);
-    border-radius: var(--zt-border-radius);
+    border: 1px solid var(--blue);
+    border-radius: 5px;
     position: relative;
     --s: 30px; /* the size on the corner */
     --t: 5px; /* the thickness of the border */
