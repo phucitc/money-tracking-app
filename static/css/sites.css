@@ -24,6 +24,9 @@
 .bg-purple {
     background: var(--purple);
 }
+.bg-blue {
+    background: var(--blue);
+}
 .text-zt-dark {
     background: var(--blue);
 }

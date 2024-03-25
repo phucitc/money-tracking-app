@@ -158,40 +158,66 @@ def zip_url():
     else:
         return make_response(jsonify({'message': 'Invalid request'}), Constant.HTTP_BAD_REQUEST)
 
+@home_blueprint.route('/get-urls')
+def get_urls():
+    cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
+    if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
+        cookie_uuid = request.headers['Zipit-Uuid']
+
+    url_alias_model = URL_Alias()
+    urls = url_alias_model.get_list_by_cookie_uuid(cookie_uuid)
+    results = []
+    for url in urls:
+        data = {
+            'long_url': Helper.remove_protocol(url.destination_link),
+            'public_id': url.public_id,
+            'short_url': Helper.return_link(url.public_id),
+            'qrcode': Helper.get_qrcode_link(url.public_id),
+            'qrcode_base64': URL_Helper.handler_qrcode(url),
+            'destination_logo': Helper.get_favicon_by_domain(url.destination_link, 32)
+        }
+        results.append(data)
+
+    return {'list_alias': results}
 
 
-# @home_blueprint.route('/<slug>')
-# def redirect_link(slug):
-#     print("slug", slug)
-#     if slug is not None:
-#         slug = slug.strip()
-#         # these are routes in VueJS
-#         if slug in Constant.VUEJS_PAGES:
-#             print("Here, return vueJS template")
-#             return render_template('index.html')
-#
-#         print(f"Query DB to get destination_link {slug}")
-#         url_alias_model = URL_Alias()
-#         slug = slug.strip()
-#         url = url_alias_model.get_by_alias_name_or_public_id(slug)
-#         if url:
-#             # Process to track click here
-#             # Create a process for the background task
-#             params = {
-#                 'url_alias_id': url.url_alias_id,
-#                 'flask_request': request,
-#                 'alias_name': slug
-#             }
-#
-#             # Start the background process
-#             background_process = multiprocessing.Process(target=background_task_tracking_click(params))
-#             background_process.start()
-#
-#             return redirect(url.destination_link, code=301)
-#         else:
-#             return render_template('index.html'), 404
-#     else:
-#         return render_template('index.html'), 404
+@home_blueprint.route('/<slug>')
+def redirect_link(slug):
+    print("slug", slug)
+    if slug is not None:
+        slug = slug.strip()
+        # these are routes in VueJS
+        if slug in Constant.VUEJS_PAGES:
+            print("Here, return vueJS template")
+            return render_template('index.html')
+
+        print(f"Query DB to get destination_link {slug}")
+        url_alias_model = URL_Alias()
+        slug = slug.strip()
+        url = url_alias_model.get_by_alias_name_or_public_id(slug)
+        if url:
+            # Process to track click here
+            # Create a process for the background task
+            params = {
+                'url_alias_id': url.url_alias_id,
+                'flask_request': request,
+                'alias_name': slug
+            }
+
+            # Start the background process
+            background_process = multiprocessing.Process(target=background_task_tracking_click(params))
+            background_process.start()
+
+            return redirect(url.destination_link, code=301)
+        else:
+            return render_template('404.html'), 404
+    else:
+        return render_template('404.html'), 404
+
+# Define a route for the custom 404 error page
+@home_blueprint.errorhandler(404)
+def page_not_found(error):
+    return render_template('404.html'), 404
 
 
 @home_blueprint.route('/admin/<page_name>')
@@ -200,6 +226,7 @@ def admin_pages(page_name):
     if page_name in Constant.VUEJS_ADMIN_PAGES:
         return render_template('index.html')
     return render_template('index.html'), 404
+
 
 
 @home_blueprint.route('/qrcode/<url_public_id>')
