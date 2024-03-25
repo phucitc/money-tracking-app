@@ -15,6 +15,7 @@
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:image:type" content="image/png">
+<meta name="Zipit-Uuid" content="{{ data['uuid'] }}">
 <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-2JR8BXX3D3"></script>
 <script>
@@ -36,4 +37,5 @@
 <script src="{{ url_for('static', filename='js/helper.js') }}"></script>
 <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js"></script>
 <link href="{{ url_for('static', filename='css/sites.css') }}" rel="stylesheet">

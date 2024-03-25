@@ -8,10 +8,14 @@ class Helper {
         return urlRegex.test(urlString);
     }
 
-    static isEmpty(input) {
+    isEmpty(input) {
         if ( input == undefined || input == '' ) {
             return true;
         }
+    }
+
+    getMetaContent(name) {
+        return document.querySelector(`meta[name=${name}]`).content;
     }
 
 }

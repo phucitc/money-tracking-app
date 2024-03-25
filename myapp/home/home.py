@@ -19,9 +19,11 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='templates')
 
 @home_blueprint.route('/')
 def index():
-    print(session.get('user'))
+    data = dict()
+    data['uuid'] = Helper.uuid_v4()
     return render_template('home.html',
-                           session=session)
+                           session=session,
+                           data=data)
 
 
 @home_blueprint.route('/components')

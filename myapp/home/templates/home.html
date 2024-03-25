@@ -88,6 +88,17 @@ import PInput from '{{ url_for('static', filename='js/components/p-input.js') }}
 import PButton from '{{ url_for('static', filename='js/components/p-button.js') }}';
     createApp({
         setup() {
+            onMounted(() => {
+                let zipit_uuid = Cookies.get('Zipit-Uuid');
+                if ( zipit_uuid === undefined ) {
+                  zipit_uuid = helper.getMetaContent('Zipit-Uuid')
+                  Cookies.set('Zipit-Uuid', zipit_uuid, { expires: 365 });
+                }
+                console.log(zipit_uuid)
+                window.axios.defaults.headers.common['Zipit-Uuid'] = zipit_uuid;
+
+            });
+            const helper = new Helper();
             const long_url = ref('');
             const alias_name = ref('');
             const globalProps= ref({
@@ -161,6 +172,7 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 shortURLProps.value.val = '';
             }
             return {
+                helper,
                 long_url,
                 alias_name,
                 longURLProps,

@@ -1,6 +1,7 @@
 import datetime
 import hashlib
 import os
+import uuid
 from urllib.parse import urlparse
 
 import qrcode
@@ -207,3 +208,7 @@ class Helper:
         ]:
             return True
         return False
+
+    @staticmethod
+    def uuid_v4():
+        return str(uuid.uuid4())

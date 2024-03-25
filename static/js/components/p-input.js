@@ -41,7 +41,7 @@ export default {
                 :placeholder="comProps.placeHolder"
                 :disabled="comProps.disabled"
                 @blur="handleBlur"
-            ><span v-if="comProps.type == 'inputGroup'" class="input-group-text pointer-event" id="basic-addon2">Copy</span>
+            ><span v-if="comProps.type == 'inputGroup'" class="input-group-text pointer" id="basic-addon2">Copy</span>
             
         </div>
     `,
