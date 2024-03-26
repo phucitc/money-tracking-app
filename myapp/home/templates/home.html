@@ -25,7 +25,7 @@
                     </div>
                     <div v-if="globalProps.isVisibleZipURLResult" class="row" v-cloak>
                         <div class="col-md-8 col-sm-12">
-                            <p-input :com-props="shortURLProps" :global-props="globalProps"></p-input>
+                            <p-input :com-props="shortURLProps" :global-props="globalProps" @button-icon-clicked="handleClickCopyToClipBoard(shortURLProps.val)"></p-input>
                             <div class="text-center">
                                 <p-button :com-props="myURLsBtnProps" @button-clicked="handleShowMyURLs"></p-button>
                                 <p-button :com-props="zipOtherBtn" @button-clicked="handleZipOtherURL"></p-button>
@@ -78,7 +78,7 @@
                                                 ${ item.long_url }
                                             </p>
 
-                                            <a :href="item.short_url" target="_blank" class="btn btn-primary"
+                                            <a :href="item.short_url" target="_blank" class="btn btn-primary blue-btn"
                                                ref="btn_url_recent_visit_url">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                      fill="currentColor"
@@ -90,7 +90,7 @@
                                                 </svg>
                                             </a>
                                             <button class="mx-2 btn btn-success"
-                                                    @click="this.copy_url(item.short_url, true)"
+                                                    @click="handleClickCopyToClipBoard(item.short_url)"
                                                     ref="btn_url_recent_copy">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                      fill="currentColor"
@@ -189,7 +189,8 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 placeHolder: 'https://zipit.link/your-link',
                 label: 'Your shorten URLs',
                 disabled: true,
-                type: 'inputGroup'
+                type: 'inputGroup',
+                copyText: 'Copy',
             });
             const zipLinkBtn = ref({
                 label: 'Zip Your URL',
@@ -250,6 +251,18 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                         console.log(error)
                     })
             }
+            const handleClickCopyToClipBoard = (text) => {
+                console.log("ASAD")
+                navigator.clipboard.writeText(text).then(() => {
+                    //let toast = new bootstrap.Toast(document.getElementById('live_toast'));
+                    //toast.show();
+                    //document.getElementById('live_toast').querySelector('.toast-body').innerText = 'Copied to clipboard';
+                    shortURLProps.value.copyText = 'Copied';
+                    setTimeout(() => {
+                        shortURLProps.value.copyText = 'Copy';
+                    }, 3000);
+                });
+            }
             return {
                 helper,
                 long_url,
@@ -266,7 +279,8 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 listAliases,
                 handleZipURL,
                 handleZipOtherURL,
-                handleShowMyURLs
+                handleShowMyURLs,
+                handleClickCopyToClipBoard
             }
         },
         delimiters: ['${', '}'],

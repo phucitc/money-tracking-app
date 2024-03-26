@@ -1,22 +1,25 @@
 export default {
+    data() {
+        return {
+        }
+    },
     mounted() {
-        console.log('mounted input');
     },
     created() {
-        console.log('created input');
         if ( !this.comProps.hasOwnProperty('ruleValidate') ) {
             this.comProps.ruleValidate = ''
         }
         if ( !this.comProps.hasOwnProperty('type') ) {
             this.comProps.type = ''
         }
+        if ( !this.comProps.hasOwnProperty('copyText') ) {
+            this.comProps.copyText = 'Copy'
+        }
 
     },
     methods: {
         handleBlur() {
             if ( this.comProps.val !== undefined ) {
-                console.log("AAA")
-                console.log(this.comProps.val)
                 this.comProps.val = this.comProps.val.trim();
             }
 
@@ -29,6 +32,10 @@ export default {
                     }
                 }
             }
+        },
+        handleClickIcon() {
+            this.$emit('button-icon-clicked');
+
         }
     },
     props:['comProps', 'globalProps'],
@@ -41,7 +48,10 @@ export default {
                 :placeholder="comProps.placeHolder"
                 :disabled="comProps.disabled"
                 @blur="handleBlur"
-            ><span v-if="comProps.type == 'inputGroup'" class="input-group-text pointer" id="basic-addon2">Copy</span>
+            ><span v-if="comProps.type == 'inputGroup'" 
+                class="input-group-text pointer"
+                @click="handleClickIcon"
+                id="basic-addon2">{{comProps.copyText}}</span>
             
         </div>
     `,
