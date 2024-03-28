@@ -90,8 +90,10 @@
                                                 </svg>
                                             </a>
                                             <button class="mx-2 btn btn-success"
-                                                    @click="handleClickCopyToClipBoard(item.short_url)"
-                                                    ref="btn_url_recent_copy">
+                                                    @click="handleClickCopyToPerURL(item.short_url, 'btnCopy' + index)"
+                                                    :id="'btnCopy' + index"
+                                                    data-toggle="tooltip" data-placement="top" :title="item.copyText ? item.copyText : 'Copy'"
+                                            >
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
                                                      fill="currentColor"
                                                      class="bi bi-clipboard" viewBox="0 0 16 16">
@@ -252,14 +254,19 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                     })
             }
             const handleClickCopyToClipBoard = (text) => {
-                console.log("ASAD")
                 navigator.clipboard.writeText(text).then(() => {
-                    //let toast = new bootstrap.Toast(document.getElementById('live_toast'));
-                    //toast.show();
-                    //document.getElementById('live_toast').querySelector('.toast-body').innerText = 'Copied to clipboard';
                     shortURLProps.value.copyText = 'Copied';
                     setTimeout(() => {
                         shortURLProps.value.copyText = 'Copy';
+                    }, 3000);
+                });
+            }
+            const handleClickCopyToPerURL = (text, elementID) => {
+                navigator.clipboard.writeText(text).then(() => {
+                    $('#'+elementID).attr('data-bs-original-title', 'Copied')
+                        .tooltip('show');
+                    setTimeout(() => {
+                        $('#'+elementID).attr('data-bs-original-title', 'Copy');
                     }, 3000);
                 });
             }
@@ -280,8 +287,12 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 handleZipURL,
                 handleZipOtherURL,
                 handleShowMyURLs,
-                handleClickCopyToClipBoard
+                handleClickCopyToClipBoard,
+                handleClickCopyToPerURL
             }
+        },
+        updated() {
+            this.helper.triggerTooltip()
         },
         delimiters: ['${', '}'],
         components: {

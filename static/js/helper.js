@@ -18,4 +18,7 @@ class Helper {
         return document.querySelector(`meta[name=${name}]`).content;
     }
 
+    triggerTooltip() {
+        $('[data-toggle="tooltip"]').tooltip()
+    }
 }
