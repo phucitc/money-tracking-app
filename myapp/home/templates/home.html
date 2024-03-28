@@ -162,7 +162,6 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                   zipit_uuid = helper.getMetaContent('Zipit-Uuid')
                   Cookies.set('Zipit-Uuid', zipit_uuid, { expires: 365 });
                 }
-                console.log(zipit_uuid)
                 window.axios.defaults.headers.common['Zipit-Uuid'] = zipit_uuid;
 
             });

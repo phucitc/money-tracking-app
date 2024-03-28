@@ -28,6 +28,19 @@ class URL_Alias(Model):
     def get_by_public_id(self, public_id):
         return self.get_by_field('public_id', public_id)
 
+    def get_by_url_id_user_id(self, url_id, user_id):
+        conditions = [
+            {
+                'column': 'url_id',
+                'value': url_id
+            },
+            {
+                'column': 'user_id',
+                'value': user_id
+            }
+        ]
+        return self.get_by_conditions(conditions)
+
     def get_by_url_id_cookie_uuid(self, url_id, cookie_uuid):
         conditions = [
             {

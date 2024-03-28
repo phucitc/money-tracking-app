@@ -98,7 +98,7 @@ def zip_url():
     print('zipit_uuid', cookie_uuid)
     if request.is_json:
         payload = request.get_json()
-
+        user_id = session.get('user').get('id') if 'user' in session else None
         url_obj = URL()
         url_alias_obj = URL_Alias()
         data = dict()
@@ -110,11 +110,13 @@ def zip_url():
 
         data_alias = dict()
         data_alias['url_id'] = url.id
+        data_alias['user_id'] = user_id
         data_alias['cookie_uuid'] = cookie_uuid
         # TODO split alias to other code block to easy maintenance
         data_alias['alias_name'] = '' if 'alias_name' not in payload else payload['alias_name'].strip()
         data_alias['alias_name'] = Helper.convert_space_to_dash(data_alias['alias_name'])
         url_alias = None
+        print(data_alias)
         if data_alias['alias_name'] != '':
             # check if alias belong to this url and count alias name, if count > 2 then return error message to ask client sign up new account
             total_alias = url_alias_obj.get_total_alias_name_by_destination_link(url.destination_link, cookie_uuid)
@@ -135,7 +137,11 @@ def zip_url():
         if url_alias:
             public_id = url_alias.alias_name if url_alias.alias_name is not None else url_alias.public_id
         else:
-            url_alias = url_alias_obj.get_by_url_id_cookie_uuid(url.id, data_alias['cookie_uuid'])
+
+            if user_id:
+                url_alias = url_alias_obj.get_by_url_id_user_id(url.id, user_id)
+            else:
+                url_alias = url_alias_obj.get_by_url_id_cookie_uuid(url.id, data_alias['cookie_uuid'])
             if url_alias is None:
                 url_alias = url_alias_obj.insert(data_alias)
             public_id = url_alias.public_id
