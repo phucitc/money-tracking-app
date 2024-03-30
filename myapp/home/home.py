@@ -22,7 +22,8 @@ def index():
     data = dict()
     data['uuid'] = Helper.uuid_v4()
     cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
-    print("cookie_uuid", cookie_uuid)
+    # print("cookie_uuid", cookie_uuid)
+    print(session['auth0_token'] if 'user' in session else None)
     return render_template('home.html',
                            session=session,
                            data=data)

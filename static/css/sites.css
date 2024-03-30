@@ -192,8 +192,15 @@ Non-user history
 .bg-primary-300 {
     background:#a370f7;
 }
-.bg-primary-300:hover,.bg-primary-400 {
-    background: #8540f5
+.bg-primary-300:hover {
+    background: #8540f5!important;
+    --bs-link-color-rgb: 133, 64, 245;
+}
+a.bg-primary-300:active {
+    background: #8540f5!important;
+}
+.account-menu .dropdown-menu a:active {
+    background: var(--blue);
 }
 /*
 Responsive

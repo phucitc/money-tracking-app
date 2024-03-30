@@ -22,11 +22,6 @@
                 <li><a href="/about" class="nav-link px-2 text-white d-none">About </a></li>
             </ul>
 
-            <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3 " role="search">
-                <input type="search" class="form-control form-control-dark text-bg-dark d-none" placeholder="Search..."
-                       aria-label="Search">
-            </form>
-
             <div class="text-end">
                 <span class="btn btn-link text-white link-underline d-none">Login</span>
                 {% if 'user' not in session %}
@@ -35,7 +30,18 @@
                 <a class="btn bg-primary-300 text-white me-2" href="/login">Login</a>
                 {% endif %}
                 {% if 'user' in session %}
-                <a class="btn bg-primary-300 text-white" href="/logout">Logout</a>
+                    <ul class="navbar-nav me-auto mb-2 mb-lg-0 account-menu">
+                        <li class="nav-item dropdown">
+                          <a class="nav-link dropdown-toggle btn bg-primary-300 text-white px-2" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Howdy <i class="fa-solid fa-user"></i>
+                          </a>
+                          <ul class="dropdown-menu">
+                            <li class="d-none"><a class="dropdown-item" href="#">Profile</a></li>
+                            <li class="d-none"><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/logout">Logout</a></li>
+                          </ul>
+                        </li>
+                      </ul>
                 {% endif %}
 
             </div>
