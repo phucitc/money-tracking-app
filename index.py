@@ -11,6 +11,7 @@ from dotenv import load_dotenv
 from api.admin_resource import AdminResource
 from api.auth_resource import AuthResource
 from model.model import Model
+from myapp.account.account import account_blueprint
 
 load_dotenv()
 
@@ -89,7 +90,7 @@ app_middle(app)
 #     return result, 200, {'Content-Type': 'text/plain; charset=utf-8'}
 
 app.register_blueprint(home_blueprint)
-
+app.register_blueprint(account_blueprint)
 oauth = OAuth(app)
 
 oauth.register(

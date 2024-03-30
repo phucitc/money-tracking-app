@@ -28,3 +28,16 @@ class User(Model):
 
     def update(self, params):
         return super().update(params)
+
+    def get_list_urls(self, user_id, **kwargs):
+        query = """
+            SELECT
+                *
+            FROM
+                url_aliases
+            WHERE
+                user_id = %s
+            LIMIT %s OFFSET %s
+        """
+        params = [user_id, kwargs.get('limit', 100), kwargs.get('offset', 0)]
+        return self.get_plsql().fetch(query, params=params)

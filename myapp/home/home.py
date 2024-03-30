@@ -98,6 +98,9 @@ def callback():
         else:
             print('User already fill links')
 
+    if token:
+        return redirect(url_for("account.page_urls"))
+
     return redirect(url_for("homepage.index"))
 
 

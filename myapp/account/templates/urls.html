@@ -1,0 +1,313 @@
+{% extends '/body.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row w-75 container-center">
+            <div class="col">
+                <h1 class="text-center mt-5 mb-0 mb-3">Shorten a long URL</h1>
+                <div class="toolbox">
+                    <div class="row">
+                        <p-input :com-props="longURLProps" :global-props="globalProps"></p-input>
+                        <div v-if="!globalProps.isVisibleZipURLResult" class="col" v-cloak>
+                            <div class="row">
+                                <div class="col-4">
+                                    <p-input :com-props="domainProps" :global-props="globalProps"></p-input>
+                                </div>
+                                <div class="col-8">
+                                    <p-input :com-props="aliasProps" :global-props="globalProps"></p-input>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <p-message :com-props="messageProps"></p-message>
+                    <div v-if="!globalProps.isVisibleZipURLResult"  class="row" v-cloak>
+                         <div class="col text-center">
+                            <p-button :com-props="zipLinkBtn" @button-clicked="handleZipURL"></p-button>
+                        </div>
+                    </div>
+                    <div v-if="globalProps.isVisibleZipURLResult" class="row" v-cloak>
+                        <div class="col-md-8 col-sm-12">
+                            <p-input :com-props="shortURLProps" :global-props="globalProps" @button-icon-clicked="handleClickCopyToClipBoard(shortURLProps.val)"></p-input>
+                            <div class="text-center">
+                                <p-button :com-props="myURLsBtnProps" @button-clicked="handleShowMyURLs"></p-button>
+                                <p-button :com-props="zipOtherBtn" @button-clicked="handleZipOtherURL"></p-button>
+                            </div>
+                        </div>
+                         <div class="col-md-4">
+                            <div class="text-center">
+                                <div class="qrcode-box overflow-hidden">
+                                    <img
+                                        :src="resultURLProps.qrcodeImage"
+                                        alt="QR Code" class="img-fluid">
+                                        <a :href="resultURLProps.qrcodeURL"
+                                            class="link-success link-offset-2 link-underline-opacity-25 link-underline-opacity-100-hover btn-download-qrcode">Download</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="offcanvas offcanvas-end non-user-history-width" data-bs-backdrop="static" tabindex="-1"
+                         id="offcanvas-urls-recent" aria-labelledby="staticBackdropLabel">
+                        <div class="offcanvas-header"><h5 class="offcanvas-title" id="offcanvasExampleLabel">Your recent
+                            URLs</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"
+                                    aria-label="Close"></button>
+                        </div>
+                        <div class="offcanvas-body">
+                            <div v-if="this.listAliases.length == 0" class="row mb-2">
+                                <div content="col">
+                                    <div class="w-100 text-center">
+                                        <div class="spinner-border text-center" role="status"><span
+                                                class="visually-hidden">Loading...</span></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card mb-2" v-for="(item, index) in this.listAliases">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-1">
+                                            <div class="text-center">
+                                                <img :src="item.destination_logo" alt="Title" class="img-fluid">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8 ps-0">
+                                            <h5 class="card-title">${ item.public_id } - Untitled</h5>
+                                            <h6 class="card-subtitle mb-2">
+                                                <a :href="item.short_url"
+                                                   class="text-decoration-none"
+                                                   target="_blank">${ item.short_url }</a></h6>
+                                            <p class="card-text">
+                                                ${ item.long_url }
+                                            </p>
+
+                                            <a :href="item.short_url" target="_blank" class="btn btn-primary blue-btn"
+                                               ref="btn_url_recent_visit_url">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     fill="currentColor"
+                                                     class="bi bi-box-arrow-up-right" viewBox="0 0 16 16">
+                                                    <path fill-rule="evenodd"
+                                                          d="M8.636 3.5a.5.5 0 0 0-.5-.5H1.5A1.5 1.5 0 0 0 0 4.5v10A1.5 1.5 0 0 0 1.5 16h10a1.5 1.5 0 0 0 1.5-1.5V7.864a.5.5 0 0 0-1 0V14.5a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h6.636a.5.5 0 0 0 .5-.5z"/>
+                                                    <path fill-rule="evenodd"
+                                                          d="M16 .5a.5.5 0 0 0-.5-.5h-5a.5.5 0 0 0 0 1h3.793L6.146 9.146a.5.5 0 1 0 .708.708L15 1.707V5.5a.5.5 0 0 0 1 0v-5z"/>
+                                                </svg>
+                                            </a>
+                                            <button class="mx-2 btn btn-success"
+                                                    @click="handleClickCopyToPerURL(item.short_url, 'btnCopy' + index)"
+                                                    :id="'btnCopy' + index"
+                                                    data-toggle="tooltip" data-placement="top" :title="item.copyText ? item.copyText : 'Copy'"
+                                            >
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     fill="currentColor"
+                                                     class="bi bi-clipboard" viewBox="0 0 16 16">
+                                                    <path
+                                                            d="M4 1.5H3a2 2 0 0 0-2 2V14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V3.5a2 2 0 0 0-2-2h-1v1h1a1 1 0 0 1 1 1V14a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V3.5a1 1 0 0 1 1-1h1v-1z"/>
+                                                    <path
+                                                            d="M9.5 1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1-.5-.5v-1a.5.5 0 0 1 .5-.5h3zm-3-1A1.5 1.5 0 0 0 5 1.5v1A1.5 1.5 0 0 0 6.5 4h3A1.5 1.5 0 0 0 11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3z"/>
+                                                </svg>
+                                            </button>
+                                            <a :href="item.qrcode" class="me-2 btn btn-success"
+                                               ref="btn_url_recent_download_qrcode">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                     fill="currentColor" class="bi bi-qr-code-scan" viewBox="0 0 16 16">
+                                                    <path d="M0 .5A.5.5 0 0 1 .5 0h3a.5.5 0 0 1 0 1H1v2.5a.5.5 0 0 1-1 0v-3Zm12 0a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-1 0V1h-2.5a.5.5 0 0 1-.5-.5ZM.5 12a.5.5 0 0 1 .5.5V15h2.5a.5.5 0 0 1 0 1h-3a.5.5 0 0 1-.5-.5v-3a.5.5 0 0 1 .5-.5Zm15 0a.5.5 0 0 1 .5.5v3a.5.5 0 0 1-.5.5h-3a.5.5 0 0 1 0-1H15v-2.5a.5.5 0 0 1 .5-.5ZM4 4h1v1H4V4Z"/>
+                                                    <path d="M7 2H2v5h5V2ZM3 3h3v3H3V3Zm2 8H4v1h1v-1Z"/>
+                                                    <path d="M7 9H2v5h5V9Zm-4 1h3v3H3v-3Zm8-6h1v1h-1V4Z"/>
+                                                    <path d="M9 2h5v5H9V2Zm1 1v3h3V3h-3ZM8 8v2h1v1H8v1h2v-2h1v2h1v-1h2v-1h-3V8H8Zm2 2H9V9h1v1Zm4 2h-1v1h-2v1h3v-2Zm-4 2v-1H8v1h2Z"/>
+                                                    <path d="M12 9h2V8h-2v1Z"/>
+                                                </svg>
+                                            </a>
+                                            <button class="me-2 btn btn-secondary opacity-50 disable d-none"
+                                                    ref="btn_url_recent_rename_link">Rename
+                                            </button>
+                                            <button class="btn btn-secondary opacity-50 disable d-none"
+                                                    ref="btn_url_recent_edit_link">Edit
+                                            </button>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div>
+                                                <img :src="item.qrcode_base64" alt="QR Code" class="img-fluid">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class=""></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="toast-container position-fixed bottom-0 end-0 p-3">
+                    <div id="live_toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                        <div class="toast-header"><strong class="me-auto"></strong><small></small>
+                            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                        </div>
+                        <div class="toast-body"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="module">
+
+
+const { createApp, ref, onMounted, OnErrorCaptured } = Vue;
+import PInput from '{{ url_for('static', filename='js/components/p-input.js') }}';
+import PButton from '{{ url_for('static', filename='js/components/p-button.js') }}';
+import PMessage from '{{ url_for('static', filename='js/components/p-message.js') }}';
+    createApp({
+        setup() {
+            onMounted(() => {
+                let zipit_uuid = Cookies.get('Zipit-Uuid');
+                if ( zipit_uuid === undefined ) {
+                  zipit_uuid = helper.getMetaContent('Zipit-Uuid')
+                  Cookies.set('Zipit-Uuid', zipit_uuid, { expires: 365 });
+                }
+                window.axios.defaults.headers.common['Zipit-Uuid'] = zipit_uuid;
+
+            });
+            const helper = new Helper();
+            const long_url = ref('');
+            const globalProps= ref({
+                'helper': new Helper(),
+                'axios': window.axios,
+                'isVisibleZipURLResult': false,
+            });
+            const longURLProps = ref({
+                placeHolder: 'Ex: https://yourdomain.com/url-too-long',
+                label: 'Paste a long URL',
+            });
+            const domainProps = ref({
+                placeHolder: 'zipit.link',
+                label: 'Domain',
+                disabled: true
+            });
+            const aliasProps = ref({
+                placeHolder: 'Ex: my-link',
+                label: 'Enter a back-half you want (optional)',
+            });
+            const shortURLProps = ref({
+                placeHolder: 'https://zipit.link/your-link',
+                label: 'Your shorten URLs',
+                disabled: true,
+                type: 'inputGroup',
+                copyText: 'Copy',
+            });
+            const zipLinkBtn = ref({
+                label: 'Zip Your URL',
+            });
+            const zipOtherBtn = ref({
+                label: 'Zip another URL',
+                class: '',
+            });
+            const resultURLProps = ref({
+                shortURL: '',
+                publicID: '',
+                qrcodeImage: '',
+                qrcodeURL: '',
+                listAlias: []
+            });
+            const myURLsBtnProps = ref({
+                label: 'My URLs',
+                class: 'btn btn-secondary me-2',
+            });
+            const listAliases = ref([]);
+            const messageProps = ref({
+                message: '',
+                type: 'error',
+                isVisible: false
+            });
+            const handleZipURL = async () => {
+                let payload = {
+                    'long_url': longURLProps.value.val,
+                    'alias_name': aliasProps.value.val
+                }
+                window.axios.post('/zip-url', payload)
+                    .then((response) => {
+                        longURLProps.value.disabled = true;
+                        globalProps.value.isVisibleZipURLResult = true;
+                        resultURLProps.value.publicID = response.data.public_id;
+                        resultURLProps.value.shortURL = response.data.short_link;
+                        resultURLProps.value.qrcodeImage = response.data.qrcode_base64;
+                        resultURLProps.value.listAlias = response.data.list_alias;
+                        resultURLProps.value.qrcodeURL = response.data.qrcode;
+                        shortURLProps.value.val = response.data.short_link;
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        messageProps.value.message = error.response.data.message;
+                        messageProps.value.isVisible = true;
+                    })
+            }
+            const handleZipOtherURL = () => {
+                globalProps.value.isVisibleZipURLResult = false;
+                longURLProps.value.disabled = false;
+                aliasProps.value.disabled = false;
+                longURLProps.value.val = '';
+                aliasProps.value.val = '';
+                shortURLProps.value.val = '';
+            }
+            const handleShowMyURLs = () => {
+                let offcanvas = new bootstrap.Offcanvas(document.getElementById('offcanvas-urls-recent'));
+                offcanvas.show();
+                window.axios.get('/get-urls')
+                    .then((response) => {
+                        listAliases.value = response.data.list_alias;
+                        console.log(response.data)
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                    })
+            }
+            const handleClickCopyToClipBoard = (text) => {
+                navigator.clipboard.writeText(text).then(() => {
+                    shortURLProps.value.copyText = 'Copied';
+                    setTimeout(() => {
+                        shortURLProps.value.copyText = 'Copy';
+                    }, 3000);
+                });
+            }
+            const handleClickCopyToPerURL = (text, elementID) => {
+                navigator.clipboard.writeText(text).then(() => {
+                    $('#'+elementID).attr('data-bs-original-title', 'Copied')
+                        .tooltip('show');
+                    setTimeout(() => {
+                        $('#'+elementID).attr('data-bs-original-title', 'Copy');
+                    }, 3000);
+                });
+            }
+            return {
+                helper,
+                long_url,
+                longURLProps,
+                domainProps,
+                aliasProps,
+                zipLinkBtn,
+                globalProps,
+                shortURLProps,
+                resultURLProps,
+                zipOtherBtn,
+                myURLsBtnProps,
+                listAliases,
+                messageProps,
+                handleZipURL,
+                handleZipOtherURL,
+                handleShowMyURLs,
+                handleClickCopyToClipBoard,
+                handleClickCopyToPerURL
+            }
+        },
+        updated() {
+            this.helper.triggerTooltip()
+        },
+        delimiters: ['${', '}'],
+        components: {
+            'p-input': PInput,
+            'p-button': PButton,
+            'p-message': PMessage
+        }
+    })
+    .mount('#app');
+</script>
+{% endblock %}
