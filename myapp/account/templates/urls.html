@@ -18,12 +18,13 @@
                     <td><a :href="item.cloak_url" target="_blank">${item.cloak_url}</a></td>
                     <td>301</td>
                     <td><a :href="item.destination_link" target="_blank">${item.destination_link}</a></td>
-                    <td><span class="pointer"><i class="fa-solid fa-pen"></i></span></td>
+                    <td><span class="pointer" @click="handleClickOpenEditURLModal(item)"><i class="fa-solid fa-pen"></i></span></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
+    <p-modal-url :com-props="modalURLProps"></p-modal-url>
     <script type="module">
 
 
@@ -31,12 +32,12 @@
         import PInput from '{{ url_for('static', filename='js/components/p-input.js') }}';
         import PButton from '{{ url_for('static', filename='js/components/p-button.js') }}';
         import PMessage from '{{ url_for('static', filename='js/components/p-message.js') }}';
+        import PModalURL from '{{ url_for('static', filename='js/components/p-modal-url.js') }}';
 
         createApp({
             setup() {
                 onMounted(() => {
                     get_urls();
-
                 });
                 const helper = new Helper();
                 const globalProps = ref({
@@ -50,21 +51,35 @@
                     isVisible: false
                 });
                 const urls = ref([]);
+                const modalURLProps = ref({
+                    'id': 'modalURL',
+                    'modalLabel': 'modalURLLabel',
+                    'item': {},
+                    'isVisible': false,
+                });
+
                 const get_urls = () => {
                     window.axios.get('/gw/urls')
                         .then((response) => {
                             urls.value = response.data.rows;
-                            console.log(response.data)
                         })
                         .catch((error) => {
                             console.log(error)
                         })
                 }
+                const handleClickOpenEditURLModal = (item) => {
+                    modalURLProps.value.item = item;
+                    modalURLProps.value.isVisible = true;
+                    console.log("CLICK TO OPEN MODAL");
+                }
+
                 return {
                     helper,
                     messageProps,
                     urls,
-                    get_urls
+                    modalURLProps,
+                    get_urls,
+                    handleClickOpenEditURLModal
                 }
             },
             updated() {
@@ -73,7 +88,8 @@
             components: {
                 'p-input': PInput,
                 'p-button': PButton,
-                'p-message': PMessage
+                'p-message': PMessage,
+                'p-modal-url': PModalURL
             }
         })
             .mount('#app');
