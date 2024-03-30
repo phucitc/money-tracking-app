@@ -25,3 +25,6 @@ class User(Model):
         if user is None:
             user = self.insert(data)
         return user.get_data() if user else None
+
+    def update(self, params):
+        return super().update(params)

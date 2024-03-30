@@ -163,12 +163,15 @@ class Helper:
         cookie_data = request.headers.get('Cookie', '')
         if cookie_data == '':
             return None
+        cookie_value = None
         cookie_data = cookie_data.split(';')
         for item in cookie_data:
             data = item.split('=')
             if data[0] == key:
-                return data[1]
-        return None
+                cookie_value = data[1]
+        if not cookie_value and 'Zipit-Uuid' in request.headers:
+            cookie_value = request.headers['Zipit-Uuid']
+        return cookie_value
 
     @staticmethod
     def remove_protocol(url):

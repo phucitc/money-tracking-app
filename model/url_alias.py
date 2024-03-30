@@ -155,4 +155,14 @@ class URL_Alias(Model):
             return row['total_count']
         return 0
 
+    def convert_urls_to_user_by_cookie(self, user_id, cookie_uuid):
+        sql = """    
+            UPDATE {table_name}
+            SET user_id = %(user_id)s
+            WHERE 
+                user_id IS NULL
+                AND cookie_uuid = %(cookie_uuid)s
+        """.format(table_name=self.TABLE)
+        return self.execute(sql, params={'user_id': user_id, 'cookie_uuid': cookie_uuid})
+
 

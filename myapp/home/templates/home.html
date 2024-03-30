@@ -18,6 +18,7 @@
                             </div>
                         </div>
                     </div>
+                    <p-message :com-props="messageProps"></p-message>
                     <div v-if="!globalProps.isVisibleZipURLResult"  class="row" v-cloak>
                          <div class="col text-center">
                             <p-button :com-props="zipLinkBtn" @button-clicked="handleZipURL"></p-button>
@@ -154,6 +155,7 @@
 const { createApp, ref, onMounted, OnErrorCaptured } = Vue;
 import PInput from '{{ url_for('static', filename='js/components/p-input.js') }}';
 import PButton from '{{ url_for('static', filename='js/components/p-button.js') }}';
+import PMessage from '{{ url_for('static', filename='js/components/p-message.js') }}';
     createApp({
         setup() {
             onMounted(() => {
@@ -167,7 +169,6 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
             });
             const helper = new Helper();
             const long_url = ref('');
-            const alias_name = ref('');
             const globalProps= ref({
                 'helper': new Helper(),
                 'axios': window.axios,
@@ -212,10 +213,15 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 class: 'btn btn-secondary me-2',
             });
             const listAliases = ref([]);
+            const messageProps = ref({
+                message: '',
+                type: 'error',
+                isVisible: false
+            });
             const handleZipURL = async () => {
                 let payload = {
                     'long_url': longURLProps.value.val,
-                    'alias': alias_name.value.val
+                    'alias_name': aliasProps.value.val
                 }
                 window.axios.post('/zip-url', payload)
                     .then((response) => {
@@ -230,6 +236,8 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                     })
                     .catch((error) => {
                         console.log(error)
+                        messageProps.value.message = error.response.data.message;
+                        messageProps.value.isVisible = true;
                     })
             }
             const handleZipOtherURL = () => {
@@ -272,7 +280,6 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
             return {
                 helper,
                 long_url,
-                alias_name,
                 longURLProps,
                 domainProps,
                 aliasProps,
@@ -283,6 +290,7 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
                 zipOtherBtn,
                 myURLsBtnProps,
                 listAliases,
+                messageProps,
                 handleZipURL,
                 handleZipOtherURL,
                 handleShowMyURLs,
@@ -296,7 +304,8 @@ import PButton from '{{ url_for('static', filename='js/components/p-button.js') 
         delimiters: ['${', '}'],
         components: {
             'p-input': PInput,
-            'p-button': PButton
+            'p-button': PButton,
+            'p-message': PMessage
         }
     })
     .mount('#app');

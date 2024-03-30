@@ -21,6 +21,8 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='templates')
 def index():
     data = dict()
     data['uuid'] = Helper.uuid_v4()
+    cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
+    print("cookie_uuid", cookie_uuid)
     return render_template('home.html',
                            session=session,
                            data=data)
@@ -81,23 +83,19 @@ def callback():
         data = {
             'email': token['userinfo']['email']
         }
-        user = User().check_and_insert_user(data)
+        user_model = User()
+        user = user_model.check_and_insert_user(data)
         session["auth0_token"] = token
         session["user"] = user
 
         print(user)
-        if user['is_fill_links'] == 0:
-            # fill links from cookie to user
-            cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
-            if cookie_uuid is None and 'Zipit-Uuid' in request.headers:
-                cookie_uuid = request.headers['Zipit-Uuid']
-            urls_alias = URL_Alias().get_list_by_cookie_uuid(cookie_uuid)
-            for url_alias in urls_alias:
-                if url_alias['user_id'] is None:
-                    url_alias.update({'user_id': user['id'], 'cookie_uuid': None})
-            user['is_fill_links'] = 1
-
-        print('callback cookie', cookie_uuid)
+        cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
+        if user['is_fill_links'] == 0 and cookie_uuid:
+            URL_Alias().convert_urls_to_user_by_cookie(user['id'], cookie_uuid)
+            user_model.update({'is_fill_links': 1})
+            print('User fill links')
+        else:
+            print('User already fill links')
 
     return redirect(url_for("homepage.index"))
 
@@ -140,7 +138,7 @@ def zip_url():
 
             url_alias = url_alias_obj.get_by_alias_name_cookie_uuid(data_alias['alias_name'], cookie_uuid)
             if url_alias and url_alias.alias_name == data_alias['alias_name']:
-                return {'message': 'Alias name is not available.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
+                return {'message': 'Alias name is not available. Please try another one.', 'type': 'alias_name'}, Constant.HTTP_BAD_REQUEST
             else:
                 # Create a new one alias name
                 url_alias = url_alias_obj.insert(data_alias)

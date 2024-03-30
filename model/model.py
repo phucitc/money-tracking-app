@@ -227,4 +227,8 @@ class Model:
 
     def get_data(self):
         return self.data
+
+    def execute(self, query, params=None):
+        return self.get_plsql().execute(query, params=params)
+
     
