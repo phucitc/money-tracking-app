@@ -41,8 +41,13 @@ class PSQL:
             print('No table name provided')
 
     def fetch(self, query, params=None):
-        self.cursor.execute(query, params)
-        return self.cursor.fetchall()
+        try:
+            self.cursor.execute(query, params)
+            return self.cursor.fetchall()
+        except Exception as e:
+            print('fetch error')
+            print(e)
+            return []
 
     def fetch_one(self, query, params=None):
         self.cursor.execute(query, params)

@@ -215,3 +215,7 @@ class Helper:
     @staticmethod
     def uuid_v4():
         return str(uuid.uuid4())
+
+    @staticmethod
+    def app_domain():
+        return os.getenv('APP_DOMAIN')

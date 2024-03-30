@@ -30,14 +30,31 @@ class User(Model):
         return super().update(params)
 
     def get_list_urls(self, user_id, **kwargs):
+        page = kwargs.get('page', 1)
+        limit = kwargs.get('limit', 100)
+        offset = self.get_offset(page, limit)
         query = """
             SELECT
-                *
-            FROM
-                url_aliases
+                ua.id,
+                ua.user_id,
+                ua.public_id,
+                ua.qrcode_path,
+                u.destination_link,
+                CASE
+                    WHEN ua.alias_name IN (NULL, '') THEN ua.public_id
+                    ELSE ua.alias_name
+				END AS alias_name
+            FROM url_aliases ua
+                LEFT JOIN urls u
+                    ON u.id = ua.url_id 
             WHERE
-                user_id = %s
-            LIMIT %s OFFSET %s
+                ua.user_id= %(user_id)s
+            ORDER BY ua.created_at DESC
+            LIMIT %(limit)s OFFSET %(offset)s
         """
-        params = [user_id, kwargs.get('limit', 100), kwargs.get('offset', 0)]
+        params = {
+            'user_id': user_id,
+            'limit': limit,
+            'offset': offset
+        }
         return self.get_plsql().fetch(query, params=params)

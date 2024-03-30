@@ -22,3 +22,23 @@ def page_urls():
     return render_template('urls.html',
                            session=session,
                            data=data)
+
+@account_blueprint.route('/gw/urls', methods=['GET'])
+def get_urls():
+    model_user = User()
+    data = dict()
+    user_id = session['user']['id']
+    app_domain = Helper.app_domain()
+
+    params = {
+        'limit': request.args.get('limit', 100),
+        'page': request.args.get('page', 1),
+    }
+    results = model_user.get_list_urls(user_id, **params)
+    rows = []
+    for item in results:
+        del item['user_id']
+        item['cloak_url'] = f"{app_domain}/{item['public_id']}"
+        rows.append(item)
+    data['rows'] = rows
+    return make_response(jsonify(data), 200)
