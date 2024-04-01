@@ -14,7 +14,7 @@
                 </thead>
                 <tbody>
                 <tr v-for="(item, index) in urls" :key="index" v-cloak>
-                    <td>${index + 1}</td>
+                    <td>${item.public_id}</td>
                     <td><a :href="item.cloak_url" target="_blank">${item.cloak_url}</a></td>
                     <td>301</td>
                     <td><a :href="item.destination_link" target="_blank">${item.destination_link}</a></td>
@@ -68,9 +68,11 @@
                         })
                 }
                 const handleClickOpenEditURLModal = (item) => {
+
+                    console.log("CLICK TO OPEN MODAL");
+                    console.log(item)
                     modalURLProps.value.item = item;
                     modalURLProps.value.isVisible = true;
-                    console.log("CLICK TO OPEN MODAL");
                 }
 
                 return {

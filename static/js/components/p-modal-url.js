@@ -24,6 +24,7 @@ export default {
         comProps: {
             handler: function (newVal) {
                 console.log(newVal.isVisible)
+                this.item = newVal
                 if ( newVal.isVisible ) {
                     this.handleOpenModal();
                 } else {

@@ -38,7 +38,8 @@ def get_urls():
     rows = []
     for item in results:
         del item['user_id']
-        item['cloak_url'] = f"{app_domain}/{item['public_id']}"
+        print(item)
+        item['cloak_url'] = f"{app_domain}/{item['alias_name']}"
         rows.append(item)
     data['rows'] = rows
     return make_response(jsonify(data), 200)
