@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.users
     timezone character varying(64),
     created_at timestamp without time zone DEFAULT now(),
     updated_at timestamp without time zone,
+    is_fill_links integrer DEFAULT 0,
     CONSTRAINT users_pkey PRIMARY KEY (user_id, email),
     CONSTRAINT unique_email UNIQUE (email)
 );

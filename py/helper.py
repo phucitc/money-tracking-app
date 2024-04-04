@@ -101,7 +101,7 @@ class Helper:
 
     @staticmethod
     def return_link(value):
-        return os.getenv('APP_DOMAIN') + value
+        return os.getenv('APP_DOMAIN') + '/' + value
 
     @staticmethod
     def get_qrcode_link(public_id):
