@@ -37,6 +37,7 @@ CORS(app, origins=["http://localhost:5173", "http://localhost:5000", "http://zip
 for key, value in os.environ.items():
     app.config[key] = value
 
+
 # Define your middleware function
 # def app_middleware(next_handler):
 #     def middleware(*args, **kwargs):
@@ -53,19 +54,38 @@ for key, value in os.environ.items():
 #         return response
 #     return middleware
 def app_middle(next_handler):
-    def middleware(*args, **kwargs):
+    @app.before_request
+    def before_request():
         print("Executing custom middleware before request")
-        if session is None or 'user' not in session:
-            session['user'] = None
-        response = next_handler(*args, **kwargs)
-        print("Executing custom middleware after request")
-        return response
-    return middleware
+        if session is None or 'user' not in session or not session['user']:
+            session['user'] = {
+                'id': None
+            }
 
-# Apply the middleware to all routes
-# app.wsgi_app = app_middleware(app.wsgi_app)
+    @app.after_request
+    def after_request(response):
+        print("Executing custom middleware after request")
+        model = Model()
+        model.get_plsql().close()
+        return response
+
+    # def middleware(*args, **kwargs):
+    #     print("Executing custom middleware before request")
+    #     if session is None or 'user' not in session:
+    #         session['user'] = None
+    #     response = next_handler(*args, **kwargs)
+    #     print("Executing custom middleware after request")
+    #     model = Model()
+    #     model.get_plsql().close()
+    #     return response
+    #
+    # return middleware
+
+
 app_middle(app)
 
+# Apply the middleware to all routes
+# app.wsgi_app = app_middle(app.wsgi_app)
 # Add the resource to the API
 # api.add_resource(TodoResource, '/todos/<int:todo_id>')
 # api.add_resource(AuthResource, '/auth')

@@ -21,9 +21,9 @@ home_blueprint = Blueprint('homepage', __name__, template_folder='templates')
 def index():
     data = dict()
     data['uuid'] = Helper.uuid_v4()
-    cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
+    # cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
     # print("cookie_uuid", cookie_uuid)
-    print(session['auth0_token'] if 'user' in session else None)
+    # print(session['auth0_token'] if 'user' in session else None)
     return render_template('home.html',
                            session=session,
                            data=data)
@@ -114,7 +114,7 @@ def zip_url():
     print('zipit_uuid', cookie_uuid)
     if request.is_json:
         payload = request.get_json()
-        user_id = session.get('user').get('id') if 'user' in session else None
+        user_id = session.get('user').get('id')
         url_obj = URL()
         url_alias_obj = URL_Alias()
         data = dict()

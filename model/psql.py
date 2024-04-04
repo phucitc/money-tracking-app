@@ -60,10 +60,10 @@ class PSQL:
 
     def execute(self, query, params=None):
         try:
-            print(params)
-            self.cursor.execute(query, params)
+            result = self.cursor.execute(query, params)
             self.connection.commit()
-            return True
+            return result
         except Exception as e:
+            print('execute error')
             print(e)
             return False
