@@ -90,8 +90,8 @@ def callback():
         session["user"] = user
 
         print(user)
-        cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
-        if user['is_fill_links'] == 0 and cookie_uuid:
+        if user['is_fill_links'] == 0:
+            cookie_uuid = Helper.get_cookie(request, 'Zipit-Uuid')
             URL_Alias().convert_urls_to_user_by_cookie(user['id'], cookie_uuid)
             user_model.update({'is_fill_links': 1})
             print('User fill links')
