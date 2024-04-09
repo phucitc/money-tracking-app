@@ -209,9 +209,9 @@ def redirect_link(slug):
     if slug is not None:
         slug = slug.strip()
         # these are routes in VueJS
-        if slug in Constant.VUEJS_PAGES:
-            print("Here, return vueJS template")
-            return render_template('index.html')
+        # if slug in Constant.VUEJS_PAGES:
+        #     print("Here, return vueJS template")
+        #     return render_template('index.html')
 
         print(f"Query DB to get destination_link {slug}")
         url_alias_model = URL_Alias()

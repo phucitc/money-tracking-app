@@ -128,6 +128,7 @@ class URL_Alias(Model):
                     ELSE
                         ua.alias_name = %(alias_name_or_public_id)s
                 END
+                AND u.is_banned = 'false'
         """
         row = self.fetch_one(query, params={'alias_name_or_public_id': alias_name_or_public_id})
         if row:

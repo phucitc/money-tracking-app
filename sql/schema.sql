@@ -29,6 +29,7 @@ CREATE TABLE IF NOT EXISTS public.urls
     destination_link_hash character varying(33) COLLATE pg_catalog."default" NOT NULL,
     created_at timestamp without time zone DEFAULT now(),
     updated_at timestamp without time zone DEFAULT now(),
+    is_banned boolean DEFAULT false,
     CONSTRAINT urls_pkey PRIMARY KEY (id)
 )
 -- Index: idx_public_id_user_id
