@@ -1,9 +1,10 @@
 <div class="container">
     <footer class="py-3 my-4">
         <div class="col text-center">
-            <span class="mb-3 mb-md-0 text-muted">© 2024 ZIPIT Team - <a class="text-muted text-decoration-none"
-                                                                         href="mailto:hello@zipit.link"><i
-                    class="fa-solid fa-envelope"></i> hello@zipit.link</a></span>
+            <span class="mb-3 mb-md-0 text-muted">© 2024 ZIPIT Team -
+                <a class="text-muted text-decoration-none" href="mailto:hello@zipit.link"><i class="fa-solid fa-envelope"></i> hello@zipit.link</a>
+                - <a class="text-muted text-decoration-none" href="/term-of-use">Term of Use</a>
+            </span>
         </div>
     </footer>
 </div>
@@ -11,7 +12,7 @@
     $(function () {
         $('[data-toggle="tooltip"]').tooltip();
         var height = $(window).height();
-        let min_height = height/100;
+        let min_height = height / 100;
         min_height = Math.round(min_height);
         $('.main-wrapper').css('min-height', Math.round(min_height) * 10 - 8 + "vh");
     })

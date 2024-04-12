@@ -295,3 +295,10 @@ def background_task_tracking_click(params):
         'country': country
     }
     URL_Click().insert(data)
+
+@home_blueprint.route('/term-of-use')
+def page_term_of_use():
+    data = dict()
+    return render_template('tou.html',
+                           session=session,
+                           data=data)

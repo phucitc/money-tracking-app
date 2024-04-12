@@ -212,6 +212,10 @@ a.bg-primary-300:active {
 .account-menu .dropdown-menu a:active {
     background: var(--blue);
 }
+
+.tou-wrap h2, .tou-wrap h3 {
+    color: var(--blue);
+}
 /*
 Responsive
 */
