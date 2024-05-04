@@ -302,3 +302,11 @@ def page_term_of_use():
     return render_template('tou.html',
                            session=session,
                            data=data)
+
+
+@home_blueprint.route('/privacy-policy')
+def page_privacy_policy():
+    data = dict()
+    return render_template('privacy_policy.html',
+                           session=session,
+                           data=data)
