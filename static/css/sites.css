@@ -221,6 +221,9 @@ Responsive
 */
 
 @media only screen and (max-width: 600px) {
+    .container-center {
+        width: 100%!important;
+    }
     .menu-top {
         padding-bottom: 15px;
     }
