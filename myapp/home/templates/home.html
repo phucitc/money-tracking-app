@@ -5,16 +5,14 @@
             <div class="col">
                 <h1 class="text-center mt-5 mb-0 mb-3">Shorten a long URL</h1>
                 <div class="toolbox">
-                    <div class="row">
-                        <p-input :com-props="longURLProps" :global-props="globalProps"></p-input>
-                        <div v-if="!globalProps.isVisibleZipURLResult" class="col" v-cloak>
-                            <div class="row">
-                                <div class="col-4">
-                                    <p-input :com-props="domainProps" :global-props="globalProps"></p-input>
-                                </div>
-                                <div class="col-8">
-                                    <p-input :com-props="aliasProps" :global-props="globalProps"></p-input>
-                                </div>
+                    <p-input :com-props="longURLProps" :global-props="globalProps"></p-input>
+                    <div v-if="!globalProps.isVisibleZipURLResult" v-cloak>
+                        <div class="row">
+                            <div class="col-md-4 col-sm-12">
+                                <p-input :com-props="domainProps" :global-props="globalProps"></p-input>
+                            </div>
+                            <div class="col-md-8 col-sm-12">
+                                <p-input :com-props="aliasProps" :global-props="globalProps"></p-input>
                             </div>
                         </div>
                     </div>

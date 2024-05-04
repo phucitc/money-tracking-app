@@ -220,14 +220,11 @@ a.bg-primary-300:active {
 Responsive
 */
 
-/* Small devices (landscape phones, 576px and up)*/
-@media (min-width: 576px) {
+@media only screen and (max-width: 600px) {
+    .menu-top {
+        padding-bottom: 15px;
+    }
 }
-
- /*Medium devices (tablets, 768px and up)*/
-@media (min-width: 768px) {
-}
-
  /*Large devices (desktops, 992px and up)*/
 @media (min-width: 992px) {
 }

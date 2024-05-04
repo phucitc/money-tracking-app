@@ -6,14 +6,14 @@
 <body id="app">
 <header class="p-1 text-zt-dark">
     <div class="container">
-        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start">
+        <div class="d-flex flex-wrap align-items-center justify-content-center justify-content-lg-start py-1">
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
                 <li>
                     <a href="/" class="nav-link px-2 text-white text-logo">ZIPIT</a>
                 </li>
             </ul>
 
-            <div class="text-end">
+            <div class="text-end menu-top">
                 <span class="btn btn-link text-white link-underline d-none">Login</span>
                 {% if not session['user']['id']  %}
                 <button type="button" class="btn bg-primary-300 text-white d-none">Sign-up</button>
